@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">BPConnect</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+
+    <!--Pre SignIn screeen-->
+    <string name="get_a_pay">Get a POSfone number for your work calls and take payments from anywhere.</string>
+    <string name="start_free_trial">START YOUR FREE TRAIL</string>
+    <string name="already_have">Already have POSfone number?</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="terms_of_use">Terms of Use - Privacy - FAQ</string>
+
+    <!--Sign In Screen-->
+    <string name="activate_link_text">An activation link has been delivered to your registered email.Activate your account before login.</string>
+    <string name="hint_name">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="forgot_pwd">Forgot Password?</string>
+    <string name="login">LOGIN</string>
+    <string name="dont_have">Sign Up</string>
+
+    <!--Contact screen-->
+    <string name="search_contact">Search contacts</string>
+
+
+    <!--Sign Up screen-->
+    <string name="first_name">First Name*</string>
+    <string name="last_name">Last Name</string>
+    <string name="company_name">Company Name</string>
+    <string name="company_address">Company Address</string>
+    <string name="company_country">Country*</string>
+    <string name="state">County/State</string>
+    <string name="save_and_next">SAVE AND NEXT</string>
+    <string name="register">REGISTER</string>
+</resources>
