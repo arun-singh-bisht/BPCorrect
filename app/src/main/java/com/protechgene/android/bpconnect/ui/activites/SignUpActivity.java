@@ -32,17 +32,23 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().hide(); // hide the title bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_sign_up_new);
+
+        initViews();
     }
 
+    private void initViews()
+    {
+        findViewById(R.id.image_back).setOnClickListener(this);
+    }
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId())
         {
-            case R.id.btn_next:{
-
+            case R.id.image_back:{
+                finish();
             }
             break;
         }

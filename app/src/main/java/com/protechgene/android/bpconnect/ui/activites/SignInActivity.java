@@ -24,7 +24,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_sign_in);
-
         intiView();
     }
 
@@ -32,6 +31,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     {
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.txt_forgot_password).setOnClickListener(this);
+        findViewById(R.id.txt_sign_up).setOnClickListener(this);
     }
 
     @Override
@@ -40,42 +40,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId())
         {
             case R.id.txt_forgot_password:{
-                //Start email enter activity
-                //startActivityForResult(new Intent(SignInActivity.this,ForgotPasswordActivity.class),1002);
+                startActivity(new Intent(SignInActivity.this,ForgotPasswordActivity.class));
             }
             break;
-            case R.id.btn_login:{
+            case R.id.txt_sign_up:{
                 startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
             }
             break;
+            case R.id.btn_login:{
+                startActivity(new Intent(SignInActivity.this,MainActivity.class));
+                finish();
+            }
         }
     }
 
-    public void goToSignUp()
-    {
-        //startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
-        finish();
-    }
-
-    public void login()
-    {
-        //Get Values
-
-        String username = email.getText().toString();
-        String password = pass.getText().toString();
-
-        //Validate Values
-        String message = null;
-        if(!GeneralUtil.validateEditText(this,R.id.input_name))
-            message = "Enter Username.";
-        else if(!GeneralUtil.validatePAsswordEditText(this,R.id.input_password))
-            message = "Enter valid password.";
-
-        if(message !=null) {
-            GeneralUtil.showToast(SignInActivity.this, message);
-            return;
-        }
-
-       // GeneralUtil.showProgressDialog(this,"Please wait");
-    }
 }

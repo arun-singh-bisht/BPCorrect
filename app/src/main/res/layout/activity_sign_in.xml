@@ -99,7 +99,7 @@
             android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
             />
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:id="@+id/txt_enroll"
+            android:id="@+id/txt_sign_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dont_have"
