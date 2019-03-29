@@ -52,6 +52,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     {
         view.findViewById(R.id.card_measure_bp).setOnClickListener(this);
         view.findViewById(R.id.card_readings).setOnClickListener(this);
+        view.findViewById(R.id.card_learn).setOnClickListener(this);
+        view.findViewById(R.id.card_devices).setOnClickListener(this);
+        view.findViewById(R.id.layout_profile).setOnClickListener(this);
+
+
+
     }
 
     @Override
@@ -64,6 +70,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             break;
             case R.id.card_readings : {
                 FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new BPReadingFragment(),BPReadingFragment.FRAGMENT_TAG,"BPReadingFragmentTransition");
+            }
+            break;
+            case R.id.card_learn : {
+                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
+            }
+            break;
+            case R.id.card_devices : {
+                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new DevicesFragment(),DevicesFragment.FRAGMENT_TAG,"DevicesFragmentTransition");
+            }
+            break;
+            case R.id.layout_profile : {
+                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new ProfileFragment(),ProfileFragment.FRAGMENT_TAG,"ProfileFragmentTransition");
             }
             break;
         }

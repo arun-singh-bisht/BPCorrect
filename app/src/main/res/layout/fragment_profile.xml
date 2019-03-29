@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/sample" />
+
+    <LinearLayout
+        android:id="@+id/profile_pic_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/background"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-100dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/download"
+            app:civ_border_color="#ffffff"
+            app:civ_border_width="2dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="28dp"
+            android:layout_gravity="bottom">
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mark Henery"
+                android:textSize="22sp"
+                android:textColor="@android:color/black"/>
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="mark.henery@gmail.com"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/app_bar_custom"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/body_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/profile_pic_layout"
+        android:layout_marginTop="30dp"
+        android:weightSum="3"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Height"
+                android:textSize="12sp"
+                />
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5'10 ft"
+                android:textSize="16sp"
+                />
+            
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight"
+                android:textSize="12sp"
+                />
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="78 kg"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Age"
+                android:textSize="12sp"
+                />
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="28 yr"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/body_profile_layout"
+        android:layout_marginTop="40dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp">
+
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mark.henery@gmail.com"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_action_email"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:drawableTint="#968F8F"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="March 12, 1988"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_action_date"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="34 Berman Ave, San Jose, CA, 9471"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_action_location"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="408-587-5578"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_action_phone"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            />
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

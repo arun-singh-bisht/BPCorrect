@@ -8,10 +8,10 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardElevation="5dp"
-        card_view:cardCornerRadius="3dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        card_view:cardElevation="1dp"
+        card_view:cardCornerRadius="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginRight="13dp"
         android:layout_marginLeft="13dp"
         >
@@ -27,7 +27,7 @@
             android:id="@+id/layout_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#673AB7"
+            android:background="#444549"
             android:padding="10dp"
             >
 
@@ -76,10 +76,9 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:text="130 mmHg"
-                 android:textColor="#000000"
                  android:textSize="15sp"
                  />
-                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="SYS"
@@ -100,10 +99,9 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="83 mmHg"
-                     android:textColor="#000000"
                      android:textSize="15sp"
                      />
-                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="DIA"
@@ -124,10 +122,9 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="76 bpm"
-                     android:textColor="#000000"
                      android:textSize="15sp"
                      />
-                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="PULSE"

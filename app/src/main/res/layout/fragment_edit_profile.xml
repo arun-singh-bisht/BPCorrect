@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <include layout="@layout/app_bar_custom"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingTop="20dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="40dp">
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/download"
+            app:civ_border_color="#ffffff"
+            app:civ_border_width="2dp" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_action_camera"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            android:layout_height="wrap_content">
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_action_person"
+                android:drawableTint="#968F8F"
+                android:hint="Name"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_email"
+                android:drawableTint="#968F8F"
+                android:hint="Email"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+           >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/input_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_date"
+                android:drawableTint="#968F8F"
+                android:hint="Date of birth"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_location"
+                android:drawableTint="#968F8F"
+                android:hint="Address"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_phone"
+                android:drawableTint="#968F8F"
+                android:hint="Phone"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/btn_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/round_bg_textview"
+            android:gravity="center"
+            android:padding="@dimen/sign_in_button_padding"
+            android:text="SIGN UP"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/get_a_pay_text_size" />
+
+    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

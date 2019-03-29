@@ -52,13 +52,13 @@ public class BPReadingModel {
             int color = MathUtil.getRandomNumber(1,4);
             String colorCode ="";
             if (color==1)
-                colorCode ="#DB1212";
+                colorCode ="#444549";
             else if (color==2)
-                colorCode ="#DAC207";
+                colorCode ="#444549";
             else if (color==3)
-                colorCode ="#4CAF50";
+                colorCode ="#444549";
             else if (color==4)
-                colorCode ="#673AB7";
+                colorCode ="#444549";
 
 
             readingModels.add(new BPReadingModel("March 29, 2019",sys+" mmHg",dia+" mmHg",pulse+" bpm",colorCode));

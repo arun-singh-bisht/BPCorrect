@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_header"
     android:layout_width="match_parent"
-    android:layout_height="65dp"
+    android:layout_height="55dp"
     android:padding="5dp"
     android:background="#ffffff">
-
 
 
         <ImageView
@@ -34,7 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_add"
             android:tint="#000000"
+            android:padding="10dp"
             android:visibility="gone"
             />
 
