@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar_custom"/>
+
+    <LinearLayout
+        android:id="@+id/layout_create"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Let's get started!"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Check your blood pressure in the \nmorning and evening for\none week"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="90dp"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_add_simple"
+            android:layout_gravity="center_horizontal"
+            app:backgroundTint="@color/bp_red"
+            app:elevation="4dp"
+            app:fabSize="normal"
+            android:layout_marginTop="30dp"
+            />
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="Set Reminder"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_active_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        >
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active alarm"
+            android:textSize="14sp"
+            />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:textSize="12sp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="12sp"
+        />
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="March 21,2019"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Date"
+        android:textSize="12sp"
+        android:layout_marginTop="13sp"
+        android:layout_marginLeft="0dp"
+        />
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="March 28,2019"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="5dp"
+
+        />
+
+        <ImageView
+            android:id="@+id/image_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_delete"
+            android:tint="#B9B5B5"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:background="#ECDF52"
+        >
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/sun"
+            android:tint="#ffffff"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Morning"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content">
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:id="@+id/text_morning_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8:30"
+                android:textSize="45sp"
+                android:textColor="#ffffff"
+                android:layout_centerVertical="true"
+                />
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM"
+                android:textSize="25sp"
+                android:layout_centerInParent="true"
+                android:textColor="#ffffff"
+                />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:background="#7DB5D1"
+        >
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/moon"
+            android:tint="#ffffff"
+            android:padding="8dp"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Evening"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:id="@+id/text_evening_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6:00"
+                android:textSize="45sp"
+                android:textColor="#ffffff"
+                android:layout_centerVertical="true"
+                />
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PM"
+                android:textSize="25sp"
+                android:textColor="#ffffff"
+                android:layout_centerInParent="true"
+                />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
