@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activites.SignInActivity"
+            android:name=".ui.login.SignInActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activites.SignUpActivity"

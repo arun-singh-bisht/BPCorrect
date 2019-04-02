@@ -2,8 +2,11 @@ package com.protechgene.android.bpconnect.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -75,6 +78,18 @@ public class GeneralUtil {
     {
         if(progressDialog!=null && progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public static ProgressDialog getProgressDialog(Context context, String msg) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(msg);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        return progressDialog;
     }
 
 

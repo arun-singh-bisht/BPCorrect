@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.ui.login.SignInActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this,SignInActivity.class));
+                startActivity(new Intent(SplashActivity.this, SignInActivity.class));
                 finish();
             }
         },2*1000);
