@@ -19,12 +19,12 @@ public class RoomModule {
                 .build();
     }
 
-     AppDatabase provideWordDatabase()
+    public AppDatabase provideDatabase()
       {
           return mAppDatabase;
       }
 
-    DatabaseHelper provideDatabaseHelper(AppDatabase appDatabase)
+    public DatabaseHelper provideDatabaseHelper(AppDatabase appDatabase)
     {
         return new DatabaseHelper(appDatabase);
     }

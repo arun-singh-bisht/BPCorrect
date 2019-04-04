@@ -1,8 +1,7 @@
-package com.protechgene.android.bpconnect.ui.fragments;
+package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,12 @@ import android.view.ViewGroup;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
-import com.protechgene.android.bpconnect.ui.home.MainActivity;
+import com.protechgene.android.bpconnect.ui.fragments.BPReadingFragment;
+import com.protechgene.android.bpconnect.ui.fragments.DevicesFragment;
+import com.protechgene.android.bpconnect.ui.fragments.MeasureBPFragment;
+import com.protechgene.android.bpconnect.ui.fragments.ProfileFragment;
+import com.protechgene.android.bpconnect.ui.fragments.ReminderFragment;
+import com.protechgene.android.bpconnect.ui.fragments.TutorialFragment;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, CustomAlertDialog.I_CustomAlertDialog {
 

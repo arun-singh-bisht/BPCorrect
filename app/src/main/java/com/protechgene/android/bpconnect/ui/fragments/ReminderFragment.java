@@ -22,7 +22,6 @@ import android.widget.TimePicker;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.data.local.models.TutorialModel;
-import com.protechgene.android.bpconnect.data.local.sp.SharedPreferenceHelper;
 import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.custom.MyTimePickerFragment;
@@ -71,7 +70,9 @@ public class ReminderFragment extends Fragment implements View.OnClickListener, 
         view.findViewById(R.id.fab_add).setOnClickListener(this);
         view.findViewById(R.id.image_delete).setOnClickListener(this);
 
-        boolean is =SharedPreferenceHelper.getSharedPreferenceBoolean(getActivity(),"isAlarmSet",false);
+        //boolean is =SharedPreferenceHelper.getSharedPreferenceBoolean(getActivity(),"isAlarmSet",false);
+
+        boolean is = false;
         if(is)
         {
             view.findViewById(R.id.layout_create).setVisibility(View.GONE);
@@ -114,12 +115,12 @@ public class ReminderFragment extends Fragment implements View.OnClickListener, 
             view.findViewById(R.id.layout_create).setVisibility(View.GONE);
             view.findViewById(R.id.layout_active_alarm).setVisibility(View.VISIBLE);
         }
-        SharedPreferenceHelper.setSharedPreferenceBoolean(getActivity(),"isAlarmSet",true);
+       // SharedPreferenceHelper.setSharedPreferenceBoolean(getActivity(),"isAlarmSet",true);
     }
 
     @Override
     public void onPositiveClick(Dialog dialog) {
-        SharedPreferenceHelper.setSharedPreferenceBoolean(getActivity(),"isAlarmSet",false);
+       // SharedPreferenceHelper.setSharedPreferenceBoolean(getActivity(),"isAlarmSet",false);
         view.findViewById(R.id.layout_create).setVisibility(View.VISIBLE);
         view.findViewById(R.id.layout_active_alarm).setVisibility(View.GONE);
     }

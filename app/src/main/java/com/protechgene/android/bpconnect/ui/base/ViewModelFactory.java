@@ -1,0 +1,50 @@
+package com.protechgene.android.bpconnect.ui.base;
+
+import android.app.Application;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
+
+import com.protechgene.android.bpconnect.data.Repository;
+import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordViewModel;
+import com.protechgene.android.bpconnect.ui.login.LoginViewModel;
+import com.protechgene.android.bpconnect.ui.signup.SignUpViewModel;
+import com.protechgene.android.bpconnect.ui.splash.SplashViewModel;
+
+
+public class ViewModelFactory implements ViewModelProvider.Factory {
+
+
+    private static ViewModelFactory viewModelFactory;
+    private Repository mRepository;
+
+    private ViewModelFactory(Repository repository) {
+        this.mRepository = repository;
+    }
+
+    public static ViewModelFactory getInstance(Application application)
+    {
+        if (viewModelFactory ==null)
+        {
+            viewModelFactory = new ViewModelFactory(Repository.getInstance(application));
+        }
+        return viewModelFactory;
+    }
+
+
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if (modelClass.isAssignableFrom(SplashViewModel.class)) {
+            return (T) new SplashViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(LoginViewModel.class)) {
+            return (T) new LoginViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(SignUpViewModel.class)) {
+            return (T) new SignUpViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(ForgotPasswordViewModel.class)) {
+            return (T) new ForgotPasswordViewModel(mRepository);
+        }
+
+        throw new IllegalArgumentException("Unknown class name");
+    }
+}

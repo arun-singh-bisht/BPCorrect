@@ -50,7 +50,7 @@
             android:layout_height="wrap_content">
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_name"
+                android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/login_usename"
@@ -70,7 +70,7 @@
             app:passwordToggleEnabled="true">
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_password"
+                android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -90,7 +90,7 @@
             app:passwordToggleEnabled="true">
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_password_confirm"
+                android:id="@+id/edit_password_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"

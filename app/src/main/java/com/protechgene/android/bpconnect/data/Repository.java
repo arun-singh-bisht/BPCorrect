@@ -1,7 +1,7 @@
 package com.protechgene.android.bpconnect.data;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.content.Context;
 
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelperInterface;
@@ -9,7 +9,11 @@ import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
 import com.protechgene.android.bpconnect.data.remote.ApiInterface;
-import com.protechgene.android.bpconnect.data.remote.models.User;
+import com.protechgene.android.bpconnect.data.remote.responseModels.User;
+import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
+import com.protechgene.android.bpconnect.di.module.AppModule;
+import com.protechgene.android.bpconnect.di.module.RestModule;
+import com.protechgene.android.bpconnect.di.module.RoomModule;
 
 import java.util.List;
 
@@ -25,16 +29,30 @@ public class Repository implements ApiInterface,
     private PreferencesHelper mSharedPrefsHelper;
     private DatabaseHelper mDatabaseHelper;
 
-    public Repository(ApiInterface apiInterface, PreferencesHelper mSharedPrefsHelper, DatabaseHelper databaseHelper) {
+    private Repository(ApiInterface apiInterface, PreferencesHelper mSharedPrefsHelper, DatabaseHelper databaseHelper) {
         this.mApiInterface = apiInterface;
         this.mSharedPrefsHelper = mSharedPrefsHelper;
         this.mDatabaseHelper = databaseHelper;
     }
 
+    public static Repository getInstance(Application mApplication)
+    {
+        if(repositoryInstance==null)
+        {
 
+            RestModule restModule = new RestModule();
+            ApiInterface apiInterface = restModule.provideApiCallInterface(restModule.provideRetrofit(restModule.provideGson(),restModule.provideOkHttpClient(mApplication.getApplicationContext())));
 
+            AppModule appModule = new AppModule(mApplication);
+            PreferencesHelper preferencesHelper = appModule.provideSharedPrefsHelper(appModule.provideSharedPrefs());
 
+            RoomModule roomModule = new RoomModule(mApplication);
+            DatabaseHelper databaseHelper = roomModule.provideDatabaseHelper(roomModule.provideDatabase());
 
+            repositoryInstance = new Repository(apiInterface,preferencesHelper,databaseHelper);
+        }
+        return repositoryInstance;
+    }
     //----------------------------------------------------------------------------------------------
     // Shared Preference access methods
 
@@ -97,15 +115,28 @@ public class Repository implements ApiInterface,
     // ----------------------------------------------------------------------------------------------
     // API Calls
 
-   /* @Override
-    public Observable<MovieResponse> getTopRatedMovie(String apiKey) {
-        Observable<MovieResponse> responseObservable = mApiInterface.getTopRatedMovie(apiKey);
-        return responseObservable;
-    }*/
+
+    @Override
+    public Observable<OauthResponse> oauth(String grant_type, String client_id, String username, String password) {
+        Observable<OauthResponse> oauth = mApiInterface.oauth(grant_type, client_id, username, password);
+        return oauth;
+    }
 
     @Override
     public Observable<User> login(String apiKey, String email, String password) {
         Observable<User> responseObservable = mApiInterface.login(apiKey, email, password);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<User> signUp(String apiKey, String email, String password) {
+        Observable<User> responseObservable = mApiInterface.signUp(apiKey, email, password);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<User> resetPassword(String apiKey, String email) {
+        Observable<User> responseObservable = mApiInterface.resetPassword(apiKey, email);
         return responseObservable;
     }
 

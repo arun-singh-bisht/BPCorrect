@@ -25,13 +25,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestModule {
 
 
-    Gson provideGson() {
+    public Gson provideGson() {
         GsonBuilder builder =
                 new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         return builder.setLenient().create();
     }
 
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
 
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
@@ -41,7 +41,7 @@ public class RestModule {
                 .build();
     }
 
-    Interceptor provideInterceptor(Context context) {
+    public Interceptor provideInterceptor(Context context) {
 
         Interceptor interceptor = chain -> {
             Request originalRequest = chain.request();
@@ -62,24 +62,24 @@ public class RestModule {
         return interceptor;
     }
 
-    Cache provideCache(Context context) {
+    public Cache provideCache(Context context) {
         File httpCacheDirectory = new File(context.getCacheDir(), "offlineCache");
         Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024); //10 MB
         return cache;
     }
 
 
-    ApiInterface provideApiCallInterface(Retrofit retrofit) {
+    public ApiInterface provideApiCallInterface(Retrofit retrofit) {
         return retrofit.create(ApiInterface.class);
     }
 
-    OkHttpClient provideOkHttpClient(Context context) {
+    public  OkHttpClient provideOkHttpClient(Context context) {
 
         //Header,Cache Intercepter
         File httpCacheDirectory = new File(context.getCacheDir(), "offlineCache");
         Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024); //10 MB
 
-        Interceptor cacheIntercepter = chain -> {
+        /*Interceptor cacheIntercepter = chain -> {
             Request originalRequest = chain.request();
 
             Request.Builder builder = originalRequest.newBuilder();
@@ -93,15 +93,14 @@ public class RestModule {
 
             Request newRequest = builder.build();
             return chain.proceed(newRequest);
-        };
+        };*/
 
         //Logging Intercepter
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(cacheIntercepter)
-                .addInterceptor(loggingInterceptor)
+        httpClient.addInterceptor(loggingInterceptor)
                 .cache(cache)
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .writeTimeout(100, TimeUnit.SECONDS)

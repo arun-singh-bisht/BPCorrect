@@ -27,17 +27,24 @@
             android:id="@+id/layout_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#444549"
-            android:padding="10dp"
+            android:background="#ffffff"
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="March 29, 2019"
-                android:textColor="#ffffff"
                 android:layout_centerVertical="true"
                 android:textSize="12sp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <View
+                android:id="@+id/color_plate"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:background="@drawable/sample_new"
+                android:layout_alignParentRight="true"
                 />
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -48,9 +55,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textSize="12sp"
+                android:layout_marginRight="10dp"
                 />
 
         </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#BEBDBD"
+                />
 
          <LinearLayout
              android:layout_width="match_parent"

@@ -4,10 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.protechgene.android.bpconnect.data.Repository;
-import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
-import com.protechgene.android.bpconnect.data.remote.ApiInterface;
 
 public class AppModule {
 
@@ -17,25 +14,25 @@ public class AppModule {
         mApplication = app;
     }
 
-    Context provideContext() {
+    public Context provideContext() {
         return mApplication.getApplicationContext();
     }
 
-    Application provideApplication() {
+    public Application provideApplication() {
         return mApplication;
     }
 
-    SharedPreferences provideSharedPrefs() {
-        return mApplication.getSharedPreferences("demo-prefs", Context.MODE_PRIVATE);
+    public SharedPreferences provideSharedPrefs() {
+        return mApplication.getSharedPreferences("bp_connect_db", Context.MODE_PRIVATE);
     }
 
-    PreferencesHelper provideSharedPrefsHelper(SharedPreferences sharedPreferences) {
+    public PreferencesHelper provideSharedPrefsHelper(SharedPreferences sharedPreferences) {
         return new PreferencesHelper(sharedPreferences);
     }
 
-    Repository provideRepository(ApiInterface apiCallInterface, PreferencesHelper mSharedPrefsHelper, DatabaseHelper databaseHelper) {
+    /*public Repository provideRepository(ApiInterface apiCallInterface, PreferencesHelper mSharedPrefsHelper, DatabaseHelper databaseHelper) {
         return new Repository(apiCallInterface,mSharedPrefsHelper,databaseHelper);
-    }
+    }*/
 
     /*ViewModelProvider.Factory provideViewModelFactory(Repository myRepository) {
         return new ViewModelFactory(myRepository);

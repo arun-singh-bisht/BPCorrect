@@ -59,7 +59,7 @@ public class BPAllReadingFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        bpReadingAdapter = new BPReadingAdapter(new ArrayList<BPReadingModel>());
+        bpReadingAdapter = new BPReadingAdapter(getActivity(),new ArrayList<BPReadingModel>());
         bpReadingAdapter.setData(BPReadingModel.getData());
         recyclerView.setAdapter(bpReadingAdapter);
 

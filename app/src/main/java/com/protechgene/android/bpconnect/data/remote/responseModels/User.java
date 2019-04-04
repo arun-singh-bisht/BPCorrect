@@ -1,4 +1,4 @@
-package com.protechgene.android.bpconnect.data.remote.models;
+package com.protechgene.android.bpconnect.data.remote.responseModels;
 
 import com.google.gson.annotations.SerializedName;
 

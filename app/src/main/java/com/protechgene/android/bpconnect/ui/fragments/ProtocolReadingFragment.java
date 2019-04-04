@@ -63,7 +63,7 @@ public class ProtocolReadingFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        bpReadingAdapter = new BPReadingAdapter(new ArrayList<BPReadingModel>());
+        bpReadingAdapter = new BPReadingAdapter(getActivity(),new ArrayList<BPReadingModel>());
         bpReadingAdapter.setData(BPReadingModel.getData());
         recyclerView.setAdapter(bpReadingAdapter);
 
