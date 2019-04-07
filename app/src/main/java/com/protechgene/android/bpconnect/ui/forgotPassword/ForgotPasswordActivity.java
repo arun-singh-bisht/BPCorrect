@@ -1,11 +1,13 @@
 package com.protechgene.android.bpconnect.ui.forgotPassword;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Handler;
 import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,6 +49,13 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPasswo
     public void redirectToLoginPage() {
         hideProgress();
         showSnakeBar("Reset password link sent to registered email address");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        },3*1000);
+
     }
 
     @Override

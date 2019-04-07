@@ -37,6 +37,7 @@
             android:layout_gravity="bottom">
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:id="@+id/text_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mark Henery"
@@ -151,6 +152,7 @@
 
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="mark.henery@gmail.com"
@@ -162,6 +164,7 @@
             />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_dob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="March 12, 1988"
@@ -174,6 +177,7 @@
             />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="34 Berman Ave, San Jose, CA, 9471"
@@ -186,6 +190,7 @@
             />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="408-587-5578"

@@ -77,7 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }).create().show();
     }
 
-    protected void showSnakeBar(String message) {
+    public void showSnakeBar(String message) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                 message, Snackbar.LENGTH_SHORT);
         snackbar.show();

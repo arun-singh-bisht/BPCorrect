@@ -3,12 +3,13 @@ package com.protechgene.android.bpconnect.ui.signup;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Handler;
 import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
-import com.protechgene.android.bpconnect.ui.home.MainActivity;
+import com.protechgene.android.bpconnect.ui.login.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,24 +49,26 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
         String password = edit_password.getText().toString();
         String passwordConfirm = edit_password_confirm.getText().toString();
 
-        if(mSignUpViewModel.isEmailAndPasswordValid(email,password,passwordConfirm)) {
-            showProgress("Please wait...");
-            mSignUpViewModel.registerUser(email, password);
-        }
-        else
-            showSnakeBar("Please enter a valid email or password.");
+        showProgress("Please wait...");
+        mSignUpViewModel.registerUser(email, password,passwordConfirm);
     }
 
     @Override
-    public void openHomeScreen() {
-        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-        finish();
+    public void openLoginScreen() {
+        hideProgress();
+        showSnakeBar("Patient Added SuccessFully");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                finish();
+            }
+        },3*1000);
     }
 
     @Override
     public void handleError(Throwable throwable) {
-
+        hideProgress();
+        showSnakeBar(throwable.getMessage());
     }
-
-
 }

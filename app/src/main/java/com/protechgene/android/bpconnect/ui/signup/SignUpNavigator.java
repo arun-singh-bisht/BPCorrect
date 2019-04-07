@@ -5,6 +5,6 @@ public interface SignUpNavigator {
 
     void handleError(Throwable throwable);
 
-    void openHomeScreen();
+    void openLoginScreen();
 
 }

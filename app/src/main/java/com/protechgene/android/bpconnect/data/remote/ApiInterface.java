@@ -1,8 +1,9 @@
 package com.protechgene.android.bpconnect.data.remote;
 
 
-import com.protechgene.android.bpconnect.data.remote.responseModels.User;
+import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,12 +16,15 @@ public interface ApiInterface {
     @GET("ProtechSentinel/oauth/token")
     Observable<OauthResponse> oauth(@Query("grant_type") String grant_type, @Query("client_id") String client_id, @Query("username") String username, @Query("password") String password);
 
-    @POST("login/user")
-    Observable<User> login(@Query("api_key") String apiKey, @Query("email") String email, @Query("password") String password);
+    @POST("ProtechSentinel/basic/forgot/password")
+    Observable<ResetPasswordResponse> resetPassword(@Query("email") String email);
 
-    @POST("signUp/user")
-    Observable<User> signUp(@Query("api_key") String apiKey, @Query("email") String email, @Query("password") String password);
+    @POST("ProtechSentinel/common/register/patient")
+    Observable<ResetPasswordResponse> signUp(@Query("email") String email, @Query("password") String password);
 
-    @POST("resetPassword/user")
-    Observable<User> resetPassword(@Query("api_key") String apiKey, @Query("email") String email);
+    @GET("ProtechSentinel/common/get/patient/information")
+    Observable<ProfileResponse> profileDetails(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId);
+
+    @POST("ProtechSentinel/common/update/patient")
+    Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId, @Query("firstname") String firstname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1);
 }

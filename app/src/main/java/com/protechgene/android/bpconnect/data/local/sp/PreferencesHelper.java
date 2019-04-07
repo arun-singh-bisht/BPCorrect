@@ -77,4 +77,64 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     public void setIsLoggedIn(boolean isLoggedIn) {
         mSharedPreferences.edit().putBoolean(PREF_KEY_IS_LOGIN,isLoggedIn).apply();
     }
+
+    @Override
+    public String getPatientId() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_ID, null);
+    }
+
+    @Override
+    public void setPatientId(String patientId) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ID, patientId).apply();
+    }
+
+    @Override
+    public String getPatientGender() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_GENDER, null);
+    }
+
+    @Override
+    public void setPatientGender(String gender) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_GENDER, gender).apply();
+    }
+
+    @Override
+    public String getPatientAddress() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_ADDRESS, null);
+    }
+
+    @Override
+    public void setPatientAddress(String address) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ADDRESS, address).apply();
+    }
+
+    @Override
+    public String getPatientMobile() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_MOBILE, null);
+    }
+
+    @Override
+    public void setPatientMobile(String mobile) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_MOBILE, mobile).apply();
+    }
+
+    @Override
+    public String getPatientDOB() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_DOB, null);
+    }
+
+    @Override
+    public void setPatientDOB(String dob) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_DOB, dob).apply();
+    }
+
+    @Override
+    public boolean isPatientGraduated() {
+        return mSharedPreferences.getBoolean(PREF_KEY_PATIENT_IS_GRADUATED,false);
+    }
+
+    @Override
+    public void setIsPatientGraduated(boolean isPatientGraduated) {
+        mSharedPreferences.edit().putBoolean(PREF_KEY_PATIENT_IS_GRADUATED,isPatientGraduated).apply();
+    }
 }

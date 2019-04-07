@@ -43,11 +43,12 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
                     @Override
                     public void accept(OauthResponse oauthResponse) throws Exception {
 
-                        //Save user credentials
-                        getRespository().setCurrentUserEmail(email);
-                        getRespository().setCurrentUserName(email);
-                        getRespository().setAccessToken(oauthResponse.getRefreshToken().getValue());
-                        getRespository().setIsLoggedIn(true);
+                        //Save user
+                        Repository respository = getRespository();
+                        respository.setCurrentUserEmail(email);
+                        respository.setAccessToken(oauthResponse.getValue());
+                        respository.setCurrentUserId(oauthResponse.getAdditionalInformation().getId()+"");
+                        respository.setIsLoggedIn(true);
 
                         getNavigator().openMainActivity();
                     }

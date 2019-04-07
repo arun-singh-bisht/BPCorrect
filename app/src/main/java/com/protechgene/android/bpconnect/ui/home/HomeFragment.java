@@ -1,102 +1,84 @@
 package com.protechgene.android.bpconnect.ui.home;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.arch.lifecycle.ViewModelProviders;
+import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.fragments.BPReadingFragment;
 import com.protechgene.android.bpconnect.ui.fragments.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.fragments.MeasureBPFragment;
-import com.protechgene.android.bpconnect.ui.fragments.ProfileFragment;
 import com.protechgene.android.bpconnect.ui.fragments.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.fragments.TutorialFragment;
+import com.protechgene.android.bpconnect.ui.profile.ProfileFragment;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, CustomAlertDialog.I_CustomAlertDialog {
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator,CustomAlertDialog.I_CustomAlertDialog {
 
     public static final String FRAGMENT_TAG = "HomeFragment";
-    private View view;
-    private MainActivity mainActivity;
+    private HomeViewModel mHomeViewModel;
+
+    @BindView(R.id.text_profile_name)
+    TextView text_profile_name;
+
+    @BindView(R.id.text_profile_email)
+    TextView text_profile_email;
+
+
+
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mainActivity = (MainActivity) activity;
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        if(view==null)
-        {
-            view = inflater.inflate(R.layout.fragment_home,container,false);
-            initView();
-        }
-        return view;
+    protected int layoutRes() {
+        return R.layout.fragment_home;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void initialize() {
+
+        mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
+        mHomeViewModel.setNavigator(this);
+
+        mHomeViewModel.getProfileDetails();
+        //CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
 
     }
 
-    private void initView()
-    {
-        view.findViewById(R.id.card_measure_bp).setOnClickListener(this);
-        view.findViewById(R.id.card_readings).setOnClickListener(this);
-        view.findViewById(R.id.card_learn).setOnClickListener(this);
-        view.findViewById(R.id.card_devices).setOnClickListener(this);
-        view.findViewById(R.id.layout_profile).setOnClickListener(this);
-        view.findViewById(R.id.card_reminder).setOnClickListener(this);
 
-        CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
+    @OnClick(R.id.card_measure_bp)
+    public void openMeasureBPFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new MeasureBPFragment(),MeasureBPFragment.FRAGMENT_TAG,"MeasureBPFragmentTransition");
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId())
-        {
-            case R.id.card_measure_bp : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new MeasureBPFragment(),MeasureBPFragment.FRAGMENT_TAG,"MeasureBPFragmentTransition");
-            }
-            break;
-            case R.id.card_readings : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new BPReadingFragment(),BPReadingFragment.FRAGMENT_TAG,"BPReadingFragmentTransition");
-            }
-            break;
-            case R.id.card_learn : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
-            }
-            break;
-            case R.id.card_devices : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new DevicesFragment(),DevicesFragment.FRAGMENT_TAG,"DevicesFragmentTransition");
-            }
-            break;
-            case R.id.layout_profile : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new ProfileFragment(),ProfileFragment.FRAGMENT_TAG,"ProfileFragmentTransition");
-            }
-            break;
-            case R.id.card_reminder : {
-                FragmentUtil.loadFragment(mainActivity,R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
-            }
-            break;
-        }
+    @OnClick(R.id.card_readings)
+    public void openReadingsFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new BPReadingFragment(),BPReadingFragment.FRAGMENT_TAG,"BPReadingFragmentTransition");
     }
+
+    @OnClick(R.id.card_learn)
+    public void openTutorialFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
+    }
+
+    @OnClick(R.id.card_devices)
+    public void openDeviceFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new DevicesFragment(),DevicesFragment.FRAGMENT_TAG,"DevicesFragmentTransition");
+    }
+
+    @OnClick(R.id.card_reminder)
+    public void openRemiderFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+    }
+
+    @OnClick(R.id.layout_profile)
+    public void openProfileFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ProfileFragment(),ProfileFragment.FRAGMENT_TAG,"ProfileFragmentTransition");
+    }
+
 
     @Override
     public void onPositiveClick(Dialog dialog) {
@@ -107,4 +89,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Cust
     public void onNegativeClick(Dialog dialog) {
 
     }
+
+    @Override
+    public void showProfileDetails() {
+        String userName = mHomeViewModel.getUserName();
+        String userEmail = mHomeViewModel.getUserEmail();
+
+        if(userName==null && userName.equalsIgnoreCase("null"))
+            userName = "Update Profile Name";
+        text_profile_name.setText(userName+"");
+        text_profile_email.setText(userEmail+"");
+    }
+
+    @Override
+    public void handleError(Throwable throwable) {
+
+    }
+
+
 }

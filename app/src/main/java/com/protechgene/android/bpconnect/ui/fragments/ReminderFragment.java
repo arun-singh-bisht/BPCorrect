@@ -21,10 +21,8 @@ import android.widget.TimePicker;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
-import com.protechgene.android.bpconnect.data.local.models.TutorialModel;
 import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
-import com.protechgene.android.bpconnect.ui.custom.MyTimePickerFragment;
 import com.protechgene.android.bpconnect.ui.custom.TimePickerFragment;
 
 import java.util.ArrayList;

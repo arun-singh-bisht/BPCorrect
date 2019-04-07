@@ -1,11 +1,11 @@
 package com.protechgene.android.bpconnect.ui.forgotPassword;
 
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.protechgene.android.bpconnect.BuildConfig;
 import com.protechgene.android.bpconnect.Utils.GeneralUtil;
 import com.protechgene.android.bpconnect.data.Repository;
-import com.protechgene.android.bpconnect.data.remote.responseModels.User;
+import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,7 +29,7 @@ public class ForgotPasswordViewModel extends BaseViewModel<ForgotPasswordNavigat
             return;
         }
 
-        disposables.add(getRespository().resetPassword(BuildConfig.ApiKey,email)
+        disposables.add(getRespository().resetPassword(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -38,18 +38,12 @@ public class ForgotPasswordViewModel extends BaseViewModel<ForgotPasswordNavigat
 
                     }
                 })
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<ResetPasswordResponse>() {
                     @Override
-                    public void accept(User user) throws Exception {
+                    public void accept(ResetPasswordResponse resetPasswordResponse) throws Exception {
 
-                        //Save user credentials
-                        getRespository().setCurrentUserId(user.getUserId());
-                        getRespository().setCurrentUserEmail(user.getEmail());
-                        getRespository().setCurrentUserName(user.getUserName());
-                        getRespository().setCurrentUserProfilePicUrl(user.getProfilePic());
-                        getRespository().setAccessToken(user.getAccessToken());
-                        getRespository().setIsLoggedIn(true);
-
+                        String message = resetPasswordResponse.getData().get(0).getMessage();
+                        Log.d("resetPassword",message);
                         getNavigator().redirectToLoginPage();
                     }
                 }, new Consumer<Throwable>() {

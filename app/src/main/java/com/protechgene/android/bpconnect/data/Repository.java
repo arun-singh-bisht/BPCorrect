@@ -9,8 +9,9 @@ import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
 import com.protechgene.android.bpconnect.data.remote.ApiInterface;
-import com.protechgene.android.bpconnect.data.remote.responseModels.User;
+import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.di.module.AppModule;
 import com.protechgene.android.bpconnect.di.module.RestModule;
 import com.protechgene.android.bpconnect.di.module.RoomModule;
@@ -107,6 +108,66 @@ public class Repository implements ApiInterface,
     public void setIsLoggedIn(boolean isLoggedIn) { mSharedPrefsHelper.setIsLoggedIn(isLoggedIn); }
 
     @Override
+    public String getPatientId() {
+        return mSharedPrefsHelper.getPatientId();
+    }
+
+    @Override
+    public void setPatientId(String patientId) {
+        mSharedPrefsHelper.setPatientId(patientId);
+    }
+
+    @Override
+    public String getPatientGender() {
+        return mSharedPrefsHelper.getPatientGender();
+    }
+
+    @Override
+    public void setPatientGender(String gender) {
+        mSharedPrefsHelper.setPatientGender(gender);
+    }
+
+    @Override
+    public String getPatientAddress() {
+        return mSharedPrefsHelper.getPatientAddress();
+    }
+
+    @Override
+    public void setPatientAddress(String address) {
+        mSharedPrefsHelper.setPatientAddress(address);
+    }
+
+    @Override
+    public String getPatientMobile() {
+        return mSharedPrefsHelper.getPatientMobile();
+    }
+
+    @Override
+    public void setPatientMobile(String mobile) {
+        mSharedPrefsHelper.setPatientMobile(mobile);
+    }
+
+    @Override
+    public String getPatientDOB() {
+        return mSharedPrefsHelper.getPatientDOB();
+    }
+
+    @Override
+    public void setPatientDOB(String dob) {
+        mSharedPrefsHelper.setPatientDOB(dob);
+    }
+
+    @Override
+    public boolean isPatientGraduated() {
+        return mSharedPrefsHelper.isPatientGraduated();
+    }
+
+    @Override
+    public void setIsPatientGraduated(boolean isPatientGraduated) {
+        mSharedPrefsHelper.setIsPatientGraduated(isPatientGraduated);
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }
@@ -123,20 +184,26 @@ public class Repository implements ApiInterface,
     }
 
     @Override
-    public Observable<User> login(String apiKey, String email, String password) {
-        Observable<User> responseObservable = mApiInterface.login(apiKey, email, password);
+    public Observable<ResetPasswordResponse> signUp(String email, String password) {
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.signUp(email, password);
         return responseObservable;
     }
 
     @Override
-    public Observable<User> signUp(String apiKey, String email, String password) {
-        Observable<User> responseObservable = mApiInterface.signUp(apiKey, email, password);
+    public Observable<ProfileResponse> profileDetails(String access_token, String patientUserId) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.profileDetails(access_token, patientUserId);
         return responseObservable;
     }
 
     @Override
-    public Observable<User> resetPassword(String apiKey, String email) {
-        Observable<User> responseObservable = mApiInterface.resetPassword(apiKey, email);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String gender, String dob, String mobile1, String address1) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, gender, dob, mobile1, address1);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<ResetPasswordResponse> resetPassword(String email) {
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.resetPassword( email);
         return responseObservable;
     }
 

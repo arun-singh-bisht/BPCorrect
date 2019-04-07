@@ -49,7 +49,7 @@
             android:layout_height="wrap_content">
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_name"
+                android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_action_person"
@@ -68,7 +68,7 @@
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_password"
+                android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -76,6 +76,8 @@
                 android:drawableTint="#968F8F"
                 android:hint="Email"
                 android:singleLine="true"
+                android:focusable="false"
+                android:clickable="false"
                 android:text=""
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>
@@ -88,7 +90,7 @@
            >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/input_password_confirm"
+                android:id="@+id/edit_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -96,6 +98,8 @@
                 android:drawableTint="#968F8F"
                 android:hint="Date of birth"
                 android:singleLine="true"
+                android:clickable="true"
+                android:focusable="false"
                 android:text=""
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>
@@ -107,6 +111,7 @@
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -125,6 +130,7 @@
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+               android:id="@+id/edit_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -132,6 +138,8 @@
                 android:drawableTint="#968F8F"
                 android:hint="Phone"
                 android:singleLine="true"
+                android:maxLength="10"
+                android:inputType="number"
                 android:text=""
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>

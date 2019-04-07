@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +25,9 @@ import butterknife.Unbinder;
 public abstract class BaseFragment extends Fragment {
 
     private Unbinder mUnbinder;
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private ProgressDialog mProgressDialog;
+    private View view;
 
     protected abstract int layoutRes();
     protected abstract void initialize();
@@ -33,7 +35,11 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+        if (context instanceof BaseActivity) {
+            BaseActivity activity = (BaseActivity) context;
+            this.mActivity = activity;
+            //activity.onFragmentAttached();
+        }
     }
 
     @Override
@@ -45,7 +51,9 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(layoutRes(), container, false);
+        if(view==null) {
+            view = inflater.inflate(layoutRes(), container, false);
+        }
         return view;
     }
 
@@ -62,7 +70,7 @@ public abstract class BaseFragment extends Fragment {
         mActivity = null;
     }
 
-    public AppCompatActivity getBaseActivity() {
+    public BaseActivity getBaseActivity() {
         return mActivity;
     }
 
@@ -73,7 +81,9 @@ public abstract class BaseFragment extends Fragment {
             mUnbinder.unbind();
             mUnbinder = null;
         }
+
     }
+
 
     protected void setTitle(String title) {
         ActionBar supportActionBar = getBaseActivity().getSupportActionBar();
@@ -89,6 +99,7 @@ public abstract class BaseFragment extends Fragment {
     {
         mProgressDialog.dismiss();
     }
+
     protected void showToast(String msg) { Toast.makeText(mActivity, msg, Toast.LENGTH_LONG).show(); }
     protected void showAlert(String msg) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);

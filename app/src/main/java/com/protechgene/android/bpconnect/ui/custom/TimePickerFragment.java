@@ -58,9 +58,6 @@ public class TimePickerFragment extends DialogFragment implements
             mListener.onTimePicked(c, mId);
     }
 
-    public static interface TimePickerDialogListener {
-        public void onTimeSet(int id, TimePicker view, int hourOfDay, int minute);
-    }
 
     public static interface TimePickedListener {
         public void onTimePicked(Calendar time, int id);
