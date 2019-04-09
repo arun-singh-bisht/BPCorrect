@@ -9,12 +9,12 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
-import com.protechgene.android.bpconnect.ui.fragments.BPReadingFragment;
-import com.protechgene.android.bpconnect.ui.fragments.DevicesFragment;
-import com.protechgene.android.bpconnect.ui.fragments.MeasureBPFragment;
+import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.fragments.ReminderFragment;
-import com.protechgene.android.bpconnect.ui.fragments.TutorialFragment;
+import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragment;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragment;
+import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
+import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -95,8 +95,10 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         String userName = mHomeViewModel.getUserName();
         String userEmail = mHomeViewModel.getUserEmail();
 
-        if(userName==null && userName.equalsIgnoreCase("null"))
-            userName = "Update Profile Name";
+        if(userName==null || userName.equalsIgnoreCase("null")) {
+            userName = "BPConnect User";
+            userEmail = "View and edit profile";
+        }
         text_profile_name.setText(userName+"");
         text_profile_email.setText(userEmail+"");
     }

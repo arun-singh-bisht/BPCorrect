@@ -83,10 +83,6 @@ public class ReminderFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId())
         {
-            case R.id.img_right:{
-                FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,new PairNewDevicesFragment(),PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
-            }
-            break;
             case R.id.fab_add:{
                 // show the time picker dialog
                 TimePickerFragment newFragmentNight = new TimePickerFragment(this,1001,"Morning Reminder Time");

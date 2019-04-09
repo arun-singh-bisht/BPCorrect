@@ -1,6 +1,7 @@
 package com.protechgene.android.bpconnect.data.remote;
 
 
+import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
@@ -27,4 +28,7 @@ public interface ApiInterface {
 
     @POST("ProtechSentinel/common/update/patient")
     Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId, @Query("firstname") String firstname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1);
+
+    @GET("ProtechSentinel/common/get/chart/data/according/to/user")
+    Observable<BpReadingsResponse> getBpReadings(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId, @Query("fromdate") String fromdate, @Query("todate") String todate, @Query("dayno") String dayno);
 }

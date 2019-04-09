@@ -9,6 +9,7 @@ import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
 import com.protechgene.android.bpconnect.data.remote.ApiInterface;
+import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
@@ -192,6 +193,12 @@ public class Repository implements ApiInterface,
     @Override
     public Observable<ProfileResponse> profileDetails(String access_token, String patientUserId) {
         Observable<ProfileResponse> responseObservable = mApiInterface.profileDetails(access_token, patientUserId);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<BpReadingsResponse> getBpReadings(String access_token, String patientUserId, String fromdate, String todate, String dayno) {
+        Observable<BpReadingsResponse> responseObservable = mApiInterface.getBpReadings(access_token, patientUserId,fromdate,todate,dayno);
         return responseObservable;
     }
 

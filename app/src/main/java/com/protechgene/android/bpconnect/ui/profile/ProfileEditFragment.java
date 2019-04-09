@@ -56,8 +56,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         ((ImageView)getView().findViewById(R.id.img_right)).setImageResource(R.drawable.ic_action_done);
 
         String name = mProfileEditFragmentViewModel.getUserName();
-        if(name==null && name.equalsIgnoreCase("null"))
-            name = "Update Profile Name";
+        if(name==null || name.equalsIgnoreCase("null"))
+            name = "BPConnect User";
         edit_name.setText(name);
         edit_email.setText(mProfileEditFragmentViewModel.getUserEmail());
         edit_dob.setText(mProfileEditFragmentViewModel.getUserDoB());

@@ -84,9 +84,9 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
     @Override
     public void showProfileDetails() {
         String name = mProfileFragmentViewModel.getUserName();
-        if(name==null && name.equalsIgnoreCase("null"))
-            name = "Update Profile Name";
-        text_profile_name.setText(mProfileFragmentViewModel.getUserName());
+        if(name==null || name.equalsIgnoreCase("null"))
+            name = "BPConnect User";
+        text_profile_name.setText(name);
         text_email.setText(mProfileFragmentViewModel.getUserEmail());
         text_dob.setText(mProfileFragmentViewModel.getUserDoB());
         text_address.setText(mProfileFragmentViewModel.getUserAddress());
