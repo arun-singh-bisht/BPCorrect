@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.StringUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.home.MainActivity;
@@ -28,6 +29,7 @@ public class SplashActivity extends BaseActivity implements SplashNavigator{
         splashViewModel = ViewModelProviders.of(this,mViewModelFactory).get(SplashViewModel.class);
         splashViewModel.setNavigator(this);
         splashViewModel.nextScreen();
+       // StringUtil.getChart();
     }
 
     @Override

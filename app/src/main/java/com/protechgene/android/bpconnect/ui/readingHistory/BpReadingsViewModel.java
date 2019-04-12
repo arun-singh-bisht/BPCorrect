@@ -2,8 +2,13 @@ package com.protechgene.android.bpconnect.ui.readingHistory;
 
 
 import com.protechgene.android.bpconnect.data.Repository;
+import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.ActualValue;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.Chartdata;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -18,41 +23,18 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
         super(repository);
     }
 
-    public String getUserName()
-    {
-        return getRespository().getCurrentUserName();
-    }
-
-    public String getUserEmail()
-    {
-        return getRespository().getCurrentUserEmail();
-    }
-
-    public String getUserDoB()
-    {
-        return getRespository().getPatientDOB();
-    }
-
-    public String getUserAddress()
-    {
-        return getRespository().getPatientAddress();
-    }
-
-    public String getUserMobile()
-    {
-        return getRespository().getPatientMobile();
-    }
 
 
-    public void getBpReadings(String firstname, String gender, String dob, String mobile1, String address1)
+    public void getBpReadings()
     {
 
         String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
 
-        String fromDay = "";
-        String toDay = "";
-        String noDay = "";
+        currentUserId = "132";
+        String fromDay = "1552121902";
+        String toDay = "1554800400";
+        String noDay = "30";
 
         disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
                 .subscribeOn(Schedulers.io())
@@ -68,7 +50,15 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
                     public void accept(BpReadingsResponse bpReadingsResponse) throws Exception {
 
                         //Save user Details
-                        getNavigator().showReadingData();
+                        List<Chartdata> chartdata = bpReadingsResponse.getData().get(0).getChartdata();
+
+                        List<ActualValue> actualValues = new ArrayList<>();
+                        for(int i=0;i<chartdata.size();i++)
+                        {
+                            actualValues.addAll(chartdata.get(i).getActualValues());
+                        }
+
+                        getNavigator().showReadingData(actualValues);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

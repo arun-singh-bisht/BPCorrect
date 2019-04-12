@@ -1,22 +1,26 @@
 package com.protechgene.android.bpconnect.ui.readingHistory;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.protechgene.android.bpconnect.R;
-import com.protechgene.android.bpconnect.data.local.models.BPReadingModel;
-import com.protechgene.android.bpconnect.ui.adapters.BPReadingAdapter;
+import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.ActualValue;
+import com.protechgene.android.bpconnect.ui.adapters.ReadingAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
 public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsFragmentNavigator {
 
     public static final String FRAGMENT_TAG = "BPAllReadingFragment";
-    private BPReadingAdapter bpReadingAdapter;
+    private ReadingAdapter bpReadingAdapter;
+    private BpReadingsViewModel bpReadingsViewModel;
 
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
@@ -28,6 +32,8 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
 
     @Override
     protected void initialize() {
+        bpReadingsViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(BpReadingsViewModel.class);
+        bpReadingsViewModel.setNavigator(this);
         initView();
     }
 
@@ -37,18 +43,23 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        bpReadingAdapter = new BPReadingAdapter(getActivity(),new ArrayList<BPReadingModel>());
-        bpReadingAdapter.setData(BPReadingModel.getData());
+        bpReadingAdapter = new ReadingAdapter(getActivity(), new ArrayList<>());
         recyclerView.setAdapter(bpReadingAdapter);
+
+        showProgress("Please wait...");
+        bpReadingsViewModel.getBpReadings();
+
     }
 
     @Override
     public void handleError(Throwable throwable) {
-
+        hideProgress();
+        getBaseActivity().showSnakeBar(throwable.getMessage());
     }
 
     @Override
-    public void showReadingData() {
-
+    public void showReadingData(List<ActualValue> actualValues) {
+        hideProgress();
+        bpReadingAdapter.setData(actualValues);
     }
 }

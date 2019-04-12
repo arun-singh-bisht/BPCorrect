@@ -11,6 +11,7 @@ import com.protechgene.android.bpconnect.ui.home.HomeViewModel;
 import com.protechgene.android.bpconnect.ui.login.LoginViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentViewModel;
+import com.protechgene.android.bpconnect.ui.readingHistory.BpReadingsViewModel;
 import com.protechgene.android.bpconnect.ui.signup.SignUpViewModel;
 import com.protechgene.android.bpconnect.ui.splash.SplashViewModel;
 
@@ -52,6 +53,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ProfileFragmentViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(ProfileEditFragmentViewModel.class)) {
             return (T) new ProfileEditFragmentViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(BpReadingsViewModel.class)) {
+            return (T) new BpReadingsViewModel(mRepository);
         }
 
         throw new IllegalArgumentException("Unknown class name");
