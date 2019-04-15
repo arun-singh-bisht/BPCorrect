@@ -29,9 +29,10 @@
         />
 
     <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+        android:id="@+id/text_bp_reading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="130/85"
+        android:text="0/0"
         android:textColor="#000000"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -50,9 +51,10 @@
         >
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/text_heart_rate_reading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="84"
+            android:text="0"
             android:textColor="#000000"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -70,7 +72,7 @@
     </LinearLayout>
 
     <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -84,6 +86,7 @@
         android:paddingRight="25dp"
         android:paddingTop="@dimen/sign_in_button_padding"
         android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+        android:visibility="visible"
         />
 
 

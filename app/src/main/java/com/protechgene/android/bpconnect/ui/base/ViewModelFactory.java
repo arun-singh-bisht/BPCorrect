@@ -11,6 +11,7 @@ import com.protechgene.android.bpconnect.ui.devices.PairNewDeviceViewModel;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordViewModel;
 import com.protechgene.android.bpconnect.ui.home.HomeViewModel;
 import com.protechgene.android.bpconnect.ui.login.LoginViewModel;
+import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.readingHistory.BpReadingsViewModel;
@@ -61,7 +62,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new PairNewDeviceViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(DeviceFragmentViewModel.class)) {
             return (T) new DeviceFragmentViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(MeasureBPFragmentViewModel.class)) {
+            return (T) new MeasureBPFragmentViewModel(mRepository);
         }
+
 
         throw new IllegalArgumentException("Unknown class name");
     }
