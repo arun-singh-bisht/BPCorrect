@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bp_gray"
-    android:orientation="vertical">
+    android:background="#ffffff"
+    android:orientation="vertical"
+    >
 
-    <include layout="@layout/app_bar_custom"/>
+    <include layout="@layout/app_bar_custom"
+        />
 
 
 
@@ -16,10 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/content"
-        app:rb_color="#0099CC"
-        app:rb_radius="32dp"
-        app:rb_rippleAmount="4"
+        app:rb_color="#1F9DC9"
+        app:rb_radius="37dp"
+        app:rb_rippleAmount="5"
         app:rb_duration="3000"
+        android:visibility="visible"
         app:rb_scale="6">
         <ImageView
             android:layout_width="64dp"
@@ -27,15 +30,71 @@
             android:layout_centerInParent="true"
             android:id="@+id/centerImage"
             android:src="@drawable/device_search"/>
+
+        <LinearLayout
+            android:id="@+id/image_found_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@+id/centerImage"
+            android:layout_marginBottom="70dp"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bp_device"
+                />
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:id="@+id/text_device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AND_UA-651BLE_DD93EA"
+                android:layout_marginTop="10dp"
+                android:textSize="13sp"
+                />
+
+        </LinearLayout>
+
     </com.skyfishjy.library.RippleBackground>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:scrollbars="vertical"
-        android:background="@color/bp_gray"
+
+    <LinearLayout
+        android:id="@+id/layout_pair"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
         android:visibility="gone"
-        android:layout_height="match_parent"/>
+        >
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AND BT Device"
+            android:textSize="16sp"
+            />
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alloe Pair to target BT Device"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/btn_pair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pair n Connect"
+            android:background="@color/colorPrimary"
+            android:textColor="#ffffff"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            />
+
+    </LinearLayout>
 
 
 </LinearLayout>

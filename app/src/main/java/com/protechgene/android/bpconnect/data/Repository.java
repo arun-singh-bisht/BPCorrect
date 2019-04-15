@@ -169,6 +169,36 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public String getBPDeviceName() {
+        return mSharedPrefsHelper.getBPDeviceName();
+    }
+
+    @Override
+    public void setBPDeviceName(String name) {
+        mSharedPrefsHelper.setBPDeviceName(name);
+    }
+
+    @Override
+    public String getBPDeviceAddress() {
+        return mSharedPrefsHelper.getBPDeviceAddress();
+    }
+
+    @Override
+    public void setBPDeviceAddress(String address) {
+        mSharedPrefsHelper.setBPDeviceAddress(address);
+    }
+
+    @Override
+    public String getBPDeviceUUID() {
+        return mSharedPrefsHelper.getBPDeviceUUID();
+    }
+
+    @Override
+    public void setBPDeviceUUID(String uuid) {
+        mSharedPrefsHelper.setBPDeviceUUID(uuid);
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }

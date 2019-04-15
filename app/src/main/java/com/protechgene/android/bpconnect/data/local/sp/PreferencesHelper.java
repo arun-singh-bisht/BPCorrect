@@ -137,4 +137,34 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     public void setIsPatientGraduated(boolean isPatientGraduated) {
         mSharedPreferences.edit().putBoolean(PREF_KEY_PATIENT_IS_GRADUATED,isPatientGraduated).apply();
     }
+
+    @Override
+    public String getBPDeviceName() {
+        return mSharedPreferences.getString(PREF_KEY_BP_DEVICE_NAME, null);
+    }
+
+    @Override
+    public void setBPDeviceName(String name) {
+        mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_NAME, name).apply();
+    }
+
+    @Override
+    public String getBPDeviceAddress() {
+        return mSharedPreferences.getString(PREF_KEY_BP_DEVICE_ADDRESS, null);
+    }
+
+    @Override
+    public void setBPDeviceAddress(String address) {
+        mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_ADDRESS, address).apply();
+    }
+
+    @Override
+    public String getBPDeviceUUID() {
+        return mSharedPreferences.getString(PREF_KEY_BP_DEVICE_UUID, null);
+    }
+
+    @Override
+    public void setBPDeviceUUID(String uuid) {
+        mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_UUID, uuid).apply();
+    }
 }

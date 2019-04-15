@@ -101,17 +101,22 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void showToast(String msg) { Toast.makeText(mActivity, msg, Toast.LENGTH_LONG).show(); }
-    protected void showAlert(String msg) {
+    protected void showAlert(String title,String msg,String positivrBtnText,AlertDialogCallback alertDialogCallback) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(getResources().getString(R.string.app_name))
+        builder.setTitle(title)
                 .setMessage(msg)
-                .setCancelable(false)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(positivrBtnText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                        alertDialogCallback.onPositiveClick();
                     }
                 }).create().show();
+    }
+
+    public interface AlertDialogCallback
+    {
+        void onPositiveClick();
     }
 }

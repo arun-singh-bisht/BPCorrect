@@ -1,5 +1,6 @@
 package com.protechgene.android.bpconnect.ui.devices;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,19 +9,23 @@ import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
 import com.protechgene.android.bpconnect.data.local.models.TutorialModel;
 import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class DevicesFragment extends BaseFragment {
+public class DevicesFragment extends BaseFragment implements DeviceFragmentNavigator {
 
     public static final String FRAGMENT_TAG = "DevicesFragment";
     private DevicesAdapter bpReadingAdapter;
+    private DeviceFragmentViewModel deviceFragmentViewModel;
 
     @BindView(R.id.txt_title)
     TextView title;
@@ -35,6 +40,9 @@ public class DevicesFragment extends BaseFragment {
 
     @Override
     protected void initialize() {
+        deviceFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(DeviceFragmentViewModel.class);
+        deviceFragmentViewModel.setNavigator(this);
+
         initView();
     }
 
@@ -54,10 +62,16 @@ public class DevicesFragment extends BaseFragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        bpReadingAdapter = new DevicesAdapter(new ArrayList<TutorialModel>());
-        bpReadingAdapter.setData(TutorialModel.getData());
+        bpReadingAdapter = new DevicesAdapter(new ArrayList<BPDeviceModel>());
         recyclerView.setAdapter(bpReadingAdapter);
+
+        List<BPDeviceModel> modelList = deviceFragmentViewModel.getPairedDeviceList();
+        bpReadingAdapter.setData(modelList);
 
     }
 
+    @Override
+    public void handleError(Throwable throwable) {
+
+    }
 }

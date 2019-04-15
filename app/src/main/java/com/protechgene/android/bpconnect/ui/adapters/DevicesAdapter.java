@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
-import com.protechgene.android.bpconnect.data.local.models.TutorialModel;
+import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
 
 import java.util.List;
 
 public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.MyViewHolder>   {
 
 
-    private List<TutorialModel> readingModelList;
+    private List<BPDeviceModel> bpDeviceModels;
 
-    public DevicesAdapter(List<TutorialModel> readingModelList) {
-        this.readingModelList = readingModelList;
+    public DevicesAdapter(List<BPDeviceModel> bpDeviceModels) {
+        this.bpDeviceModels = bpDeviceModels;
     }
 
     @Override
@@ -30,37 +30,33 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        /*BPReadingModel readingModel = readingModelList.get(position);
-        holder.text_sys_value.setText(readingModel.getSys());
-        holder.text_dia_value.setText(readingModel.getDia());
-        holder.text_pulse_value.setText(readingModel.getPulse());
-        String color = readingModel.getColor();
-        holder.layout_header.setBackgroundColor(Color.parseColor(color));*/
+        BPDeviceModel bpDeviceModel = bpDeviceModels.get(position);
+        holder.text_name.setText(bpDeviceModel.getDeviceName());
+        holder.text_address.setText(bpDeviceModel.getDeviceAddress());
     }
 
     @Override
     public int getItemCount() {
-        return readingModelList.size();
+        return bpDeviceModels.size();
     }
 
 
-    public void setData(List<TutorialModel> readingModelList)
+    public void setData(List<BPDeviceModel> bpDeviceModels)
     {
-        this.readingModelList = readingModelList;
+        this.bpDeviceModels = bpDeviceModels;
         notifyDataSetChanged();
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView text_sys_value,sys,text_dia_value,text_pulse_value;
-        public View layout_header;
+        public TextView text_name,text_address;
+        public View root;
 
         public MyViewHolder(View view) {
             super(view);
-          /*  text_sys_value = (TextView) view.findViewById(R.id.text_sys_value);
-            text_dia_value = (TextView) view.findViewById(R.id.text_dia_value);
-            text_pulse_value = (TextView) view.findViewById(R.id.text_pulse_value);
-            layout_header =  view.findViewById(R.id.layout_header);*/
+            text_name = view.findViewById(R.id.text_name);
+            text_address = view.findViewById(R.id.text_address);
+            root = view.findViewById(R.id.root);
         }
     }
 

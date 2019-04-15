@@ -11,9 +11,11 @@
         android:layout_marginBottom="5dp"
         android:layout_marginRight="13dp"
         android:layout_marginLeft="13dp"
+
         >
 
         <LinearLayout
+            android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -22,7 +24,7 @@
             >
 
             <ImageView
-                android:layout_width="130dp"
+                android:layout_width="110dp"
                 android:layout_height="90dp"
                 android:src="@drawable/s_watch"
                 android:padding="10dp"
@@ -37,13 +39,14 @@
                 >
 
                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-                    android:id="@+id/text_sys_value"
+                    android:id="@+id/text_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Smart Flex"
                     android:textSize="15sp"
                     />
                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                    android:id="@+id/text_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Last Sync: 10 PM, Monday"

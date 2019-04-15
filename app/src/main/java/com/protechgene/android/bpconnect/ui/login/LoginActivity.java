@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.PermissionUtils;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordActivity;
@@ -34,6 +35,8 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
         //Do something here
         mLoginViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(LoginViewModel.class);
         mLoginViewModel.setNavigator(this);
+
+        new PermissionUtils().requestForPermission(this);
     }
 
     @Override
