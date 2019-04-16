@@ -31,6 +31,7 @@
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="March 29, 2019"
@@ -48,6 +49,7 @@
                 />
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3:40 PM"

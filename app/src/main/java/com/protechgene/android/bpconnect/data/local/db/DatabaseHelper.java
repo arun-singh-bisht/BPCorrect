@@ -3,7 +3,7 @@ package com.protechgene.android.bpconnect.data.local.db;
 
 import android.arch.lifecycle.LiveData;
 
-import com.protechgene.android.bpconnect.data.local.db.models.Word;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ public class DatabaseHelper implements DatabaseHelperInterface {
     }
 
     @Override
-    public void addNewWord(Word word) {
-        mAppDatabase.getWordDAO().addNewWord(word);
+    public void addNewHealthRecord(HealthReading healthReading) {
+        mAppDatabase.getHealthReadingDAO().addNewRecord(healthReading);
     }
 
     @Override
-    public LiveData<List<Word>> getAllWords() {
-        return mAppDatabase.getWordDAO().getAllWords();
+    public List<HealthReading> getAllRecords() {
+        return mAppDatabase.getHealthReadingDAO().getAllRecords();
     }
 
     @Override
-    public void deleteAllWords() {
-        mAppDatabase.getWordDAO().deleteAllWords();
+    public void deleteAllHealthRecords() {
+        mAppDatabase.getHealthReadingDAO().deleteAllRecords();
     }
 }

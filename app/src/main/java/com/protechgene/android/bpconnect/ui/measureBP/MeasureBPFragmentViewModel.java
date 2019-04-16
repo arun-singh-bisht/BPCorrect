@@ -23,6 +23,7 @@ import com.protechgene.android.bpconnect.data.ble.ADGattService;
 import com.protechgene.android.bpconnect.data.ble.ADGattUUID;
 import com.protechgene.android.bpconnect.data.ble.BleReceivedService;
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 import java.text.DateFormat;
@@ -91,23 +92,30 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
    public void connectToDevice(Context context)
    {
-       mContext = context;
-       deviceList = new ArrayList<BluetoothDevice>();
 
-       int val = ((0x07 & 0xff) << 8) | (0xE1 & 0xff);
-       int sys = ((0x00 & 0xff) << 8) | (0x65 & 0xff);
+       mContext = context;
+       //Enable Bluetooth in background
+       getBluetoothManager().getAdapter().enable();
+
+       deviceList = new ArrayList<BluetoothDevice>();
 
        context.registerReceiver(mMeasudataUpdateReceiver, MeasuDataUpdateIntentFilter());
 
-       //Call function to get paired device
-       boolean isBpDevicePaired =  isDevicePaired();
-       if(isBpDevicePaired) {
-           getNavigator().bpDevicePairedStatus(true);
-           doStartService();
-       }else
-       {
-           getNavigator().bpDevicePairedStatus(false);
-       }
+       //Start Background service after 1.5 sec delay
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               //Call function to get paired device
+               boolean isBpDevicePaired =  isDevicePaired();
+               if(isBpDevicePaired) {
+                   getNavigator().bpDevicePairedStatus(true);
+                   doStartService();
+               }else
+               {
+                   getNavigator().bpDevicePairedStatus(false);
+               }
+           }
+       },1500);
    }
 
     protected void onResume() {
@@ -694,7 +702,12 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             MeasuDataManager measuDataManager = ((AndMedical_App_Global) getApplication()).getMeasuDataManager();
             measuDataManager.syncMeasudata(MeasuDataManager.MEASU_DATA_TYPE_BP, true);*/
 
+            //Notify new data to UI
             getNavigator().result(infoBeanObj);
+
+            //Insert new data into DB
+            HealthReading healthReading = new HealthReading(0,infoBeanObj.getSystolic(),infoBeanObj.getDiastolic(),infoBeanObj.getPulse(),infoBeanObj.getDateTimeStamp(),false);
+            getRespository().addNewHealthRecord(healthReading);
 
         } else if (ADGattUUID.TemperatureMeasurement.toString().equals(characteristicUuidString)) {
             BluetoothGatt gatt = BleReceivedService.getGatt();

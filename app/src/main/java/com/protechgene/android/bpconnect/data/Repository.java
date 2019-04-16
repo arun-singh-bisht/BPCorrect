@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelperInterface;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
@@ -249,18 +250,17 @@ public class Repository implements ApiInterface,
     // Local Database access methods
 
     @Override
-    public void addNewWord(Word word) {
-        //Execute this new backgroundthread
-        mDatabaseHelper.addNewWord(word);
+    public void addNewHealthRecord(HealthReading healthReading) {
+        mDatabaseHelper.addNewHealthRecord(healthReading);
     }
 
     @Override
-    public LiveData<List<Word>> getAllWords() {
-        return mDatabaseHelper.getAllWords();
+    public List<HealthReading> getAllRecords() {
+        return mDatabaseHelper.getAllRecords();
     }
 
     @Override
-    public void deleteAllWords() {
-        mDatabaseHelper.deleteAllWords();
+    public void deleteAllHealthRecords() {
+        mDatabaseHelper.deleteAllHealthRecords();
     }
 }

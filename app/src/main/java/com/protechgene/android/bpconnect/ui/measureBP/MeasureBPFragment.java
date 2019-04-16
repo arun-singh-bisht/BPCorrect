@@ -12,8 +12,6 @@ import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
-import org.w3c.dom.Text;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 

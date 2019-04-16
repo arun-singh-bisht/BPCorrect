@@ -45,7 +45,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         mHomeViewModel.getProfileDetails();
         //CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
-
     }
 
 

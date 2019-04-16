@@ -1,12 +1,13 @@
 package com.protechgene.android.bpconnect.ui.readingHistory;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.protechgene.android.bpconnect.R;
-import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.ActualValue;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.ui.adapters.ReadingAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
@@ -46,20 +47,21 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
         bpReadingAdapter = new ReadingAdapter(getActivity(), new ArrayList<>());
         recyclerView.setAdapter(bpReadingAdapter);
 
-        showProgress("Please wait...");
+        showProgress("Loading...");
         bpReadingsViewModel.getBpReadings();
 
+    }
+
+    @Override
+    public void showReadingData(List<HealthReading> actualValues) {
+
+        hideProgress();
+        bpReadingAdapter.setData(actualValues);
     }
 
     @Override
     public void handleError(Throwable throwable) {
         hideProgress();
         getBaseActivity().showSnakeBar(throwable.getMessage());
-    }
-
-    @Override
-    public void showReadingData(List<ActualValue> actualValues) {
-        hideProgress();
-        bpReadingAdapter.setData(actualValues);
     }
 }

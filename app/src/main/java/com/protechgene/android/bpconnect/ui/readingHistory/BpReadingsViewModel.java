@@ -1,7 +1,11 @@
 package com.protechgene.android.bpconnect.ui.readingHistory;
 
 
+import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
+
 import com.protechgene.android.bpconnect.data.Repository;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.ActualValue;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.Chartdata;
@@ -25,7 +29,7 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
 
 
 
-    public void getBpReadings()
+   /* public void getBpReadings()
     {
 
         String accessToken = getRespository().getAccessToken();
@@ -68,5 +72,36 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
                     }
                 }));
 
+    }*/
+
+    public void getBpReadings()
+    {
+            new AsynDataAccess().execute();
+    }
+
+    class AsynDataAccess extends AsyncTask<Void,Void,Void>
+    {
+        List<HealthReading> allRecords = null;
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            allRecords = getRespository().getAllRecords();
+
+            /*try {
+                Thread.sleep(3000);
+                allRecords = getRespository().getAllRecords();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            getNavigator().showReadingData(allRecords);
+
+        }
     }
 }
