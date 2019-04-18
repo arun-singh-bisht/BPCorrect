@@ -8,7 +8,7 @@ public interface MeasureBPFragmentNavigator {
     void handleError(Throwable throwable);
 
     void bpDevicePairedStatus(boolean status);
-    void tunrOnBluetooth();
+    void turningOnBluetooth();
 
     void setIndicatorMessage(String message);
     void showIndicator(String message);

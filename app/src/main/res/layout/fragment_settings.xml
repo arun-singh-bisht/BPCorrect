@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar_custom"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:drawableLeft="@drawable/ic_action_signout"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:drawableTint="#968F8F"
+            android:padding="10dp"
+            android:id="@+id/text_signout"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

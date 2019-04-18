@@ -17,6 +17,9 @@ public interface PreferencesHelperInterface {
      String PREF_KEY_PATIENT_ADDRESS = "PREF_KEY_PATIENT_ADDRESS";
      String PREF_KEY_PATIENT_MOBILE = "PREF_KEY_PATIENT_MOBILE";
      String PREF_KEY_PATIENT_DOB = "PREF_KEY_PATIENT_DOB";
+     String PREF_KEY_PATIENT_WEIGHT = "PREF_KEY_PATIENT_WEIGHT";
+     String PREF_KEY_PATIENT_HEIGHT = "PREF_KEY_PATIENT_HEIGHT";
+     String PREF_KEY_PATIENT_ABOUT = "PREF_KEY_PATIENT_ABOUT";
 
      String PREF_KEY_BP_DEVICE_NAME = "PREF_KEY_BP_DEVICE_NAME";
      String PREF_KEY_BP_DEVICE_ADDRESS = "PREF_KEY_BP_DEVICE_ADDRESS";
@@ -68,6 +71,14 @@ public interface PreferencesHelperInterface {
 
      void setPatientDOB(String dob);
 
+     String getPatientWeight();
+
+     void setPatientWeight(String weight);
+
+     String getPatientHeight();
+
+     void setPatientHeight(String height);
+
      boolean isPatientGraduated();
 
      void setIsPatientGraduated(boolean isPatientGraduated);
@@ -83,4 +94,10 @@ public interface PreferencesHelperInterface {
      String getBPDeviceUUID();
 
      void setBPDeviceUUID(String uuid);
+
+     String getPatientAbout();
+
+     void setPatientAbout(String about);
+
+
 }

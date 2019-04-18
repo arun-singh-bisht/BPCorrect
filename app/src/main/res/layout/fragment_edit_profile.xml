@@ -144,6 +144,90 @@
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_weight"
+                android:drawableTint="#968F8F"
+                android:hint="Weight (kg)"
+                android:singleLine="true"
+                android:maxLength="3"
+                android:inputType="number"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_height"
+                android:drawableTint="#968F8F"
+                android:hint="Height"
+                android:singleLine="true"
+                android:maxLength="20"
+                android:clickable="true"
+                android:focusable="false"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_gender"
+                android:drawableTint="#968F8F"
+                android:hint="Gender"
+                android:singleLine="true"
+                android:maxLength="20"
+                android:clickable="true"
+                android:focusable="false"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_about"
+                android:drawableTint="#968F8F"
+                android:hint="About"
+                android:maxLines="10"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:id="@+id/btn_signup"
             android:layout_width="match_parent"

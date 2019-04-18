@@ -15,6 +15,7 @@ import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentViewModel
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.readingHistory.BpReadingsViewModel;
+import com.protechgene.android.bpconnect.ui.settings.SettingFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.signup.SignUpViewModel;
 import com.protechgene.android.bpconnect.ui.splash.SplashViewModel;
 
@@ -64,8 +65,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DeviceFragmentViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(MeasureBPFragmentViewModel.class)) {
             return (T) new MeasureBPFragmentViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(SettingFragmentViewModel.class)) {
+            return (T) new SettingFragmentViewModel(mRepository);
         }
-
 
         throw new IllegalArgumentException("Unknown class name");
     }

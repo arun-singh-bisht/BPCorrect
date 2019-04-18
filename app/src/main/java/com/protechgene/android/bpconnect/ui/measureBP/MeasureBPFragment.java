@@ -1,13 +1,15 @@
 package com.protechgene.android.bpconnect.ui.measureBP;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.Utils.GpsUtils;
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
@@ -22,12 +24,13 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     private MeasureBPFragmentViewModel measureBPFragmentViewModel;
 
     @BindView(R.id.btn_start)
-    View startButton;
-
+    TextView startButton;
     @BindView(R.id.text_bp_reading)
     TextView text_bp_reading;
     @BindView(R.id.text_heart_rate_reading)
     TextView text_heart_rate_reading;
+
+    private boolean isReadingDone = false;
 
     @Override
     protected int layoutRes() {
@@ -41,10 +44,20 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         measureBPFragmentViewModel.connectToDevice(getBaseActivity());
     }
 
+    @OnClick(R.id.img_left)
+    public void onBackIconClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
+    }
+
     @OnClick(R.id.btn_start)
     public void onStartButtonClick()
     {
-        measureBPFragmentViewModel.onResume();
+        if(!isReadingDone) {
+            measureBPFragmentViewModel.onResume();
+        }else {
+            FragmentUtil.removeFragment(getBaseActivity());
+        }
     }
 
     @Override
@@ -66,15 +79,38 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     }
 
     @Override
-    public void tunrOnBluetooth() {
-        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(intent, measureBPFragmentViewModel.REQUEST_ENABLE_BLUETOOTH);
+    public void turningOnBluetooth() {
+        showProgress("Turning On bluetooth...");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                GpsUtils  gpsUtils = new GpsUtils(getBaseActivity());
+                gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
+                    @Override
+                    public void gpsStatus(boolean isGPSEnable) {
+                        measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+                    }
+                });
+
+            }
+        },1500);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        measureBPFragmentViewModel.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GpsUtils.GPS_REQUEST)
+        {
+            if(resultCode == getBaseActivity().RESULT_OK)
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+            else
+                FragmentUtil.removeFragment(getBaseActivity());
+        }
+        else
+            measureBPFragmentViewModel.onActivityResult(requestCode,resultCode,data);
+
+        Log.d("onActivityResult",""+requestCode+" "+resultCode);
     }
 
     @Override
@@ -100,6 +136,8 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     public void result(Lifetrack_infobean lifetrackInfobean) {
         text_bp_reading.setText(lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic());
         text_heart_rate_reading.setText(lifetrackInfobean.getPulse());
+        isReadingDone = true;
+        startButton.setText("DONE");
     }
 
     @Override

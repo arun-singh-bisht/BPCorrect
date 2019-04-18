@@ -38,6 +38,10 @@ public class Data {
     private String accessRole;
     @SerializedName("photo_url")
     private String photo_url;
+    @SerializedName("weight")
+    private String weight;
+    @SerializedName("height")
+    private String height;
 
 
 
@@ -175,5 +179,21 @@ public class Data {
 
     public void setPhoto_url(String photo_url) {
         this.photo_url = photo_url;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
     }
 }

@@ -5,10 +5,12 @@ import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class BPReadingFragment extends BaseFragment {
 
@@ -31,6 +33,12 @@ public class BPReadingFragment extends BaseFragment {
     @Override
     protected void initialize() {
         initView();
+    }
+
+    @OnClick(R.id.img_left)
+    public void onBackIconClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
     }
 
     private void initView()

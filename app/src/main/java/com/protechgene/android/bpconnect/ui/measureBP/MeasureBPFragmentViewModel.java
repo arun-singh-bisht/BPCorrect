@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -95,25 +96,32 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
        mContext = context;
        //Enable Bluetooth in background
-       getBluetoothManager().getAdapter().enable();
+       if(!getBluetoothManager().getAdapter().isEnabled())
+       {
+           getBluetoothManager().getAdapter().enable();
+           getNavigator().turningOnBluetooth();
+           return;
+       }
 
        deviceList = new ArrayList<BluetoothDevice>();
 
        context.registerReceiver(mMeasudataUpdateReceiver, MeasuDataUpdateIntentFilter());
+
+       boolean isBpDevicePaired =  isDevicePaired();
+       if(isBpDevicePaired) {
+           getNavigator().bpDevicePairedStatus(true);
+           doStartService();
+       }else
+       {
+           getNavigator().bpDevicePairedStatus(false);
+       }
 
        //Start Background service after 1.5 sec delay
        new Handler().postDelayed(new Runnable() {
            @Override
            public void run() {
                //Call function to get paired device
-               boolean isBpDevicePaired =  isDevicePaired();
-               if(isBpDevicePaired) {
-                   getNavigator().bpDevicePairedStatus(true);
-                   doStartService();
-               }else
-               {
-                   getNavigator().bpDevicePairedStatus(false);
-               }
+
            }
        },1500);
    }
@@ -132,7 +140,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 if (!bluetoothAdapter.isEnabled()) {
                     if (!mIsCheckBleetoothEnabled) {
                         mIsCheckBleetoothEnabled = true;
-                        getNavigator().tunrOnBluetooth();
+                        //getNavigator().tunrOnBluetooth();
                         return;
                     }
                 } else {
@@ -706,8 +714,13 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             getNavigator().result(infoBeanObj);
 
             //Insert new data into DB
-            HealthReading healthReading = new HealthReading(0,infoBeanObj.getSystolic(),infoBeanObj.getDiastolic(),infoBeanObj.getPulse(),infoBeanObj.getDateTimeStamp(),false);
-            getRespository().addNewHealthRecord(healthReading);
+            final HealthReading healthReading = new HealthReading(0,infoBeanObj.getSystolic(),infoBeanObj.getDiastolic(),infoBeanObj.getPulse(),infoBeanObj.getDateTimeStamp(),false);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    getRespository().addNewHealthRecord(healthReading);
+                }
+            });
 
         } else if (ADGattUUID.TemperatureMeasurement.toString().equals(characteristicUuidString)) {
             BluetoothGatt gatt = BleReceivedService.getGatt();
@@ -891,7 +904,14 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     protected void onDestroy() {
         getNavigator().dismissIndicator();
         doStopService();
-        mContext.unregisterReceiver(mMeasudataUpdateReceiver);
+        try {
+            //Register or UnRegister your broadcast receiver here
+            mContext.unregisterReceiver(mMeasudataUpdateReceiver);
+        } catch(IllegalArgumentException e) {
+
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -7,9 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,6 +40,17 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
     TextView text_mobile;
     @BindView(R.id.text_profile_name)
     TextView text_profile_name;
+    @BindView(R.id.text_height_value)
+    TextView text_height_value;
+    @BindView(R.id.text_weight_value)
+    TextView text_weight_value;
+    @BindView(R.id.text_age_value)
+    TextView text_age_value;
+    @BindView(R.id.text_gender_value)
+    TextView text_gender_value;
+    @BindView(R.id.text_about)
+    TextView text_about;
+
 
 
     @Override
@@ -91,5 +107,47 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
         text_dob.setText(mProfileFragmentViewModel.getUserDoB());
         text_address.setText(mProfileFragmentViewModel.getUserAddress());
         text_mobile.setText(mProfileFragmentViewModel.getUserMobile());
+        text_gender_value.setText(mProfileFragmentViewModel.getUserGender());
+        text_about.setText(mProfileFragmentViewModel.getUserAbout());
+
+        //Set Height
+        String userHeight = mProfileFragmentViewModel.getUserHeight();
+        if(userHeight==null || userHeight.isEmpty() || userHeight.equalsIgnoreCase("0"))
+            userHeight = "-";
+        else
+        {
+            if(userHeight.contains("feet"))
+                userHeight = userHeight.replace("feet","'");
+            if(userHeight.contains("inches"))
+                userHeight = userHeight.replace("inches","\"");
+        }
+        text_height_value.setText(userHeight);
+
+        //Set Weight
+        String userWeight = mProfileFragmentViewModel.getUserWeight();
+        if(userWeight==null || userWeight.isEmpty() || userWeight.equalsIgnoreCase("0"))
+            userWeight = "-";
+        else
+        {
+            userWeight = userWeight+" kg";
+        }
+        text_weight_value.setText(userWeight);
+
+        //Set Age
+        String userDoB = mProfileFragmentViewModel.getUserDoB();
+        if(userDoB==null || userDoB.isEmpty() || userDoB.equalsIgnoreCase("0"))
+            userDoB = "-";
+        else
+        {
+            Date date1= null;
+            try {
+                date1 = new SimpleDateFormat("yyyy-mm-dd").parse(userDoB);
+                userDoB = DateUtils.getAge(date1)+" yr";
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        text_age_value.setText(userDoB);
     }
 }

@@ -17,6 +17,9 @@ import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.data.local.models.BPReadingModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.ActualValue;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHolder>   {
@@ -43,7 +46,14 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
         holder.text_sys_value.setText(actualValue.getSystolic() +" mmHg");
         holder.text_dia_value.setText(actualValue.getDiastolic()+" mmHg");
         holder.text_pulse_value.setText(actualValue.getPulse()+" bpm");
-        holder.text_date.setText(actualValue.getLogTime());
+
+        Date date = new Date(Long.parseLong(actualValue.getLogTime()));
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd,yyyy");
+        String strDate = dateFormat.format(date);
+        holder.text_date.setText(strDate);
+        dateFormat = new SimpleDateFormat("HH:mm");
+        String strTime = dateFormat.format(date);
+        holder.text_time.setText(strTime);
         //String color = readingModel.getColor();
         //holder.layout_header.setBackgroundColor(Color.parseColor(color));
         Drawable background = holder.colorPlate.getBackground();
@@ -51,12 +61,25 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
         RotateDrawable gradientDrawable = (RotateDrawable) layerDrawable
                 .findDrawableByLayerId(R.id.color_rect);
 
-        if(position%2==0)
+        String systolic = actualValue.getSystolic();
+        String diastolic = actualValue.getDiastolic();
+        int sys = Integer.parseInt(systolic);
+        int dia = Integer.parseInt(diastolic);
+        if(sys<120 && dia<80)
         {
-            gradientDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+            gradientDrawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+        }else if(sys<130 && dia<80)
+        {
+            gradientDrawable.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+        }else if(sys<140 || dia<90)
+        {
+            gradientDrawable.setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_IN);
+        }else if(sys<180 || dia<120)
+        {
+            gradientDrawable.setColorFilter(Color.parseColor("#ff5959"), PorterDuff.Mode.SRC_IN);
         }else
         {
-            gradientDrawable.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+            gradientDrawable.setColorFilter(Color.parseColor("#5a3921"), PorterDuff.Mode.SRC_IN);
         }
 
     }

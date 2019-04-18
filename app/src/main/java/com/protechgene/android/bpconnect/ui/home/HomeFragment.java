@@ -10,10 +10,11 @@ import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
-import com.protechgene.android.bpconnect.ui.fragments.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragment;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragment;
 import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
+import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
+import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
 
 import butterknife.BindView;
@@ -71,6 +72,11 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     @OnClick(R.id.card_reminder)
     public void openRemiderFragment() {
         FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+    }
+
+    @OnClick(R.id.card_settings)
+    public void openSettingsFragment() {
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new SettingsFragment(),SettingsFragment.FRAGMENT_TAG,"SettingsFragmentTransition");
     }
 
     @OnClick(R.id.layout_profile)

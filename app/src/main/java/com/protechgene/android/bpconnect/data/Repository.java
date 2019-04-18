@@ -160,6 +160,26 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public String getPatientWeight() {
+        return mSharedPrefsHelper.getPatientWeight();
+    }
+
+    @Override
+    public void setPatientWeight(String weight) {
+        mSharedPrefsHelper.setPatientWeight(weight);
+    }
+
+    @Override
+    public String getPatientHeight() {
+        return mSharedPrefsHelper.getPatientHeight();
+    }
+
+    @Override
+    public void setPatientHeight(String height) {
+        mSharedPrefsHelper.setPatientHeight(height);
+    }
+
+    @Override
     public boolean isPatientGraduated() {
         return mSharedPrefsHelper.isPatientGraduated();
     }
@@ -200,6 +220,16 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public String getPatientAbout() {
+        return mSharedPrefsHelper.getPatientAbout();
+    }
+
+    @Override
+    public void setPatientAbout(String about) {
+        mSharedPrefsHelper.setPatientAbout(about);
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }
@@ -234,8 +264,8 @@ public class Repository implements ApiInterface,
     }
 
     @Override
-    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String gender, String dob, String mobile1, String address1) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, gender, dob, mobile1, address1);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String gender, String dob, String mobile1, String address1,String weight,String height,String about) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, gender, dob, mobile1, address1,weight,height,about);
         return responseObservable;
     }
 

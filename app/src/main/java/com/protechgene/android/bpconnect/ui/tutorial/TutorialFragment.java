@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.data.local.models.TutorialModel;
 import com.protechgene.android.bpconnect.ui.adapters.TutorialAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
@@ -13,6 +14,7 @@ import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class TutorialFragment extends BaseFragment {
 
@@ -35,6 +37,12 @@ public class TutorialFragment extends BaseFragment {
     @Override
     protected void initialize() {
         initView();
+    }
+
+    @OnClick(R.id.img_left)
+    public void onBackIconClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
     }
 
     private void initView()

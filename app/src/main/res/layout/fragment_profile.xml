@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:background="@drawable/sample" />
 
     <LinearLayout
@@ -18,11 +18,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/background"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="-100dp">
+        android:layout_marginTop="-85dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:src="@drawable/download"
             app:civ_border_color="#ffffff"
             app:civ_border_width="2dp" />
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="28dp"
             android:layout_gravity="bottom">
@@ -64,11 +64,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/profile_pic_layout"
-        android:layout_marginTop="30dp"
-        android:weightSum="3"
+        android:layout_marginTop="20dp"
+        android:weightSum="4"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textSize="12sp"
+                />
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:textSize="16sp"
+                android:id="@+id/text_gender_value"
+                />
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -89,6 +113,7 @@
                 android:layout_height="wrap_content"
                 android:text="5'10 ft"
                 android:textSize="16sp"
+                android:id="@+id/text_height_value"
                 />
             
         </LinearLayout>
@@ -112,6 +137,7 @@
                 android:layout_height="wrap_content"
                 android:text="78 kg"
                 android:textSize="16sp"
+                android:id="@+id/text_weight_value"
                 />
 
         </LinearLayout>
@@ -135,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:text="28 yr"
                 android:textSize="16sp"
+                android:id="@+id/text_age_value"
                 />
 
         </LinearLayout>
@@ -203,6 +230,33 @@
             android:drawableTint="#968F8F"
             android:layout_marginTop="18dp"
             android:hint="Contact Number"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_action_about"
+            android:drawablePadding="15dp"
+            android:gravity="top"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            android:maxLines="3"
+            />
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/text_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="At Text we want to publish books that make a difference to people’s lives. We believe that reading should be a marvellous experience, that every book you read should somehow change your life if only by a fraction"
+            android:textSize="14sp"
+            android:gravity="top"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:maxLines="4"
+            android:ellipsize="end"
             />
 
 

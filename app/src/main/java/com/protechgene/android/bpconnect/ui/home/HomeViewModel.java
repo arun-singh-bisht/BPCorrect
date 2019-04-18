@@ -65,6 +65,9 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                         respository.setPatientDOB(profileResponse.getData().get(0).getDob());
                         respository.setPatientMobile(profileResponse.getData().get(0).getMobile1());
                         respository.setPatientId(profileResponse.getData().get(0).getPatientId().toString());
+                        respository.setPatientWeight(profileResponse.getData().get(0).getWeight());
+                        respository.setPatientHeight(profileResponse.getData().get(0).getHeight());
+                        respository.setPatientAbout(profileResponse.getData().get(0).getAddress2());
 
                         getNavigator().showProfileDetails();
                     }

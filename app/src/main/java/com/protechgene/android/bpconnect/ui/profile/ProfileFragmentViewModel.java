@@ -36,4 +36,24 @@ public class ProfileFragmentViewModel extends BaseViewModel<ProfileFragmentNavig
     {
         return getRespository().getPatientMobile();
     }
+
+    public String getUserWeight()
+    {
+        return getRespository().getPatientWeight();
+    }
+
+    public String getUserHeight()
+    {
+        return getRespository().getPatientHeight();
+    }
+
+    public String getUserGender()
+    {
+        return getRespository().getPatientGender();
+    }
+
+    public String getUserAbout()
+    {
+        return getRespository().getPatientAbout();
+    }
 }

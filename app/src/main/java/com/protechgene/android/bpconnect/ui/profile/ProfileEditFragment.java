@@ -1,6 +1,8 @@
 package com.protechgene.android.bpconnect.ui.profile;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -8,10 +10,10 @@ import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.DatePickerFragment;
-import com.protechgene.android.bpconnect.ui.custom.TimePickerFragment;
 
 import java.util.Calendar;
 
@@ -33,6 +35,17 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     EditText edit_address;
     @BindView(R.id.edit_mobile)
     EditText edit_mobile;
+    @BindView(R.id.edit_weight)
+    EditText edit_weight;
+    @BindView(R.id.edit_height)
+    EditText edit_height;
+    @BindView(R.id.edit_gender)
+    EditText edit_gender;
+    @BindView(R.id.edit_about)
+    EditText edit_about;
+
+
+
 
     @Override
     protected int layoutRes() {
@@ -63,7 +76,10 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         edit_dob.setText(mProfileEditFragmentViewModel.getUserDoB());
         edit_address.setText(mProfileEditFragmentViewModel.getUserAddress());
         edit_mobile.setText(mProfileEditFragmentViewModel.getUserMobile());
-
+        edit_weight.setText(mProfileEditFragmentViewModel.getUserWeight());
+        edit_height.setText(mProfileEditFragmentViewModel.getUserHeight());
+        edit_gender.setText(mProfileEditFragmentViewModel.getUserGender());
+        edit_about.setText(mProfileEditFragmentViewModel.getUserAbout());
     }
 
     @OnClick(R.id.img_left)
@@ -74,7 +90,17 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @OnClick(R.id.img_right)
     public void onIconDoneClick() {
         showProgress("Updating Profile...");
-        mProfileEditFragmentViewModel.updateProfile(edit_name.getText().toString(),"Male",edit_dob.getText().toString(),edit_mobile.getText().toString(),edit_address.getText().toString());
+
+        ProfileDetailModel profileDetailModel = new ProfileDetailModel();
+        profileDetailModel.setFirstname(edit_name.getText().toString());
+        profileDetailModel.setGender(edit_gender.getText().toString());
+        profileDetailModel.setDob(edit_dob.getText().toString());
+        profileDetailModel.setMobile1(edit_mobile.getText().toString());
+        profileDetailModel.setAddress1(edit_address.getText().toString());
+        profileDetailModel.setWeight(edit_weight.getText().toString());
+        profileDetailModel.setHeight(edit_height.getText().toString());
+        profileDetailModel.setAbout(edit_about.getText().toString());
+        mProfileEditFragmentViewModel.updateProfile(profileDetailModel);
     }
 
     @Override
@@ -97,6 +123,64 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         newFragmentNight.show(getFragmentManager(), "datePicker");
     }
 
+    @OnClick(R.id.edit_height)
+    public void onHeightClick()
+    {
+        //DatePickerFragment newFragmentNight = new DatePickerFragment(this,"Date Of Birth");
+        //newFragmentNight.show(getFragmentManager(), "datePicker");
+
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setTitle("Select Height");
+
+        // add a list
+        String[] height = new String[48];
+        int minHeight = 3;
+        for(int i=1;i<=48;i++)
+        {
+            if(i%12==0) {
+                minHeight++;
+                height[i-1] =  minHeight +" feet ";
+            }else {
+                height[i - 1] = minHeight + " feet " + (i % 12) + " inches";
+            }
+
+        }
+        String[] animals = {"horse", "cow", "camel", "sheep", "goat"};
+        builder.setItems(height, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                edit_height.setText(height[which]);
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @OnClick(R.id.edit_gender)
+    public void onGenderClick()
+    {
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setTitle("Select Gender");
+
+        // add a list
+        String[] gender = {"Male", "Female"};
+        builder.setItems(gender, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                edit_gender.setText(gender[which]);
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     @Override
     public void onDatePicked(Calendar c) {
         int mYear = c.get(Calendar.YEAR);
@@ -105,4 +189,6 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
         edit_dob.setText(mYear+"-"+mMonth+"-"+mDay);
     }
+
+
 }

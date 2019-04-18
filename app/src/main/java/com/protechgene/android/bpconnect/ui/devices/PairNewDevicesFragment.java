@@ -45,6 +45,12 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
         initView();
     }
 
+    @OnClick(R.id.img_left)
+    public void onBackIconClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
+    }
+
     private void initView()
     {
 

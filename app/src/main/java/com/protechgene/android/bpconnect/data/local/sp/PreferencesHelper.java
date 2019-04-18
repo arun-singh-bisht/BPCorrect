@@ -129,6 +129,27 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     }
 
     @Override
+    public String getPatientWeight() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_WEIGHT, "");
+    }
+
+    @Override
+    public void setPatientWeight(String weight) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_WEIGHT, weight).apply();
+    }
+
+    @Override
+    public String getPatientHeight() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_HEIGHT, "");
+    }
+
+    @Override
+    public void setPatientHeight(String height) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_HEIGHT, height).apply();
+    }
+
+
+    @Override
     public boolean isPatientGraduated() {
         return mSharedPreferences.getBoolean(PREF_KEY_PATIENT_IS_GRADUATED,false);
     }
@@ -166,5 +187,15 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     @Override
     public void setBPDeviceUUID(String uuid) {
         mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_UUID, uuid).apply();
+    }
+
+    @Override
+    public String getPatientAbout() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_ABOUT, "");
+    }
+
+    @Override
+    public void setPatientAbout(String about) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ABOUT, about).apply();
     }
 }

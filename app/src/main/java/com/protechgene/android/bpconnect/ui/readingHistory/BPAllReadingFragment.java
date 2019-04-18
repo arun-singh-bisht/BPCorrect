@@ -13,6 +13,7 @@ import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +57,7 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
     public void showReadingData(List<HealthReading> actualValues) {
 
         hideProgress();
+        Collections.reverse(actualValues);
         bpReadingAdapter.setData(actualValues);
     }
 
