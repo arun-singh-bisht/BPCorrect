@@ -45,7 +45,7 @@ public class SettingsFragment extends BaseFragment implements  SettingFragmentNa
     @OnClick(R.id.text_signout)
     public void onSignOutClick()
     {
-        CustomAlertDialog.showDialog(getActivity(), "Do you want to sign out from app?","YES","CANCEL",R.layout.custom_dialo,this);
+        CustomAlertDialog.showDialog(getActivity(),0, "Do you want to sign out from app?","YES","CANCEL",R.layout.custom_dialo,this);
     }
 
     private void initView()
@@ -55,12 +55,12 @@ public class SettingsFragment extends BaseFragment implements  SettingFragmentNa
     }
 
     @Override
-    public void onPositiveClick(Dialog dialog) {
+    public void onPositiveClick(Dialog dialog,int request_code) {
         settingFragmentViewModel.signOut();
     }
 
     @Override
-    public void onNegativeClick(Dialog dialog) {
+    public void onNegativeClick(Dialog dialog,int request_code) {
 
     }
 

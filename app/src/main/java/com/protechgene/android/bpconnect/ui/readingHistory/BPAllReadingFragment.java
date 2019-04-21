@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
@@ -26,6 +28,10 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
 
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
+    @BindView(R.id.text_empty_msg)
+    public TextView text_empty_msg;
+
+
 
     @Override
     protected int layoutRes() {
@@ -57,8 +63,18 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
     public void showReadingData(List<HealthReading> actualValues) {
 
         hideProgress();
-        Collections.reverse(actualValues);
-        bpReadingAdapter.setData(actualValues);
+
+        if(actualValues.size()>0) {
+            recyclerView.setVisibility(View.VISIBLE);
+            text_empty_msg.setVisibility(View.GONE);
+
+            Collections.reverse(actualValues);
+            bpReadingAdapter.setData(actualValues);
+        }else
+        {
+            recyclerView.setVisibility(View.GONE);
+            text_empty_msg.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

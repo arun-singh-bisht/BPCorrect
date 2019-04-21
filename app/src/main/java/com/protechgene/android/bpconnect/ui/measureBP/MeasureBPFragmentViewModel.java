@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.view.WindowManager;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.GpsUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.ADGattService;
 import com.protechgene.android.bpconnect.data.ble.ADGattUUID;
@@ -95,7 +96,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
    {
 
        mContext = context;
-       //Enable Bluetooth in background
+       // 1. Enable Bluetooth in background
        if(!getBluetoothManager().getAdapter().isEnabled())
        {
            getBluetoothManager().getAdapter().enable();
@@ -103,27 +104,31 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
            return;
        }
 
-       deviceList = new ArrayList<BluetoothDevice>();
-
-       context.registerReceiver(mMeasudataUpdateReceiver, MeasuDataUpdateIntentFilter());
-
-       boolean isBpDevicePaired =  isDevicePaired();
-       if(isBpDevicePaired) {
-           getNavigator().bpDevicePairedStatus(true);
-           doStartService();
-       }else
-       {
-           getNavigator().bpDevicePairedStatus(false);
-       }
-
-       //Start Background service after 1.5 sec delay
-       new Handler().postDelayed(new Runnable() {
+       // 2. Check if GPS is Active, If Not ask user to turn it on ,receive user action in onActivityResult
+       GpsUtils gpsUtils = new GpsUtils((Activity)mContext);
+       gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
            @Override
-           public void run() {
-               //Call function to get paired device
+           public void gpsStatus(boolean isGPSEnable) {
+
+               if(isGPSEnable)
+               {
+                   deviceList = new ArrayList<BluetoothDevice>();
+
+                   // 3. Check Device Paired Status
+                   boolean isBpDevicePaired =  isDevicePaired();
+                   if(isBpDevicePaired) {
+                       mContext.registerReceiver(mMeasudataUpdateReceiver, MeasuDataUpdateIntentFilter());
+                       getNavigator().bpDevicePairedStatus(true);
+                       doStartService();
+                   }else
+                   {
+                       getNavigator().bpDevicePairedStatus(false);
+                   }
+               }
 
            }
-       },1500);
+       });
+
    }
 
     protected void onResume() {
@@ -368,6 +373,23 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             }
         }
     };
+
+
+    public boolean isBluetoothEnabled()
+    {
+        return getBluetoothManager().getAdapter().isEnabled();
+        /*if(!getBluetoothManager().getAdapter().isEnabled())
+        {
+            getBluetoothManager().getAdapter().enable();
+            getNavigator().turningOnBluetooth();
+            return;
+        }*/
+    }
+
+    public void enableBluetooth()
+    {
+        getBluetoothManager().getAdapter().enable();
+    }
 
     boolean isDevicePaired() {
         final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);

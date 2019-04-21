@@ -1,5 +1,7 @@
 package com.protechgene.android.bpconnect.Utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,5 +33,13 @@ public class DateUtils {
         }
 
         return age;
+    }
+
+    public static String getDateString(int offset,String requiredFormatt)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE,offset);
+        DateFormat dateFormat = new SimpleDateFormat(requiredFormatt);
+        return dateFormat.format(cal.getTime());
     }
 }

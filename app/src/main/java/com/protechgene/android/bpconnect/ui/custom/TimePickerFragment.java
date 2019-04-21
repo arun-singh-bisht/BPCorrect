@@ -1,13 +1,14 @@
 package com.protechgene.android.bpconnect.ui.custom;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -20,28 +21,36 @@ public class TimePickerFragment extends DialogFragment implements
     private int mId;
     private TimePickedListener mListener;
     private String title;
-    public TimePickerFragment (TimePickedListener mListener,int id,String title) {
+    private int hour_of_day;
+    private int min;
+    public TimePickerFragment (TimePickedListener mListener,int id,String title,int hour_of_day,int min) {
         this.mListener = mListener;
        mId = id;
        this.title = title;
+       this.hour_of_day = hour_of_day;
+       this.min = min;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // use the current time as the default values for the picker
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK
-                ,this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+                ,this, hour_of_day, min, DateFormat.is24HourFormat(getActivity()));
 
-        /*.........Set a custom title for picker........*/
         TextView tvTitle = new TextView(getActivity());
         tvTitle.setText(title);
         tvTitle.setBackgroundColor(Color.parseColor("#FFFFFF"));
         tvTitle.setPadding(5, 12, 5, 12);
         tvTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         timePickerDialog.setCustomTitle(tvTitle);
+
+        timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Log.d("onTimeSet","onClick:"+i);
+            }
+        });
 
         return timePickerDialog;
     }
@@ -54,8 +63,11 @@ public class TimePickerFragment extends DialogFragment implements
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
 
+        Log.d("onTimeSet","hourOfDay:"+hourOfDay+" minute:"+minute);
+
         if(mListener != null)
             mListener.onTimePicked(c, mId);
+
     }
 
 

@@ -51,6 +51,7 @@
         <!--<service android:name=".data.ble.BluetoothLeService" android:enabled="true"/>-->
         <service android:name=".data.ble.BleConnectService" />
         <service android:name=".data.ble.BleReceivedService" />
+        <receiver android:name=".ui.reminder.AlarmReceiver"/>
     </application>
 
 </manifest>

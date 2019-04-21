@@ -1,9 +1,9 @@
 package com.protechgene.android.bpconnect.data.local.db;
 
 
-import android.arch.lifecycle.LiveData;
 
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 
 import java.util.List;
 
@@ -27,5 +27,20 @@ public class DatabaseHelper implements DatabaseHelperInterface {
     @Override
     public void deleteAllHealthRecords() {
         mAppDatabase.getHealthReadingDAO().deleteAllRecords();
+    }
+
+    @Override
+    public void addNewProtocol(ProtocolModel protocolModel) {
+        mAppDatabase.getProtocolDAO().addNewProtocol(protocolModel);
+    }
+
+    @Override
+    public List<ProtocolModel> getAllProtocol() {
+        return mAppDatabase.getProtocolDAO().getAllProtocol();
+    }
+
+    @Override
+    public void deleteAllProtocol() {
+        mAppDatabase.getProtocolDAO().deleteAllProtocol();
     }
 }

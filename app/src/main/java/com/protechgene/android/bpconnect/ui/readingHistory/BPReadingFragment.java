@@ -2,17 +2,21 @@ package com.protechgene.android.bpconnect.ui.readingHistory;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class BPReadingFragment extends BaseFragment {
+public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
     public static final String FRAGMENT_TAG = "BPReadingFragment";
 
@@ -25,6 +29,9 @@ public class BPReadingFragment extends BaseFragment {
     @BindView(R.id.txt_title)
     public TextView txt_title;
 
+    @BindView(R.id.img_right)
+    public ImageView img_right;
+
     @Override
     protected int layoutRes() {
         return R.layout.fragment_bp_readings;
@@ -35,17 +42,25 @@ public class BPReadingFragment extends BaseFragment {
         initView();
     }
 
+    private void initView()
+    {
+        txt_title.setText("Blood Pressure Readings");
+        img_right.setImageResource(R.drawable.ic_action_add_simple);
+
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
     @OnClick(R.id.img_left)
     public void onBackIconClick()
     {
         FragmentUtil.removeFragment(getBaseActivity());
     }
 
-    private void initView()
+    @OnClick(R.id.img_right)
+    public void onAddIconClick()
     {
-        txt_title.setText("Blood Pressure Readings");
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -53,5 +68,31 @@ public class BPReadingFragment extends BaseFragment {
         adapter.addFragment(new BPAllReadingFragment(), "ALL");
         adapter.addFragment(new ProtocolReadingFragment(), "Scheduled");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d("onPageSelected","position: "+position);
+        if(position==0)
+            img_right.setVisibility(View.GONE);
+        else if(position==1)
+            img_right.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    public void setRightIcon(int res_id)
+    {
+        img_right.setImageResource(res_id);
+        img_right.setTag(res_id);
     }
 }

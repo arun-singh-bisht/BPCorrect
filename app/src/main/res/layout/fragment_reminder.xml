@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_vertical"
+        android:visibility="gone"
         >
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
@@ -61,7 +62,7 @@
         android:id="@+id/layout_active_alarm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
     <LinearLayout
@@ -101,6 +102,7 @@
         android:layout_marginTop="12sp"
         />
     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:id="@+id/text_start_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -118,6 +120,7 @@
         android:layout_marginLeft="0dp"
         />
     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:id="@+id/text_end_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -150,12 +153,29 @@
         android:background="#ECDF52"
         >
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/sun"
-            android:tint="#ffffff"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/sun"
+                android:tint="#ffffff"
+                />
+
+            <ImageView
+                android:id="@+id/image_edit_morning_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_edit"
+                android:layout_alignParentRight="true"
+                android:tint="#ffffff"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:layout_width="wrap_content"
@@ -210,13 +230,30 @@
         android:background="#7DB5D1"
         >
 
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/moon"
-            android:tint="#ffffff"
-            android:padding="8dp"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/moon"
+                android:tint="#ffffff"
+                android:padding="8dp"
+                />
+
+            <ImageView
+                android:id="@+id/image_edit_evening_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_edit"
+                android:layout_alignParentRight="true"
+                android:tint="#ffffff"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:layout_width="wrap_content"

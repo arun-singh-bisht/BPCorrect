@@ -1,10 +1,9 @@
 package com.protechgene.android.bpconnect.data.local.db;
 
 
-import android.arch.lifecycle.LiveData;
 
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
-import com.protechgene.android.bpconnect.data.local.db.models.Word;
+import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 
 import java.util.List;
 
@@ -15,4 +14,13 @@ public interface DatabaseHelperInterface  {
     List<HealthReading> getAllRecords();
 
     void deleteAllHealthRecords();
+
+    //Protocol MEthods
+    void addNewProtocol(ProtocolModel protocolModel);
+
+    List<ProtocolModel> getAllProtocol();
+
+    void deleteAllProtocol();
+
+
 }

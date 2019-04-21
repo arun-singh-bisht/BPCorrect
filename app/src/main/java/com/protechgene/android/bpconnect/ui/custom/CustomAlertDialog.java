@@ -16,8 +16,8 @@ public class CustomAlertDialog {
 
     public interface I_CustomAlertDialog
     {
-        void onPositiveClick(Dialog dialog);
-        void onNegativeClick(Dialog dialog);
+        void onPositiveClick(Dialog dialog,int request_code);
+        void onNegativeClick(Dialog dialog,int request_code);
     }
 
     public static void showDialog(Activity activity, String msg,int res_id,final I_CustomAlertDialog i_customAlertDialog){
@@ -33,7 +33,7 @@ public class CustomAlertDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                i_customAlertDialog.onNegativeClick(dialog);
+                i_customAlertDialog.onNegativeClick(dialog,0);
             }
         });
         TextView txt_positive = (TextView) dialog.findViewById(R.id.txt_positive);
@@ -41,14 +41,14 @@ public class CustomAlertDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                i_customAlertDialog.onPositiveClick(dialog);
+                i_customAlertDialog.onPositiveClick(dialog,0);
             }
         });
         dialog.show();
     }
 
 
-    public static void showDialog(Activity activity, String msg,String positiveBtnText,String negativeBtnText,int res_id,final I_CustomAlertDialog i_customAlertDialog){
+    public static void showDialog(Activity activity,final int request_code, String msg,String positiveBtnText,String negativeBtnText,int res_id,final I_CustomAlertDialog i_customAlertDialog){
 
         final Dialog dialog = new Dialog(activity,R.style.Theme_AppCompat_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -67,7 +67,7 @@ public class CustomAlertDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                i_customAlertDialog.onNegativeClick(dialog);
+                i_customAlertDialog.onNegativeClick(dialog,request_code);
             }
         });
         //Set Positive button Text and click listener
@@ -78,7 +78,7 @@ public class CustomAlertDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                i_customAlertDialog.onPositiveClick(dialog);
+                i_customAlertDialog.onPositiveClick(dialog,request_code);
             }
         });
         dialog.show();
@@ -99,7 +99,7 @@ public class CustomAlertDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                i_customAlertDialog.onPositiveClick(dialog);
+                i_customAlertDialog.onPositiveClick(dialog,0);
             }
         });
         dialog.show();

@@ -61,12 +61,6 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //measureBPFragmentViewModel.onResume();
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         measureBPFragmentViewModel.onPause();
@@ -78,6 +72,7 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         measureBPFragmentViewModel.onDestroy();
     }
 
+
     @Override
     public void turningOnBluetooth() {
         showProgress("Turning On bluetooth...");
@@ -85,14 +80,7 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
             @Override
             public void run() {
                 hideProgress();
-                GpsUtils  gpsUtils = new GpsUtils(getBaseActivity());
-                gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
-                    @Override
-                    public void gpsStatus(boolean isGPSEnable) {
-                        measureBPFragmentViewModel.connectToDevice(getBaseActivity());
-                    }
-                });
-
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity());
             }
         },1500);
     }
@@ -113,6 +101,8 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         Log.d("onActivityResult",""+requestCode+" "+resultCode);
     }
 
+
+    //-------------- Show Progress Message ---------------------------------------
     @Override
     public void setIndicatorMessage(String message) {
         if(message==null)
@@ -132,6 +122,7 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         hideProgress();
     }
 
+    //------------- receive Result from BLE device -----------------------------------------
     @Override
     public void result(Lifetrack_infobean lifetrackInfobean) {
         text_bp_reading.setText(lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic());

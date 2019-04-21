@@ -86,12 +86,12 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
 
     @Override
-    public void onPositiveClick(Dialog dialog) {
+    public void onPositiveClick(Dialog dialog,int request_code) {
 
     }
 
     @Override
-    public void onNegativeClick(Dialog dialog) {
+    public void onNegativeClick(Dialog dialog,int request_code) {
 
     }
 

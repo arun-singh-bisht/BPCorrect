@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelperInterface;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
@@ -292,5 +293,20 @@ public class Repository implements ApiInterface,
     @Override
     public void deleteAllHealthRecords() {
         mDatabaseHelper.deleteAllHealthRecords();
+    }
+
+    @Override
+    public void addNewProtocol(ProtocolModel protocolModel) {
+        mDatabaseHelper.addNewProtocol(protocolModel);
+    }
+
+    @Override
+    public List<ProtocolModel> getAllProtocol() {
+        return mDatabaseHelper.getAllProtocol();
+    }
+
+    @Override
+    public void deleteAllProtocol() {
+        mDatabaseHelper.deleteAllProtocol();
     }
 }
