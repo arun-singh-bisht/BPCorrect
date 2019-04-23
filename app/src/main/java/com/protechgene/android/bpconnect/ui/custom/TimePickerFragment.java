@@ -35,7 +35,7 @@ public class TimePickerFragment extends DialogFragment implements
         // use the current time as the default values for the picker
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK
-                ,this, hour_of_day, min, DateFormat.is24HourFormat(getActivity()));
+                ,this, hour_of_day, min, true);
 
         TextView tvTitle = new TextView(getActivity());
         tvTitle.setText(title);
@@ -44,13 +44,6 @@ public class TimePickerFragment extends DialogFragment implements
         tvTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         timePickerDialog.setCustomTitle(tvTitle);
 
-        timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                Log.d("onTimeSet","onClick:"+i);
-            }
-        });
 
         return timePickerDialog;
     }

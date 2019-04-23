@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
@@ -94,7 +95,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         if(request_code == DIALOG_REQUEST_CODE_DELETE)
         {
             //Delete current Protocol
-            reminderViewModel.deleteProtocol();
+            reminderViewModel.deleteProtocol(getBaseActivity());
             layout_create.setVisibility(View.VISIBLE);
             layout_active_alarm.setVisibility(View.GONE);
             getBaseActivity().showSnakeBar("Protocol deleted successfully");
@@ -131,8 +132,8 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
                         //Set Details
                         text_start_day.setText(protocolModel.getStartDay());
                         text_end_day.setText(protocolModel.getEndDay());
-                        text_morning_time.setText(protocolModel.getMorningReadingTime());
-                        text_evening_time.setText(protocolModel.getEveningReadingTime());
+                        text_morning_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getMorningReadingTime()));
+                        text_evening_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getEveningReadingTime()));
                         activeProtocol = protocolModel;
                     }else
                     {
@@ -161,8 +162,8 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         //Set Details
         text_start_day.setText(protocolModel.getStartDay());
         text_end_day.setText(protocolModel.getEndDay());
-        text_morning_time.setText(protocolModel.getMorningReadingTime());
-        text_evening_time.setText(protocolModel.getEveningReadingTime());
+        text_morning_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getMorningReadingTime()));
+        text_evening_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getEveningReadingTime()));
         activeProtocol = protocolModel;
     }
 
@@ -171,4 +172,5 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         super.onDestroy();
         reminderViewModel.onDestroy();
     }
+
 }

@@ -2,9 +2,11 @@ package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
@@ -46,6 +48,9 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         mHomeViewModel.getProfileDetails();
         //CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
+
+        String dateString = DateUtils.getDateString(0, "MMM dd,yyyy HH:mm:ss");
+        Log.d("dateString",dateString);
     }
 
 

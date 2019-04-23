@@ -75,11 +75,12 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
-    public void deleteProtocol()
+    public void deleteProtocol(final Context context)
     {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                AlarmReceiver.deleteAllAlarm(context);
                 getRespository().deleteAllProtocol();
             }
         });
@@ -93,7 +94,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         if(id == 1001)
         {
             //Selected Morning Time
-            if(HOUR_OF_DAY>=4 && HOUR_OF_DAY<12)
+            if(HOUR_OF_DAY>=4 && HOUR_OF_DAY<24)
             {
                 selectedMorningTime = HOUR_OF_DAY+":"+MINUTE;
 
@@ -107,11 +108,24 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         }else if(id == 1002)
         {
             //Selected Evening Time
-            if(HOUR_OF_DAY>=16 && HOUR_OF_DAY<24)
+            if(HOUR_OF_DAY>=18 && HOUR_OF_DAY<24)
             {
                 selectedEveningTime = HOUR_OF_DAY+":"+MINUTE;
-                String startDate = DateUtils.getDateString(1, "MMM dd,yyyy");
-                String endDate = DateUtils.getDateString(7, "MMM dd,yyyy");
+
+                String currrentTime = DateUtils.getDateString(0, "HH:mm");
+                int i = DateUtils.compareTimeString(selectedMorningTime, currrentTime,"HH:mm");
+                Log.d("compareTimeString","compareTimeString :"+i);
+
+                if(i<=0)
+                    i = 1;
+                else
+                    i = 0;
+
+                //Remove this
+                i =0;
+
+                String startDate = DateUtils.getDateString(i, "MMM dd,yyyy");
+                String endDate = DateUtils.getDateString(6+i, "MMM dd,yyyy");
 
                 final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true);
                 getNavigator().onProtocolCreated(protocolModel);
@@ -122,6 +136,10 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                         getRespository().addNewProtocol(protocolModel);
                     }
                 });
+                //Set Alarm
+                String[] split = selectedMorningTime.split(":");
+                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),i);
+
             }else
             {
                 //Show invalid Time Message
@@ -170,27 +188,6 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 getNavigator().invalidTimeSelection("Evening Alarm should be between 4:00 PM to 12:00 AM");
             }
         }
-    }
-
-    public void setAlarm(Context context,int hour_of_day,int min)
-    {
-        //Create alarm manager
-        AlarmManager alarmMgr0 = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
-        //Create pending intent & register it to your alarm notifier class
-        Intent intent0 = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent0 = PendingIntent.getBroadcast(context, 1101, intent0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //set timer you want alarm to work (here I have set it to 7.20pm)
-        //Intent intent0 = new Intent(this, OldEntryRemover.class);
-        Calendar timeOff9 = Calendar.getInstance();
-        timeOff9.set(Calendar.HOUR_OF_DAY, hour_of_day);
-        timeOff9.set(Calendar.MINUTE, min);
-        timeOff9.set(Calendar.SECOND, 0);
-
-        //set that timer as a RTC Wakeup to alarm manager object
-        alarmMgr0.set(AlarmManager.RTC_WAKEUP, timeOff9.getTimeInMillis(), pendingIntent0);
-        Log.d("setAlarm","setAlarm at "+hour_of_day+":"+min);
     }
 
     /**

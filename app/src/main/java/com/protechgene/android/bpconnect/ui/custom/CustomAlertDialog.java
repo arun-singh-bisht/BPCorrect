@@ -2,6 +2,8 @@ package com.protechgene.android.bpconnect.ui.custom;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -18,6 +20,13 @@ public class CustomAlertDialog {
     {
         void onPositiveClick(Dialog dialog,int request_code);
         void onNegativeClick(Dialog dialog,int request_code);
+    }
+
+    public interface I_CustomAlertDialogThreeButton
+    {
+        void onPositiveClick(int request_code);
+        void onNegativeClick(int request_code);
+        void onNeuralClick(int request_code);
     }
 
     public static void showDialog(Activity activity, String msg,int res_id,final I_CustomAlertDialog i_customAlertDialog){
@@ -48,6 +57,7 @@ public class CustomAlertDialog {
     }
 
 
+    //Two Button
     public static void showDialog(Activity activity,final int request_code, String msg,String positiveBtnText,String negativeBtnText,int res_id,final I_CustomAlertDialog i_customAlertDialog){
 
         final Dialog dialog = new Dialog(activity,R.style.Theme_AppCompat_Dialog);
@@ -82,6 +92,42 @@ public class CustomAlertDialog {
             }
         });
         dialog.show();
+    }
+
+    //Three Button
+    public static void showThreeButtonDialog(Activity activity,final int request_code, String msg,String positiveBtnText,String negativeBtnText,String neutralBtnText,final I_CustomAlertDialogThreeButton i_customAlertDialogThreeButton){
+
+        AlertDialog.Builder  builder = new AlertDialog.Builder(activity);
+        //builder.setTitle("Test");
+        builder.setMessage(msg);
+        builder.setCancelable(false);
+        builder.setPositiveButton(positiveBtnText,
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        i_customAlertDialogThreeButton.onPositiveClick(request_code);
+                    }
+                });
+
+        builder.setNeutralButton(neutralBtnText,
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        i_customAlertDialogThreeButton.onNeuralClick(request_code);
+                    }
+                });
+
+        builder.setNegativeButton(negativeBtnText,
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        i_customAlertDialogThreeButton.onNegativeClick(request_code);
+                    }
+                });
+        builder.create().show();
     }
 
 

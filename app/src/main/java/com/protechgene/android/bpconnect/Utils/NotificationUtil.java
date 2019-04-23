@@ -28,7 +28,7 @@ public class NotificationUtil {
         //Send local notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(requestCode, repeatedNotification);
+        notificationManager.notify(requestCode, repeatedNotification);
     }
 
     private NotificationCompat.Builder createBuilder(Context context, PendingIntent pendingIntent,String title) {
@@ -44,6 +44,8 @@ public class NotificationUtil {
         return mBuilder;
     }
 
+
+    //Called From Application Class
     public static void createNotificationChannel(Context context) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
