@@ -15,6 +15,7 @@ import com.protechgene.android.bpconnect.Utils.GpsUtils;
 import com.protechgene.android.bpconnect.Utils.MathUtil;
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
@@ -22,11 +23,14 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.feeeei.circleseekbar.CircleSeekBar;
 
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.isReadingTakenFromActualDevice;
+
 public class MeasureBPFragment extends BaseFragment implements MeasureBPFragmentNavigator {
 
     public static final String FRAGMENT_TAG = "MeasureBPFragment";
 
     private MeasureBPFragmentViewModel measureBPFragmentViewModel;
+    private  CountDownTimer countDownTimer;
 
     @BindView(R.id.btn_start)
     TextView startButton;
@@ -81,16 +85,20 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
             return;
 
         if(!isReadingDone) {
-            //measureBPFragmentViewModel.onResume();
-            //showProgress("Wait...");
 
-            Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
-            lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(80,130)+"");
-            lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(60,90)+"");
-            lifetrackInfobean.setPulse(MathUtil.getRandomNumber(70,100)+"");
-            lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()/1000)+"");
-            measureBPFragmentViewModel.saveReading(lifetrackInfobean);
-
+            if(isReadingTakenFromActualDevice)
+            {
+                measureBPFragmentViewModel.onResume();
+                showProgress("Wait...");
+            }else
+            {
+                Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
+                lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(80,130)+"");
+                lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(60,90)+"");
+                lifetrackInfobean.setPulse(MathUtil.getRandomNumber(70,100)+"");
+                lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()/1000)+"");
+                measureBPFragmentViewModel.saveReading(lifetrackInfobean);
+            }
         }else {
             FragmentUtil.removeFragment(getBaseActivity());
         }
@@ -190,7 +198,11 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
 
     @Override
     public void bpDevicePairedStatus(boolean status) {
-        if(!status)
+
+        if(!ApplicationBPConnect.isBPDeviceRequiredForTesting)
+            status = !status;
+
+        if(status)
         {
             getBaseActivity().showSnakeBar("No BP Device Found");
             //activate 'Start' button
@@ -219,10 +231,10 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     {
         isCounterRunning = true;
         text_wait.setVisibility(View.VISIBLE);
-        new CountDownTimer(60*1000, 1000) {
+        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                startButton.setText(millisUntilFinished/1000 +"\nseconds");
+                startButton.setText(millisUntilFinished / 1000 + "\nseconds");
             }
 
             public void onFinish() {
@@ -232,5 +244,14 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
                 clearReadingData();
             }
         }.start();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(countDownTimer!=null)
+            countDownTimer.cancel();
+        countDownTimer = null;
+
     }
 }

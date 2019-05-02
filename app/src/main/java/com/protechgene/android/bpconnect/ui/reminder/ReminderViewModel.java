@@ -139,13 +139,14 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                     i = 0;
 
                 //Remove this
-                i =0;
+                if(ApplicationBPConnect.isTodayIncluded)
+                    i =0;
 
                 String startDate = DateUtils.getDateString(i, "MMM dd,yyyy");
                 String endDate = DateUtils.getDateString(6+i, "MMM dd,yyyy");
 
                 final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true);
-                String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId();
+                String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId()+"_"+System.currentTimeMillis();
                 protocolModel.setProtocolCode(protocolCode);
 
                 getNavigator().onProtocolCreated(protocolModel);

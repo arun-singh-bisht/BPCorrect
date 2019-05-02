@@ -14,6 +14,7 @@ import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.NotificationUtil;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
+import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.home.MainActivity;
 
 import java.util.Calendar;
@@ -36,7 +37,8 @@ public class AlarmReceiver  extends BroadcastReceiver {
         new NotificationUtil().buildLocalNotification(context,intentToRepeat,1001,"Time to check BP");
 
         //Play Sound in loop
-        AlarmSound.getInstance(context).playSound();
+        if(ApplicationBPConnect.isAlarmSoundEnabled)
+            AlarmSound.getInstance(context).playSound();
 
         //Set Next Alarm
         final Repository repository = Repository.getInstance((Application) context.getApplicationContext());

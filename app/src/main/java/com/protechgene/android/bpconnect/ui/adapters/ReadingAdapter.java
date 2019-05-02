@@ -48,10 +48,15 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
         holder.text_dia_value.setText(actualValue.getDiastolic()+" mmHg");
         holder.text_pulse_value.setText(actualValue.getPulse()+" bpm");
 
-        if(actualValue.getIs_abberant().equalsIgnoreCase("1"))
+        boolean isAberentTextVisible =false;
+        if(actualValue.getIs_abberant().equalsIgnoreCase("1")) {
             holder.text_aberrant.setVisibility(View.VISIBLE);
-        else
+            isAberentTextVisible = true;
+        }
+        else {
             holder.text_aberrant.setVisibility(View.GONE);
+            isAberentTextVisible = false;
+        }
 
         Log.d("onBindView","Log time: "+actualValue.getLogTime());
         Date date = new Date(Long.parseLong(actualValue.getLogTime()));
@@ -62,8 +67,7 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
         String strTime = dateFormat.format(date);
         holder.text_time.setText(strTime);
 
-        if(isColorPlateShow)
-        {
+
 
             holder.colorPlate.setVisibility(View.VISIBLE);
 
@@ -72,6 +76,8 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
             RotateDrawable gradientDrawable = (RotateDrawable) layerDrawable
                     .findDrawableByLayerId(R.id.color_rect);
 
+        if(isColorPlateShow && !isAberentTextVisible)
+        {
             String systolic = actualValue.getSystolic();
             String diastolic = actualValue.getDiastolic();
             int sys = Integer.parseInt(systolic);
@@ -92,6 +98,9 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
             {
                 gradientDrawable.setColorFilter(Color.parseColor("#5a3921"), PorterDuff.Mode.SRC_IN);
             }
+        }else
+        {
+            gradientDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         }
     }
 

@@ -127,7 +127,8 @@ public class ProtocolReadingsViewModel extends BaseViewModel<ProtocolReadingsFra
                         int avgDia = 0;
                         int avgpulse = 0;
                         int totalReadings = 28;
-                        int readingTaken = 0;
+                        int readingTakenIdeal = 0;
+                        int readingTakenActual = 0;
                         int readingMissed = 0;
                         int count = 0;
 
@@ -143,24 +144,42 @@ public class ProtocolReadingsViewModel extends BaseViewModel<ProtocolReadingsFra
                                 avgSys = avgSys + Integer.parseInt(healthReading.getSystolic());
                                 avgDia = avgDia + Integer.parseInt(healthReading.getDiastolic());
                                 avgpulse = avgpulse + Integer.parseInt(healthReading.getPulse());
-                                readingTaken++;
-
+                                readingTakenActual++;
                             }
                         }
 
                         //Calculate Missed Readings
                         String startDay = protocolModel.getStartDay();
                         String todayDate = DateUtils.getDateString(0,"MMM dd,yyyy");
-                        long l = DateUtils.daysDifferenceBetweenDates(startDay, todayDate,"MMM dd,yyyy");
+                        int l = (int)DateUtils.daysDifferenceBetweenDates(startDay, todayDate,"MMM dd,yyyy");
+
+                        readingTakenIdeal = l*4;
+                        String currentTime = DateUtils.getDateString(0, "HH:mm");
+                        String morningReadingTime = protocolModel.getMorningReadingTime();
+
+                        long compareResult = DateUtils.compareTimeString(currentTime, morningReadingTime, "HH:mm");
+                        if(compareResult>0)
+                            readingTakenIdeal = readingTakenIdeal+2;
+
+                        String eveningReadingTime = protocolModel.getEveningReadingTime();
+
+                        compareResult = DateUtils.compareTimeString(currentTime, eveningReadingTime, "HH:mm");
+                        if(compareResult>0)
+                            readingTakenIdeal = readingTakenIdeal+2;
+
 
                         Log.d("DaysDifference","DaysDifference "+startDay+" - "+todayDate+" = "+l);
+                        Log.d("DaysDifference","readingTakenIdeal "+readingTakenIdeal);
 
-                        if(valueList.size()>0)
-                        {
-                            Collections.reverse(valueList);
-                            getNavigator().showReadingData(valueList);
-                            getNavigator().showSummeyData(avgSys/count,avgDia/count,avgpulse/count,totalReadings,readingTaken,readingMissed);
-                        }
+                        readingMissed = readingTakenIdeal - readingTakenActual;
+
+                        Collections.reverse(valueList);
+                        getNavigator().showReadingData(valueList);
+
+                        if(count==0)
+                            count =1;
+                        getNavigator().showSummeyData(avgSys/count,avgDia/count,avgpulse/count,totalReadings,readingTakenActual,readingMissed);
+
                     }
                 }
             });

@@ -40,14 +40,7 @@
                 android:layout_marginLeft="10dp"
                 />
 
-            <View
-                android:id="@+id/color_plate"
-                android:layout_width="200dp"
-                android:layout_height="30dp"
-                android:background="@drawable/sample_new"
-                android:layout_alignParentRight="true"
-                android:visibility="gone"
-                />
+
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                 android:id="@+id/text_time"
@@ -58,6 +51,25 @@
                 android:textSize="12sp"
                 android:layout_toRightOf="@+id/text_date"
                 android:layout_marginLeft="5dp"
+                />
+
+            <View
+                android:id="@+id/color_plate"
+                android:layout_width="200dp"
+                android:layout_height="27dp"
+                android:background="@drawable/sample_new"
+                android:layout_alignParentRight="true"
+                android:visibility="visible"
+                />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_action_info"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:tint="#ffffff"
+                android:layout_centerVertical="true"
                 />
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView

@@ -55,6 +55,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_EVENING_MAXIMUM_TIME;
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_EVENING_MINIMUM_TIME;
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_MORNING_MAXIMUM_TIME;
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_MORNING_MINIMUM_TIME;
@@ -986,7 +987,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                     String s = DateUtils.convertMillisecToDateTime(logTime, "HH");
                     int HH = Integer.parseInt(s);
                     //int HH = Integer.parseInt(hh);
-                    if(HH<PROTOCOL_MORNING_MINIMUM_TIME || (HH>=PROTOCOL_MORNING_MAXIMUM_TIME && HH<PROTOCOL_EVENING_MINIMUM_TIME) )
+                    if(HH<PROTOCOL_MORNING_MINIMUM_TIME || (HH>=PROTOCOL_MORNING_MAXIMUM_TIME && HH<PROTOCOL_EVENING_MINIMUM_TIME) || HH>=PROTOCOL_EVENING_MAXIMUM_TIME )
                     {
                         //yes It is aberrant reading
                         healthReading.setIs_abberant("1");

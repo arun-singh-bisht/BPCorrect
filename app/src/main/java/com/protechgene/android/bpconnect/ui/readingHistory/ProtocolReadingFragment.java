@@ -30,6 +30,10 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
     @BindView(R.id.view_protocol_readings)
     public View view_protocol_readings;
 
+    @BindView(R.id.text_empty_msg)
+    public TextView text_empty_msg;
+
+
     @BindView(R.id.text_sys_dia)
     public TextView text_sys_dia;
     @BindView(R.id.text_pulse)
@@ -101,12 +105,15 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
                 {
                     bpReadingFragment.setRightIcon(R.drawable.ic_action_alarm);
                     view_protocol_readings.setVisibility(View.VISIBLE);
+                    text_empty_msg.setVisibility(View.GONE);
+
                     text_protocol_date.setText(protocolModel.getStartDay()+" - "+protocolModel.getEndDay());
                     protocolReadingsViewModel.getBpReadings();
                 }else
                 {
                     bpReadingFragment.setRightIcon(R.drawable.ic_action_add_simple);
                     view_protocol_readings.setVisibility(View.GONE);
+                    text_empty_msg.setVisibility(View.VISIBLE);
                 }
             }
         });
