@@ -3,10 +3,16 @@ package com.protechgene.android.bpconnect.ui.home;
 
 import android.os.AsyncTask;
 
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -81,22 +87,4 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
     }
 
-    public void insertDummyValue()
-    {
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                HealthReading healthReading = new HealthReading(0,115+"",83+"",76+"",System.currentTimeMillis()+"",false);
-                /*healthReading.setSystolic(115+"");
-                healthReading.setDiastolic(83+"");
-                healthReading.setPulse(76+"");
-                healthReading.setLogTime(System.currentTimeMillis()+"");
-                healthReading.setSync(false);*/
-                getRespository().addNewHealthRecord(healthReading);
-            }
-        });
-
-
-    }
 }

@@ -7,13 +7,15 @@
     android:background="@color/bp_gray"
     android:orientation="vertical">
 
-
     <LinearLayout
+        android:id="@+id/view_protocol_readings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/text_protocol_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="March 1,2019 - March 7,2019"
@@ -53,10 +55,11 @@
                     />
 
                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                    android:id="@+id/text_sys_dia"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="130/85"
+                    android:text="0"
                     android:gravity="center"
                     android:textSize="15sp"
                     />
@@ -76,9 +79,10 @@
                         />
 
                     <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                        android:id="@+id/text_pulse"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="84"
+                        android:text="0"
                         android:gravity="center_vertical"
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"
@@ -103,7 +107,7 @@
                         android:id="@+id/seekbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:wheel_max_process="100"
+                        app:wheel_max_process="28"
                         app:wheel_reached_color="#2FE237"
                         app:wheel_unreached_color="@color/bp_gray"
                         app:wheel_reached_width="10dp"
@@ -111,15 +115,16 @@
                         app:wheel_pointer_color="#2FE237"
                         app:wheel_can_touch="false"
                         app:wheel_scroll_only_one_circle="true"
-                        app:wheel_cur_process="78"
+                        app:wheel_cur_process="0"
                         android:padding="15dp"
                         />
 
                     <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                        android:id="@+id/text_progress_percentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="78%"
+                        android:text="0"
                         android:textSize="22sp"
                         />
 
@@ -144,7 +149,7 @@
                         android:id="@+id/text_total_readings_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="14"
+                        android:text="28"
                         android:layout_alignParentRight="true"
                         android:layout_alignBottom="@+id/text_total_readings"
                         android:textSize="16sp"
@@ -164,7 +169,7 @@
                         android:id="@+id/text_reading_taken_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10"
+                        android:text="0"
                         android:layout_alignParentRight="true"
                         android:layout_alignBottom="@+id/text_reading_taken"
                         android:textSize="16sp"
@@ -185,7 +190,7 @@
                         android:id="@+id/text_reading_missed_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4"
+                        android:text="0"
                         android:layout_alignParentRight="true"
                         android:layout_alignBottom="@+id/text_reading_missed"
                         android:textSize="16sp"
@@ -225,6 +230,5 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 
 </ScrollView>

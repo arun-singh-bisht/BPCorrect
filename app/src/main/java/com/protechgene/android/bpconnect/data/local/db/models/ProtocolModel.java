@@ -33,6 +33,9 @@ public class ProtocolModel {
     @ColumnInfo(name = "isActive")
     private boolean isActive;
 
+    @ColumnInfo(name = "protocolCode")
+    private String protocolCode;
+
     public ProtocolModel(int protocolId, String startDay, String endDay, String morningReadingTime, String eveningReadingTime, boolean isActive) {
         this.protocolId = protocolId;
         this.startDay = startDay;
@@ -88,5 +91,13 @@ public class ProtocolModel {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getProtocolCode() {
+        return protocolCode;
+    }
+
+    public void setProtocolCode(String protocolCode) {
+        this.protocolCode = protocolCode;
     }
 }

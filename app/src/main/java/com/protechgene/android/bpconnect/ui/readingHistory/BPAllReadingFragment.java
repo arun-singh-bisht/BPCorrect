@@ -62,19 +62,24 @@ public class BPAllReadingFragment extends BaseFragment implements BPAllReadingsF
     @Override
     public void showReadingData(List<HealthReading> actualValues) {
 
-        hideProgress();
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
 
-        if(actualValues.size()>0) {
-            recyclerView.setVisibility(View.VISIBLE);
-            text_empty_msg.setVisibility(View.GONE);
+                if(actualValues.size()>0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    text_empty_msg.setVisibility(View.GONE);
 
-            Collections.reverse(actualValues);
-            bpReadingAdapter.setData(actualValues);
-        }else
-        {
-            recyclerView.setVisibility(View.GONE);
-            text_empty_msg.setVisibility(View.VISIBLE);
-        }
+                    Collections.reverse(actualValues);
+                    bpReadingAdapter.setData(actualValues,true);
+                }else
+                {
+                    recyclerView.setVisibility(View.GONE);
+                    text_empty_msg.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override

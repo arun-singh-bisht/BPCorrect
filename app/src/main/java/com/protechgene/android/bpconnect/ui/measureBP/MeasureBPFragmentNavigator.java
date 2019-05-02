@@ -1,6 +1,7 @@
 package com.protechgene.android.bpconnect.ui.measureBP;
 
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 
 public interface MeasureBPFragmentNavigator {
 
@@ -11,6 +12,6 @@ public interface MeasureBPFragmentNavigator {
     void setIndicatorMessage(String message);
     void showIndicator(String message);
     void dismissIndicator();
-    void result(Lifetrack_infobean lifetrackInfobean);
+    void result(HealthReading healthReading);
 
 }

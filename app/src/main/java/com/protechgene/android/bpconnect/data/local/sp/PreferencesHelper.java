@@ -198,4 +198,14 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     public void setPatientAbout(String about) {
         mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ABOUT, about).apply();
     }
+
+    @Override
+    public boolean isHistoryDataSync() {
+        return mSharedPreferences.getBoolean(PREF_KEY_IS_DATA_SYNC,false);
+    }
+
+    @Override
+    public void setHistoryDataSyncStatus(boolean status) {
+        mSharedPreferences.edit().putBoolean(PREF_KEY_IS_DATA_SYNC,status).apply();
+    }
 }

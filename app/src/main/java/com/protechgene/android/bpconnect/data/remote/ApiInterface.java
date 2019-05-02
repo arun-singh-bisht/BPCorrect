@@ -1,13 +1,20 @@
 package com.protechgene.android.bpconnect.data.remote;
 
 
+import com.google.gson.JsonArray;
+import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
+
+import org.json.JSONArray;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -31,4 +38,17 @@ public interface ApiInterface {
 
     @GET("ProtechSentinel/common/get/chart/data/according/to/user")
     Observable<BpReadingsResponse> getBpReadings(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId, @Query("fromdate") String fromdate, @Query("todate") String todate, @Query("dayno") String dayno);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @POST("ProtechSentinel/common/add/patient/reading")
+    Observable<AddBpReadingResponse> addBpReadings(@Query("access_token") String access_token,@Body JsonArray body);
+
+    @POST("ProtechSentinel/common/create/ehc/protocol")
+    Observable<ProfileResponse> createProtocol(@Query("access_token") String access_token, @Query("patient_id") String userId,@Query("startdate") String startdate,@Query("enddate") String enddate,@Query("protocol_id") String protocol_id,@Query("morning_alarm") String morning_alarm,@Query("evening_alarm") String evening_alarm);
+
+    @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
+    Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
 }

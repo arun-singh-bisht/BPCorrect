@@ -5,6 +5,7 @@ public interface PreferencesHelperInterface {
 
      String PREF_KEY_ACCESS_TOKEN = "PREF_KEY_ACCESS_TOKEN";
      String PREF_KEY_IS_LOGIN = "PREF_KEY_IS_LOGIN";
+     String PREF_KEY_IS_DATA_SYNC = "PREF_KEY_IS_DATA_SYNc";
 
      //Profile details
      String PREF_KEY_CURRENT_USER_EMAIL = "PREF_KEY_CURRENT_USER_EMAIL";
@@ -99,5 +100,8 @@ public interface PreferencesHelperInterface {
 
      void setPatientAbout(String about);
 
+     boolean isHistoryDataSync();
+
+     void setHistoryDataSyncStatus(boolean status);
 
 }

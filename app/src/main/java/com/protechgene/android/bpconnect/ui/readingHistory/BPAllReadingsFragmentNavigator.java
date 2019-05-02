@@ -14,4 +14,5 @@ public interface BPAllReadingsFragmentNavigator {
 
     void showReadingData(List<HealthReading> valueList);
 
+
 }

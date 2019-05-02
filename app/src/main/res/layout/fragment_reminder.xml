@@ -139,6 +139,7 @@
             android:layout_gravity="right"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
+            android:visibility="visible"
             />
     </LinearLayout>
     <LinearLayout
@@ -172,6 +173,7 @@
                 android:layout_alignParentRight="true"
                 android:tint="#ffffff"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:layout_centerVertical="true"
                 />
         </RelativeLayout>
@@ -251,6 +253,7 @@
                 android:tint="#ffffff"
                 android:padding="10dp"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 />
         </RelativeLayout>
 

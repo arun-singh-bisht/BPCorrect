@@ -95,7 +95,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         if(request_code == DIALOG_REQUEST_CODE_DELETE)
         {
             //Delete current Protocol
-            reminderViewModel.deleteProtocol(getBaseActivity());
+            reminderViewModel.deleteProtocol(getBaseActivity(),activeProtocol);
             layout_create.setVisibility(View.VISIBLE);
             layout_active_alarm.setVisibility(View.GONE);
             getBaseActivity().showSnakeBar("Protocol deleted successfully");
@@ -121,11 +121,19 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
     }
 
     @Override
+    public void showSearchingProgress() {
+        showProgress("Searching for protocol...");
+    }
+
+    @Override
     public void isProtocolExists(final boolean status, final ProtocolModel protocolModel) {
         //getBaseActivity().showSnakeBar("Is Protocol Exists ? "+status);
             getBaseActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    hideProgress();
+
                     if(status) {
                         layout_create.setVisibility(View.GONE);
                         layout_active_alarm.setVisibility(View.VISIBLE);
@@ -157,6 +165,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
 
     @Override
     public void onProtocolCreated(ProtocolModel protocolModel) {
+
         layout_create.setVisibility(View.GONE);
         layout_active_alarm.setVisibility(View.VISIBLE);
         //Set Details
@@ -165,6 +174,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         text_morning_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getMorningReadingTime()));
         text_evening_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getEveningReadingTime()));
         activeProtocol = protocolModel;
+
     }
 
     @Override

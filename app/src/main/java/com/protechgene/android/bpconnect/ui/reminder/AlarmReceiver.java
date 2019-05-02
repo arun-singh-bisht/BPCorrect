@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.protechgene.android.bpconnect.Utils.AlarmSound;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.NotificationUtil;
 import com.protechgene.android.bpconnect.data.Repository;
@@ -35,7 +36,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
         new NotificationUtil().buildLocalNotification(context,intentToRepeat,1001,"Time to check BP");
 
         //Play Sound in loop
-        //AlarmSound.getInstance(context).playSound();
+        AlarmSound.getInstance(context).playSound();
 
         //Set Next Alarm
         final Repository repository = Repository.getInstance((Application) context.getApplicationContext());
@@ -58,7 +59,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
                 {
                     //set next alarm for next day morning.
                     String todayDateString = DateUtils.getDateString(0, "MMM dd,yyyy");
-                    int compareResult = DateUtils.compareTimeString(todayDateString, endDay, "MMM dd,yyyy");
+                    long compareResult = DateUtils.compareTimeString(todayDateString, endDay, "MMM dd,yyyy");
                     if(compareResult<0)
                     {
                         //Set Alarm for next day morning.
@@ -105,7 +106,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
                 String currrentTime = DateUtils.getDateString(0, "HH:mm");
 
-                int i = DateUtils.compareTimeString(morningReadingTime,currrentTime,"HH:mm");
+                long i = DateUtils.compareTimeString(morningReadingTime,currrentTime,"HH:mm");
                 if(i>0)
                 {
                     //Cancel Morning alarm

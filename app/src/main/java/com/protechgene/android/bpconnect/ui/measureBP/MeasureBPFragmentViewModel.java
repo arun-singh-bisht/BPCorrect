@@ -16,25 +16,51 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.WindowManager;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.GpsUtils;
+import com.protechgene.android.bpconnect.Utils.MathUtil;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.ADGattService;
 import com.protechgene.android.bpconnect.data.ble.ADGattUUID;
 import com.protechgene.android.bpconnect.data.ble.BleReceivedService;
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
+import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
+import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_EVENING_MINIMUM_TIME;
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_MORNING_MAXIMUM_TIME;
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_MORNING_MINIMUM_TIME;
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_READING_ACCEPTED_TIME_WINDOW;
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_READING__EVENING;
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_READING__MORNING;
 
 
 public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> {
@@ -87,6 +113,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     ArrayList<String> pairedDeviceList = new ArrayList<String>(); //ACGS-10
 
     private Context mContext;
+
 
     public MeasureBPFragmentViewModel(Repository repository) {
         super(repository);
@@ -733,16 +760,19 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             measuDataManager.syncMeasudata(MeasuDataManager.MEASU_DATA_TYPE_BP, true);*/
 
             //Notify new data to UI
-            getNavigator().result(infoBeanObj);
+            //getNavigator().result(infoBeanObj);
+
+            //Save Reading data - Local DB + Server
+            saveReading(infoBeanObj);
 
             //Insert new data into DB
-            final HealthReading healthReading = new HealthReading(0,infoBeanObj.getSystolic(),infoBeanObj.getDiastolic(),infoBeanObj.getPulse(),infoBeanObj.getDateTimeStamp(),false);
+           /* final HealthReading healthReading = new HealthReading(0,infoBeanObj.getSystolic(),infoBeanObj.getDiastolic(),infoBeanObj.getPulse(),infoBeanObj.getDateTimeStamp(),false);
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     getRespository().addNewHealthRecord(healthReading);
                 }
-            });
+            });*/
 
         } else if (ADGattUUID.TemperatureMeasurement.toString().equals(characteristicUuidString)) {
             BluetoothGatt gatt = BleReceivedService.getGatt();
@@ -936,4 +966,156 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
     }
 
+
+    //This is Testing code . Delete this after testing
+
+        public void saveReading(final Lifetrack_infobean lifetrackInfobean)
+        {
+            getNavigator().showIndicator("Processing data...");
+
+            lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis())+"");
+
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    final HealthReading healthReading = new HealthReading();
+
+                    //case 1: Check for Aberrant reading
+                    long logTime = Long.parseLong(lifetrackInfobean.getDateTimeStamp());
+                    String s = DateUtils.convertMillisecToDateTime(logTime, "HH");
+                    int HH = Integer.parseInt(s);
+                    //int HH = Integer.parseInt(hh);
+                    if(HH<PROTOCOL_MORNING_MINIMUM_TIME || (HH>=PROTOCOL_MORNING_MAXIMUM_TIME && HH<PROTOCOL_EVENING_MINIMUM_TIME) )
+                    {
+                        //yes It is aberrant reading
+                        healthReading.setIs_abberant("1");
+                    }else
+                    {
+                        // During recommanded time zone
+                        healthReading.setIs_abberant("0");
+                    }
+
+                    //case 2: Check for Protocol bound reading
+                    List<ProtocolModel> allProtocol1 = getRespository().getAllProtocol();
+                    if(allProtocol1!=null && allProtocol1.size()>0)
+                    {
+                        //protocol exists
+                        ProtocolModel protocolModel = allProtocol1.get(0);
+
+                        String readingLogTime = DateUtils.convertMillisecToDateTime(logTime, "HH:mm");
+
+                        String morningReadingTime = protocolModel.getMorningReadingTime();
+                        long compareResult = DateUtils.compareTimeString(readingLogTime, morningReadingTime, "HH:mm");
+                        if(compareResult<0)
+                        {
+                            //Reading Done before morning protocol time
+                            healthReading.setProtocol_id("");
+                        }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW)
+                        {
+                            //Reading Done in 10 min of Morning Protocol Time, so it is valid protocol reading
+                            healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
+                            healthReading.setReading_time(PROTOCOL_READING__MORNING);
+                        }else
+                        {
+                            //Reading done in evening
+                            String eveningReadingTime = protocolModel.getEveningReadingTime();
+                            compareResult = DateUtils.compareTimeString(readingLogTime, eveningReadingTime, "HH:mm");
+                            if(compareResult<0)
+                            {
+                                //Reading Done before evening protocol time
+                                healthReading.setProtocol_id("");
+                            }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW)
+                            {
+                                //Reading Done in 10 min of evening Protocol Time, so it is valid protocol reading
+                                healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
+                                healthReading.setReading_time(PROTOCOL_READING__EVENING);
+                            }
+                        }
+
+                    }else
+                    {
+                        //No Protocol Exists
+                        healthReading.setProtocol_id("");
+                    }
+
+                    //Set Other Details
+                    healthReading.setSync(false);
+                    healthReading.setLogTime(lifetrackInfobean.getDateTimeStamp());
+                    healthReading.setPulse(lifetrackInfobean.getPulse());
+                    healthReading.setDiastolic(lifetrackInfobean.getDiastolic());
+                    healthReading.setSystolic(lifetrackInfobean.getSystolic());
+                    healthReading.setReadingID(0);
+
+                    //Save This reading IN DB
+                    getRespository().addNewHealthRecord(healthReading);
+                    //Deliver Reading to UI
+                    getNavigator().result(healthReading);
+
+                    uploadReadingToServer(healthReading);
+
+                }
+            });
+        }
+
+        private void uploadReadingToServer( final HealthReading healthReading )
+        {
+            String accessToken = getRespository().getAccessToken();
+            String patientId = getRespository().getPatientId();
+            String userId = getRespository().getCurrentUserId();
+
+            //Send Reading Data to server
+            JsonArray jsonArray = new JsonArray();
+            for(int i =0;i<1;i++)
+            {
+                JsonObject jsonObject = new JsonObject();
+                try {
+
+                    jsonObject.addProperty("patientId",userId);
+                    jsonObject.addProperty("systolic",healthReading.getSystolic());
+                    jsonObject.addProperty("diastolic",healthReading.getDiastolic());
+                    jsonObject.addProperty("pulse_data",healthReading.getPulse());
+                    jsonObject.addProperty("reading_time",(Long.parseLong(healthReading.getLogTime())/1000) +"");
+                    jsonObject.addProperty("device_id","12345");
+                    jsonObject.addProperty("device_name","AND");
+                    jsonObject.addProperty("device_mac_address","12:34:56:78:90");
+                    jsonObject.addProperty("is_abberant",healthReading.getIs_abberant());
+                    jsonObject.addProperty("protocol_id",healthReading.getProtocol_id());
+                    jsonArray.add(jsonObject);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(jsonArray.size()==0)
+                return;
+
+            String json  = jsonArray.toString();
+            Log.d("createDummyReadings","createDummyReadings:"+json);
+
+            disposables.add(getRespository().addBpReadings(accessToken,jsonArray)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(new Consumer<Disposable>() {
+                        @Override
+                        public void accept(Disposable disposable) throws Exception {
+
+                        }
+                    })
+                    .subscribe(new Consumer<AddBpReadingResponse>() {
+                        @Override
+                        public void accept(AddBpReadingResponse addBpReadingResponse) throws Exception {
+
+                            //Throwable throwable = new Throwable("Data Syn to server");
+                            //getNavigator().handleError(throwable);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                            //getNavigator().handleError(throwable);
+                        }
+                    }));
+        }
 }

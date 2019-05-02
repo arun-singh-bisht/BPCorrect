@@ -3,6 +3,7 @@ package com.protechgene.android.bpconnect.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
+import com.google.gson.JsonArray;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelperInterface;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
@@ -11,13 +12,17 @@ import com.protechgene.android.bpconnect.data.local.db.models.Word;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterface;
 import com.protechgene.android.bpconnect.data.remote.ApiInterface;
+import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.di.module.AppModule;
 import com.protechgene.android.bpconnect.di.module.RestModule;
 import com.protechgene.android.bpconnect.di.module.RoomModule;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -231,6 +236,16 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public boolean isHistoryDataSync() {
+        return mSharedPrefsHelper.isHistoryDataSync();
+    }
+
+    @Override
+    public void setHistoryDataSyncStatus(boolean status) {
+        mSharedPrefsHelper.setHistoryDataSyncStatus(status);
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }
@@ -263,6 +278,25 @@ public class Repository implements ApiInterface,
         Observable<BpReadingsResponse> responseObservable = mApiInterface.getBpReadings(access_token, patientUserId,fromdate,todate,dayno);
         return responseObservable;
     }
+
+    @Override
+    public Observable<AddBpReadingResponse> addBpReadings(String access_token, JsonArray json) {
+        Observable<AddBpReadingResponse> responseObservable = mApiInterface.addBpReadings(access_token,json);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<ProfileResponse> createProtocol(String access_token, String userId,String startdate,String enddate,String protocol_id,String morning_alarm,String evening_alarm) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.createProtocol(access_token,userId,startdate,enddate,protocol_id,morning_alarm,evening_alarm);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<GetProtocolResponse> getProtocolDetail(String access_token, String userId) {
+        Observable<GetProtocolResponse> responseObservable = mApiInterface.getProtocolDetail(access_token,userId);
+        return responseObservable;
+    }
+
 
     @Override
     public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String gender, String dob, String mobile1, String address1,String weight,String height,String about) {

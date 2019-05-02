@@ -10,6 +10,12 @@ public class ActualValue {
     private String dBP;
     @SerializedName("SBP")
     private String sBP;
+    @SerializedName("is_abberant")
+    private String is_abberant;
+    @SerializedName("protocol_id")
+    private String protocol_id;
+    @SerializedName("PULSE")
+    private String PULSE;
 
     public String getTimestamp() {
         return timestamp;
@@ -33,5 +39,45 @@ public class ActualValue {
 
     public void setSBP(String sBP) {
         this.sBP = sBP;
+    }
+
+    public String getdBP() {
+        return dBP;
+    }
+
+    public void setdBP(String dBP) {
+        this.dBP = dBP;
+    }
+
+    public String getsBP() {
+        return sBP;
+    }
+
+    public void setsBP(String sBP) {
+        this.sBP = sBP;
+    }
+
+    public String getIs_abberant() {
+        return is_abberant;
+    }
+
+    public void setIs_abberant(String is_abberant) {
+        this.is_abberant = is_abberant;
+    }
+
+    public String getProtocol_id() {
+        return protocol_id;
+    }
+
+    public void setProtocol_id(String protocol_id) {
+        this.protocol_id = protocol_id;
+    }
+
+    public String getPULSE() {
+        return PULSE;
+    }
+
+    public void setPULSE(String PULSE) {
+        this.PULSE = PULSE;
     }
 }

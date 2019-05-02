@@ -2,6 +2,8 @@ package com.protechgene.android.bpconnect.ui.measureBP;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +12,15 @@ import android.widget.TextView;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.Utils.GpsUtils;
+import com.protechgene.android.bpconnect.Utils.MathUtil;
 import com.protechgene.android.bpconnect.data.ble.Lifetrack_infobean;
+import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.feeeei.circleseekbar.CircleSeekBar;
 
 public class MeasureBPFragment extends BaseFragment implements MeasureBPFragmentNavigator {
 
@@ -29,8 +34,20 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     TextView text_bp_reading;
     @BindView(R.id.text_heart_rate_reading)
     TextView text_heart_rate_reading;
+    @BindView(R.id.text_wait)
+    TextView text_wait;
+    //@BindView(R.id.seekbar)
+    //CircleSeekBar seekbar;
+    //@BindView(R.id.view_timer)
+    //View view_timer;
+    @BindView(R.id.view_reading)
+    View view_reading;
+
 
     private boolean isReadingDone = false;
+    private boolean isTypeProtocol = false;
+    private boolean isCounterRunning = false;
+    private int numberOfReadings = 0;
 
     @Override
     protected int layoutRes() {
@@ -42,6 +59,13 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         measureBPFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(MeasureBPFragmentViewModel.class);
         measureBPFragmentViewModel.setNavigator(this);
         measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+
+        Bundle args = getArguments();
+        if(args!=null)
+            isTypeProtocol = args.getBoolean("isTypeProtocol");
+
+        //isTypeProtocol = true;
+
     }
 
     @OnClick(R.id.img_left)
@@ -53,8 +77,20 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     @OnClick(R.id.btn_start)
     public void onStartButtonClick()
     {
+        if(isCounterRunning)
+            return;
+
         if(!isReadingDone) {
-            measureBPFragmentViewModel.onResume();
+            //measureBPFragmentViewModel.onResume();
+            //showProgress("Wait...");
+
+            Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
+            lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(80,130)+"");
+            lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(60,90)+"");
+            lifetrackInfobean.setPulse(MathUtil.getRandomNumber(70,100)+"");
+            lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()/1000)+"");
+            measureBPFragmentViewModel.saveReading(lifetrackInfobean);
+
         }else {
             FragmentUtil.removeFragment(getBaseActivity());
         }
@@ -124,22 +160,39 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
 
     //------------- receive Result from BLE device -----------------------------------------
     @Override
-    public void result(Lifetrack_infobean lifetrackInfobean) {
-        text_bp_reading.setText(lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic());
-        text_heart_rate_reading.setText(lifetrackInfobean.getPulse());
-        isReadingDone = true;
-        startButton.setText("DONE");
+    public void result(final HealthReading healthReading) {
+
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                text_bp_reading.setText(healthReading.getSystolic()+"/"+healthReading.getDiastolic());
+                text_heart_rate_reading.setText(healthReading.getPulse());
+                numberOfReadings = numberOfReadings+1;
+
+                if(isTypeProtocol && numberOfReadings<2)
+                    activateCountDown();
+                else
+                {
+                    isReadingDone = true;
+                    startButton.setText("DONE");
+                }
+            }
+        });
+
     }
 
     @Override
     public void handleError(Throwable throwable) {
+        hideProgress();
         getBaseActivity().showSnakeBar(throwable.getMessage());
     }
 
     @Override
     public void bpDevicePairedStatus(boolean status) {
-        if(status)
+        if(!status)
         {
+            getBaseActivity().showSnakeBar("No BP Device Found");
             //activate 'Start' button
             startButton.setVisibility(View.VISIBLE);
         }else
@@ -154,5 +207,30 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
                 }
             });
         }
+    }
+
+    private void clearReadingData()
+    {
+        text_bp_reading.setText("0/0");
+        text_heart_rate_reading.setText("0");
+    }
+
+    private void activateCountDown()
+    {
+        isCounterRunning = true;
+        text_wait.setVisibility(View.VISIBLE);
+        new CountDownTimer(60*1000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                startButton.setText(millisUntilFinished/1000 +"\nseconds");
+            }
+
+            public void onFinish() {
+                isCounterRunning = false;
+                startButton.setText("START");
+                text_wait.setVisibility(View.GONE);
+                clearReadingData();
+            }
+        }.start();
     }
 }

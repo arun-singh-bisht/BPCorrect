@@ -10,6 +10,8 @@ public interface ReminderFragmentNavigator {
 
     void handleError(Throwable throwable);
 
+    void showSearchingProgress();
+
     void isProtocolExists(boolean status, ProtocolModel protocolModel);
 
     void invalidTimeSelection(String message);

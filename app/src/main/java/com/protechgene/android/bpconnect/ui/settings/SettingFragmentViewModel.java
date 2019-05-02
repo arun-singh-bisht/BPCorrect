@@ -22,6 +22,7 @@ public class SettingFragmentViewModel extends BaseViewModel<SettingFragmentNavig
             public void run() {
                 getRespository().clearSharedPref();
                 getRespository().deleteAllHealthRecords();
+                getRespository().deleteAllProtocol();
                 getNavigator().onSignOut();
             }
         });

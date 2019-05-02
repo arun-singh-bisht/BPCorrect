@@ -12,11 +12,22 @@ import android.util.Log;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
+import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
+import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import com.protechgene.android.bpconnect.ui.custom.TimePickerFragment;
 
 import java.util.Calendar;
 import java.util.List;
+
+import butterknife.internal.Utils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> implements TimePickerFragment.TimePickedListener {
@@ -32,13 +43,15 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
 
     public void checkActiveProtocol()
     {
+        getNavigator().showSearchingProgress();
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 List<ProtocolModel> allProtocol = getRespository().getAllProtocol();
 
                 if(allProtocol==null || allProtocol.size()==0)
-                    getNavigator().isProtocolExists(false,null);
+                    getProtocolFromServer();
                 else
                     getNavigator().isProtocolExists(true,allProtocol.get(0));
             }
@@ -75,8 +88,9 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
-    public void deleteProtocol(final Context context)
+    public void deleteProtocol(final Context context, ProtocolModel protocolModel)
     {
+        //Delete protocol from Local DB
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -84,6 +98,8 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 getRespository().deleteAllProtocol();
             }
         });
+        //Delete Protocol from server
+        sendProtocolToServer(protocolModel);
     }
 
     @Override
@@ -94,7 +110,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         if(id == 1001)
         {
             //Selected Morning Time
-            if(HOUR_OF_DAY>=4 && HOUR_OF_DAY<24)
+            if(HOUR_OF_DAY>= ApplicationBPConnect.PROTOCOL_MORNING_MINIMUM_TIME && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_MORNING_MAXIMUM_TIME)
             {
                 selectedMorningTime = HOUR_OF_DAY+":"+MINUTE;
 
@@ -108,15 +124,16 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         }else if(id == 1002)
         {
             //Selected Evening Time
-            if(HOUR_OF_DAY>=18 && HOUR_OF_DAY<24)
+            if(HOUR_OF_DAY>=ApplicationBPConnect.PROTOCOL_EVENING_MINIMUM_TIME && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_EVENING_MAXIMUM_TIME)
             {
                 selectedEveningTime = HOUR_OF_DAY+":"+MINUTE;
 
                 String currrentTime = DateUtils.getDateString(0, "HH:mm");
-                int i = DateUtils.compareTimeString(selectedMorningTime, currrentTime,"HH:mm");
-                Log.d("compareTimeString","compareTimeString :"+i);
+                long k = DateUtils.compareTimeString(selectedMorningTime, currrentTime,"HH:mm");
+                Log.d("compareTimeString","compareTimeString :"+k);
 
-                if(i<=0)
+                int i =0;
+                if(k<=0)
                     i = 1;
                 else
                     i = 0;
@@ -128,7 +145,15 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 String endDate = DateUtils.getDateString(6+i, "MMM dd,yyyy");
 
                 final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true);
+                String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId();
+                protocolModel.setProtocolCode(protocolCode);
+
                 getNavigator().onProtocolCreated(protocolModel);
+
+                //Set Alarm
+                String[] split = selectedMorningTime.split(":");
+                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),i);
+
                 //Save new protocol in DB
                 AsyncTask.execute(new Runnable() {
                     @Override
@@ -136,9 +161,9 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                         getRespository().addNewProtocol(protocolModel);
                     }
                 });
-                //Set Alarm
-                String[] split = selectedMorningTime.split(":");
-                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),i);
+
+                //Send created Protocol to server
+                sendProtocolToServer(protocolModel);
 
             }else
             {
@@ -189,6 +214,97 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
             }
         }
     }
+
+
+    private void sendProtocolToServer(final ProtocolModel protocolModel)
+    {
+        String accessToken = getRespository().getAccessToken();
+        String userId = getRespository().getCurrentUserId();
+
+        String startdate = DateUtils.convertDateStringToMillisec(protocolModel.getStartDay(), "MMM dd,yyyy");
+        String endDate = DateUtils.convertDateStringToMillisec(protocolModel.getEndDay(), "MMM dd,yyyy");
+
+        disposables.add(getRespository().createProtocol(accessToken,userId,startdate,endDate,protocolModel.getProtocolCode(),protocolModel.getMorningReadingTime(),protocolModel.getEveningReadingTime())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<ProfileResponse>() {
+                    @Override
+                    public void accept(ProfileResponse profileResponse) throws Exception {
+
+                        //Throwable throwable = new Throwable("Data Syn to server");
+                        //getNavigator().handleError(throwable);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                        //getNavigator().handleError(throwable);
+                    }
+                }));
+    }
+
+    private void getProtocolFromServer()
+    {
+        String accessToken = getRespository().getAccessToken();
+        String userId = getRespository().getCurrentUserId();
+
+        disposables.add(getRespository().getProtocolDetail(accessToken,userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<GetProtocolResponse>() {
+                    @Override
+                    public void accept(GetProtocolResponse protocolResponse) throws Exception {
+
+                        //Throwable throwable = new Throwable("Data Syn to server");
+                        //getNavigator().handleError(throwable);
+                        if(protocolResponse.getData().get(0).getProtocolId() == null)
+                            getNavigator().isProtocolExists(false,null);
+                        else
+                        {
+                            Data data = protocolResponse.getData().get(0);
+
+                            String startDate = data.getStartDate();
+                            startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(startDate) * 1000,"MMM dd,yyyy");
+
+                            String endDate = data.getEndDate();
+                            endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000,"MMM dd,yyyy");
+
+                            final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,data.getMorningAlarm(),data.getEveningAlarm(),true);
+                            protocolModel.setProtocolCode(data.getProtocolId());
+
+                            //Save new protocol in DB
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getRespository().addNewProtocol(protocolModel);
+                                    getNavigator().isProtocolExists(true,protocolModel);
+                                }
+                            });
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                        //getNavigator().handleError(throwable);
+                        getNavigator().isProtocolExists(false,null);
+                    }
+                }));
+    }
+
 
     /**
      * This is the real time /wall clock time

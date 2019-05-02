@@ -14,4 +14,6 @@ public interface ProtocolReadingsFragmentNavigator {
 
     void showReadingData(List<HealthReading> valueList);
 
+    void showSummeyData(int avgSys,int avgDia,int avgPulse,int totalReadings,int taken,int missed);
+
 }

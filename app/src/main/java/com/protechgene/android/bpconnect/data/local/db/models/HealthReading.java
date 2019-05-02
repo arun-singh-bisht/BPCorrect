@@ -15,7 +15,7 @@ public class HealthReading {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "productId")
+    @ColumnInfo(name = "readingID")
     private int readingID;
 
     @ColumnInfo(name = "systolic")
@@ -33,14 +33,30 @@ public class HealthReading {
     @ColumnInfo(name = "isSync")
     private boolean isSync;
 
-    public HealthReading(int readingID, String systolic, String diastolic, String pulse, String logTime, boolean isSync) {
+    @ColumnInfo(name = "is_abberant")
+    private String is_abberant;
+
+    @ColumnInfo(name = "protocol_id")
+    private String protocol_id;
+
+    @ColumnInfo(name = "reading_time")
+    private String reading_time;
+
+   /* public HealthReading(int readingID, String systolic, String diastolic, String pulse, String logTime, boolean isSync,boolean is_abberant,String protocol_id) {
         this.readingID = readingID;
         this.systolic = systolic;
         this.diastolic = diastolic;
         this.pulse = pulse;
         this.logTime = logTime;
         this.isSync = isSync;
+        this.is_abberant = is_abberant;
+        this.protocol_id = protocol_id;
+    }*/
+
+    public HealthReading() {
     }
+
+
 
     public String getSystolic() {
         return systolic;
@@ -88,5 +104,31 @@ public class HealthReading {
 
     public void setReadingID(int readingID) {
         this.readingID = readingID;
+    }
+
+
+
+    public String getProtocol_id() {
+        return protocol_id;
+    }
+
+    public void setProtocol_id(String protocol_id) {
+        this.protocol_id = protocol_id;
+    }
+
+    public String getReading_time() {
+        return reading_time;
+    }
+
+    public void setReading_time(String reading_time) {
+        this.reading_time = reading_time;
+    }
+
+    public String getIs_abberant() {
+        return is_abberant;
+    }
+
+    public void setIs_abberant(String is_abberant) {
+        this.is_abberant = is_abberant;
     }
 }

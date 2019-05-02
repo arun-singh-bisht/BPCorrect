@@ -46,6 +46,7 @@
                 android:layout_height="30dp"
                 android:background="@drawable/sample_new"
                 android:layout_alignParentRight="true"
+                android:visibility="gone"
                 />
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -53,10 +54,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3:40 PM"
-                android:textColor="#ffffff"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textSize="12sp"
+                android:layout_toRightOf="@+id/text_date"
+                android:layout_marginLeft="5dp"
+                />
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_aberrant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aberrant BP"
+                android:layout_centerVertical="true"
+                android:textSize="12sp"
+               android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 />
 
@@ -90,7 +101,7 @@
                  android:id="@+id/text_sys_value"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:text="130 mmHg"
+                 android:text="0 mmHg"
                  android:textSize="15sp"
                  />
                  <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -113,7 +124,7 @@
                      android:id="@+id/text_dia_value"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="83 mmHg"
+                     android:text="0 mmHg"
                      android:textSize="15sp"
                      />
                  <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -136,7 +147,7 @@
                      android:id="@+id/text_pulse_value"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="76 bpm"
+                     android:text="0 bpm"
                      android:textSize="15sp"
                      />
                  <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView

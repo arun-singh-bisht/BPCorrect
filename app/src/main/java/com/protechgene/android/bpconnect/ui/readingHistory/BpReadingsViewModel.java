@@ -1,7 +1,6 @@
 package com.protechgene.android.bpconnect.ui.readingHistory;
 
 
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.protechgene.android.bpconnect.data.Repository;
@@ -29,79 +28,89 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
 
 
 
-   /* public void getBpReadings()
+   public void getBpReadings()
     {
 
         String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
-
-        currentUserId = "132";
-        String fromDay = "1552121902";
-        String toDay = "1554800400";
+        String patientId = getRespository().getPatientId();
+        String fromDay = "1546300800"; // 1 January 2019 00:00:00
+        String toDay = (System.currentTimeMillis() + (5*60*60*1000))/1000 +"";
         String noDay = "30";
 
-        disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
+        if(!getRespository().isHistoryDataSync())
+        {
+            disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(new Consumer<Disposable>() {
+                        @Override
+                        public void accept(Disposable disposable) throws Exception {
 
-                    }
-                })
-                .subscribe(new Consumer<BpReadingsResponse>() {
-                    @Override
-                    public void accept(BpReadingsResponse bpReadingsResponse) throws Exception {
-
-                        //Save user Details
-                        List<Chartdata> chartdata = bpReadingsResponse.getData().get(0).getChartdata();
-
-                        List<ActualValue> actualValues = new ArrayList<>();
-                        for(int i=0;i<chartdata.size();i++)
-                        {
-                            actualValues.addAll(chartdata.get(i).getActualValues());
                         }
+                    })
+                    .subscribe(new Consumer<BpReadingsResponse>() {
+                        @Override
+                        public void accept(BpReadingsResponse bpReadingsResponse) throws Exception {
 
-                        getNavigator().showReadingData(actualValues);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
+                            //Save user Details
+                            List<Chartdata> chartdata = bpReadingsResponse.getData().get(0).getChartdata();
 
-                        getNavigator().handleError(throwable);
-                    }
-                }));
+                            List<ActualValue> actualValues = new ArrayList<>();
+                            for(int i=0;i<chartdata.size();i++)
+                            {
+                                actualValues.addAll(chartdata.get(i).getActualValues());
+                            }
 
-    }*/
+                            //Save InDB
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    List<HealthReading> healthReadingList = new ArrayList<>();
+                                    for(int i=0;i<actualValues.size();i++)
+                                    {
+                                        ActualValue actualValue = actualValues.get(i);
+                                        //HealthReading healthReading = new HealthReading(0,actualValue.getSBP(),actualValue.getDBP(),"0",actualValue.getTimestamp(),true,false,"");
 
-    public void getBpReadings()
-    {
-            new AsynDataAccess().execute();
+                                        HealthReading healthReading = new HealthReading();
+                                        healthReading.setSystolic(actualValue.getSBP());
+                                        healthReading.setDiastolic(actualValue.getDBP());
+                                        healthReading.setLogTime((Long.parseLong(actualValue.getTimestamp())*1000)+"");
+                                        healthReading.setPulse(actualValue.getPULSE());
+                                        healthReading.setSync(true);
+                                        healthReading.setIs_abberant(actualValue.getIs_abberant());
+                                        healthReading.setProtocol_id(actualValue.getProtocol_id());
+
+                                        getRespository().addNewHealthRecord(healthReading);
+
+                                        healthReadingList.add(healthReading);
+                                    }
+
+                                    getNavigator().showReadingData(healthReadingList);
+                                    getRespository().setHistoryDataSyncStatus(true);
+                                }
+                            });
+
+
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+
+                            getNavigator().handleError(throwable);
+                        }
+                    }));
+        }else
+        {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<HealthReading> allRecords = getRespository().getAllRecords();
+                    getNavigator().showReadingData(allRecords);
+                }
+            });
+
+        }
     }
 
-    class AsynDataAccess extends AsyncTask<Void,Void,Void>
-    {
-        List<HealthReading> allRecords = null;
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            allRecords = getRespository().getAllRecords();
-
-            /*try {
-                Thread.sleep(3000);
-                allRecords = getRespository().getAllRecords();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            getNavigator().showReadingData(allRecords);
-
-        }
-    }
 }

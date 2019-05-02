@@ -3,8 +3,13 @@ package com.protechgene.android.bpconnect.Utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class DateUtils {
 
@@ -52,6 +57,37 @@ public class DateUtils {
         return dateFormat.format(cal.getTime());
     }
 
+    public static String convertMillisecToDateTime(long milliseconds,String resultFormat)
+    {
+        DateFormat simple = new SimpleDateFormat(resultFormat);
+        Date result = new Date(milliseconds);
+        return simple.format(result);
+    }
+
+    public static String convertDateStringToMillisec(String dateString,String format)
+    {
+        DateFormat simple = new SimpleDateFormat(format);
+        try {
+            Date parse = simple.parse(dateString);
+            return parse.getTime()/1000 +"";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int convertMillisecToHourOfDay(long seconds)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(seconds* 1000L);
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return Calendar.HOUR_OF_DAY;
+
+    }
+
+
+
     //timeString - 18:30
     public static String conver24hourformatTo12hour(String timeString)
     {
@@ -72,9 +108,8 @@ public class DateUtils {
     }
 
     //time1 - 15:22
-    public static int compareTimeString(String time1,String time2,String format)
+    public static long compareTimeString(String time1,String time2,String format)
     {
-
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
             Date d1 = sdf.parse(time1);
@@ -85,10 +120,27 @@ public class DateUtils {
             else if(elapsed==0)
                 return 0;
             else if(elapsed>0)
-                return 1;
+                return elapsed;
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static long daysDifferenceBetweenDates(String dateString1,String dateString2,String format)
+    {
+        SimpleDateFormat myFormat = new SimpleDateFormat(format);
+
+        try {
+            Date date1 = myFormat.parse(dateString1);
+            Date date2 = myFormat.parse(dateString2);
+
+            long diff = date2.getTime() - date1.getTime();
+            return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+           // System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
