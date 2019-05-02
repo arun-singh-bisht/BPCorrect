@@ -8,9 +8,9 @@ import com.protechgene.android.bpconnect.data.Repository;
 public class ApplicationBPConnect extends Application {
 
     public static int PROTOCOL_MORNING_MINIMUM_TIME = 4; // 4:00 AM
-    public static int PROTOCOL_MORNING_MAXIMUM_TIME = 10; // 12:00 pM
-    public static int PROTOCOL_EVENING_MINIMUM_TIME = 14; // 4:00 PM
-    public static int PROTOCOL_EVENING_MAXIMUM_TIME = 18; // 12:00 AM
+    public static int PROTOCOL_MORNING_MAXIMUM_TIME = 12; // 12:00 pM
+    public static int PROTOCOL_EVENING_MINIMUM_TIME = 16; // 4:00 PM
+    public static int PROTOCOL_EVENING_MAXIMUM_TIME = 22; // 12:00 AM
 
 
     public static long PROTOCOL_READING_ACCEPTED_TIME_WINDOW = 1000*60*5; //5 min

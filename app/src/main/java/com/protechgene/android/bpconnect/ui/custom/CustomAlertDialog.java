@@ -2,8 +2,12 @@ package com.protechgene.android.bpconnect.ui.custom;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -55,7 +59,6 @@ public class CustomAlertDialog {
         });
         dialog.show();
     }
-
 
     //Two Button
     public static void showDialog(Activity activity,final int request_code, String msg,String positiveBtnText,String negativeBtnText,int res_id,final I_CustomAlertDialog i_customAlertDialog){
@@ -130,7 +133,6 @@ public class CustomAlertDialog {
         builder.create().show();
     }
 
-
     public static void showDialogSingleButton(Activity activity,String msg,final I_CustomAlertDialog i_customAlertDialog){
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -149,5 +151,43 @@ public class CustomAlertDialog {
             }
         });
         dialog.show();
+    }
+
+    public static void showDefaultDialog(Context context,String title,String mesg)
+    {
+        // setup the alert builder
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+
+        builder.setTitle(title);
+
+        // Linkify the message
+        final SpannableString s = new SpannableString(mesg);
+        Linkify.addLinks(s, Linkify.ALL);
+
+        // add a list
+        builder.setMessage(s);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        // create and show the alert dialog
+        android.app.AlertDialog dialog = builder.create();
+
+        int titleId = context.getResources().getIdentifier( "alertTitle", "id", "android" );
+        if (titleId > 0) {
+            TextView dialogTitle = (TextView) dialog.findViewById(titleId);
+            if (dialogTitle != null) {
+                Linkify.addLinks(dialogTitle, Linkify.WEB_URLS);
+            }
+        }
+
+        dialog.show();
+
+        // Make the textview clickable. Must be called after show()
+        ((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 }

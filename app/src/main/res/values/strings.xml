@@ -43,4 +43,12 @@
     <string name="indicator_start_receive">Start receiving</string>
     <string name="indicator_complete_receive">Complete receiving</string>
     <string name="indicator_during_receive">During receiving</string>
+
+
+    <string name="bp_normal">Your blood pressure falls within the normal range.</string>
+    <string name="bp_elevated">According to the American Heart Association (https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings), you have elevated blood pressure. People with elevated blood pressure are likely to develop high blood pressure unless steps are taken to control the blood pressure.</string>
+    <string name="bp_hypertension_stage_1">According to the American Heart Association (https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings), you have Hypertension Stage 1. At this stage of high blood pressure, doctors are likely to prescribe lifestyle changes and may consider adding blood pressure medication based on your risk of atherosclerotic cardiovascular disease (ASCVD), such as heart attack or stroke.</string>
+    <string name="bp_hypertension_stage_2">According to the American Heart Association (https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings), you have Hypertension Stage 2. At this stage of high blood pressure, doctors are likely to prescribe a combination of blood pressure medications and lifestyle changes.</string>
+    <string name="bp_hypertension_crisis">If you are experiencing signs of possible organ damage such as chest pain, shortness of breath, back pain, numbness/weakness, change in vision, difficulty speaking, do not wait to see if your pressure comes down on its own. Call 9-1-1.</string>
+
 </resources>

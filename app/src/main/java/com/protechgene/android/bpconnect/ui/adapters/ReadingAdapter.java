@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,6 +77,8 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
             RotateDrawable gradientDrawable = (RotateDrawable) layerDrawable
                     .findDrawableByLayerId(R.id.color_rect);
 
+            int stage =0;
+            String bp_stage_name ="";
         if(isColorPlateShow && !isAberentTextVisible)
         {
             String systolic = actualValue.getSystolic();
@@ -85,23 +88,47 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
             if(sys<120 && dia<80)
             {
                 gradientDrawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                stage = R.string.bp_normal;
+                bp_stage_name = "Normal";
             }else if(sys<130 && dia<80)
             {
                 gradientDrawable.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+                stage = R.string.bp_elevated;
+                bp_stage_name = "Elevated";
             }else if(sys<140 || dia<90)
             {
                 gradientDrawable.setColorFilter(Color.parseColor("#FF8C00"), PorterDuff.Mode.SRC_IN);
+                stage = R.string.bp_hypertension_stage_1;
+                bp_stage_name = "Hypertension Stage 1";
             }else if(sys<180 || dia<120)
             {
                 gradientDrawable.setColorFilter(Color.parseColor("#ff5959"), PorterDuff.Mode.SRC_IN);
+                stage = R.string.bp_hypertension_stage_2;
+                bp_stage_name = "Hypertension Stage 2";
             }else
             {
                 gradientDrawable.setColorFilter(Color.parseColor("#5a3921"), PorterDuff.Mode.SRC_IN);
+                stage = R.string.bp_hypertension_crisis;
+                bp_stage_name = "Hypertensive Crisis";
             }
         }else
         {
             gradientDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         }
+
+        final int bp_stage = stage;
+        final String bp_stage_text = bp_stage_name;
+        holder.image_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(bp_stage==0)
+                    return;
+
+                String mystring = context.getResources().getString(bp_stage);
+                CustomAlertDialog.showDefaultDialog(context,bp_stage_text,mystring);
+            }
+        });
     }
 
     @Override
@@ -123,7 +150,7 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView text_sys_value,text_dia_value,text_pulse_value,text_time,text_date,text_aberrant;
         public View layout_header;
-        public View colorPlate;
+        public View colorPlate,image_info;
 
         public MyViewHolder(View view) {
             super(view);
@@ -135,6 +162,7 @@ public class ReadingAdapter extends RecyclerView.Adapter<ReadingAdapter.MyViewHo
             text_aberrant = view.findViewById(R.id.text_aberrant);
             layout_header =  view.findViewById(R.id.layout_header);
             colorPlate = view.findViewById(R.id.color_plate);
+            image_info = view.findViewById(R.id.image_info);
         }
     }
 
