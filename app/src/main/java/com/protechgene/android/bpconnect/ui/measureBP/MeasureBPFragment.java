@@ -18,10 +18,10 @@ import com.protechgene.android.bpconnect.data.local.db.models.HealthReading;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.feeeei.circleseekbar.CircleSeekBar;
 
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.isReadingTakenFromActualDevice;
 
@@ -89,7 +89,7 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
             if(isReadingTakenFromActualDevice)
             {
                 measureBPFragmentViewModel.onResume();
-                showProgress("Wait...");
+                //showProgress("Wait...");
             }else
             {
                 Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
@@ -204,9 +204,10 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
 
         if(status)
         {
-            getBaseActivity().showSnakeBar("No BP Device Found");
+            //getBaseActivity().showSnakeBar("No BP Device Found");
             //activate 'Start' button
             startButton.setVisibility(View.VISIBLE);
+            CustomAlertDialog.showInstructionDialog(getBaseActivity());
         }else
         {
             startButton.setVisibility(View.GONE);
@@ -244,6 +245,13 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
                 clearReadingData();
             }
         }.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CustomAlertDialog.showInstructionDialog(getBaseActivity());
+            }
+        },1000*5);
     }
 
     @Override

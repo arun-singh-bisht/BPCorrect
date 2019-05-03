@@ -1,6 +1,8 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,9 @@ public class MainActivity extends BaseActivity implements CustomAlertDialog.I_Cu
         {
             String msg = "It's time to check your blood pressure. You can also snooz it for some time.";
             CustomAlertDialog.showThreeButtonDialog(this,1001,msg,"Check Now","Snooz","Cancel",this);
+        }else
+        {
+            CustomAlertDialog.showVideoDialog(this);
         }
     }
 
@@ -65,4 +70,5 @@ public class MainActivity extends BaseActivity implements CustomAlertDialog.I_Cu
         //Cancel
         AlarmSound.getInstance(this).stopSound();
     }
+
 }

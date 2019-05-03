@@ -389,7 +389,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                     String uuidString = intent.getExtras().getString(BleReceivedService.EXTRA_CHARACTERISTIC_UUID);
                     receivedData(uuidString, bundle);
                     uiThreadHandler.removeCallbacks(disableIndicationRunnable);
-                    uiThreadHandler.postDelayed(disableIndicationRunnable, 4000L);
+                    //uiThreadHandler.postDelayed(disableIndicationRunnable, 4000L);
                 } else if (BleReceivedService.TYPE_DESCRIPTOR_WRITE.equals(type)) {
                     //For now do this only for the UW-302
                     String device_name = intent.getExtras().getString(BleReceivedService.EXTRA_DEVICE_NAME);

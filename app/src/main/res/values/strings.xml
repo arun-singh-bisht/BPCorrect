@@ -51,4 +51,13 @@
     <string name="bp_hypertension_stage_2">According to the American Heart Association (https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings), you have Hypertension Stage 2. At this stage of high blood pressure, doctors are likely to prescribe a combination of blood pressure medications and lifestyle changes.</string>
     <string name="bp_hypertension_crisis">If you are experiencing signs of possible organ damage such as chest pain, shortness of breath, back pain, numbness/weakness, change in vision, difficulty speaking, do not wait to see if your pressure comes down on its own. Call 9-1-1.</string>
 
+
+    <string name="bulleted_list">
+        \n<li> Don’t smoke, exercise, or drink caffeine or alcohol 30 min prior to measurement</li>\n\n
+        <li>Left arm resting comfortably at heart level</li>\n\n
+        <li>Don’t talk</li>\n\n
+        <li>Sit still in a chair with back supported, legs uncrossed</li>\n\n
+        <li>Cuff positioning (bottom of cuff above the bend of elbow)</li>\n\n
+        <li>Cuff sizing instructions</li>\n\n
+    </string>
 </resources>

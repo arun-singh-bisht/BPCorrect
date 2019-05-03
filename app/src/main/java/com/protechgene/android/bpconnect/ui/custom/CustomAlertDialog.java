@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.View;
 import android.view.Window;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.protechgene.android.bpconnect.R;
 
@@ -189,5 +192,57 @@ public class CustomAlertDialog {
 
         // Make the textview clickable. Must be called after show()
         ((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+
+    public static void showVideoDialog(final Context context)
+    {
+        final Dialog dialog = new Dialog(context,R.style.Theme_AppCompat_Dialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_dialog_video);
+        dialog.setCancelable(false);
+        dialog.findViewById(R.id.text_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        final VideoView simpleVideoView = dialog.findViewById(R.id.video_view);
+        dialog.findViewById(R.id.image_play).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Hide Play Button
+                dialog.findViewById(R.id.image_play).setVisibility(View.GONE);
+                //Load Video
+                String link="http://67.211.223.164:8080/video/bp_video.mp4";
+                Uri video = Uri.parse(link);
+                MediaController mediaController = new MediaController(context);
+                mediaController.setAnchorView(simpleVideoView);
+                simpleVideoView.setMediaController(mediaController);
+                simpleVideoView.setVideoURI(video);
+                simpleVideoView.start();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public static void showInstructionDialog(Context context)
+    {
+        // setup the alert builder
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Proper blood pressure measuring instructions");
+
+        builder.setMessage(R.string.bulleted_list);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        // create and show the alert dialog
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
