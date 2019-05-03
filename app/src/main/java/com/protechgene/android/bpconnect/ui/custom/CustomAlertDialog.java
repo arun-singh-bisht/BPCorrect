@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -243,6 +248,58 @@ public class CustomAlertDialog {
 
         // create and show the alert dialog
         android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public static  void dialogPlayVideo(Context context){
+
+        View view_layout = LayoutInflater.from(context).inflate(R.layout.dialog_video_play_layout,null);
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(view_layout);
+        dialog.setCancelable(false);
+
+
+        final VideoView videoView = dialog.findViewById(R.id.video_view);
+
+        final ImageView play = dialog.findViewById(R.id.dialog_video_play_btn);
+        Button ok = (Button) dialog.findViewById(R.id.dailog_ok_button);
+        final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.dailog_progress_bar);
+        Uri uri = Uri.parse("http://67.211.223.164:8080/video/bp_video.mp4");
+        videoView.setVideoURI(uri);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                play.setVisibility(View.GONE);
+                videoView.start();
+                progressBar.setVisibility(View.VISIBLE);
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        // TODO Auto-generated method stub
+                        mp.start();
+                        progressBar.setVisibility(View.GONE);
+                        mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                            @Override
+                            public void onVideoSizeChanged(MediaPlayer mp, int arg1,
+                                                           int arg2) {
+                                progressBar.setVisibility(View.GONE);
+                                mp.start();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.stopPlayback();
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
 }

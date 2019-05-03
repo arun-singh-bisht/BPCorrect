@@ -16,14 +16,16 @@ import com.protechgene.android.bpconnect.R;
 public class NotificationUtil {
 
 
-    public void buildLocalNotification(Context context, Intent intentToRepeat,int requestCode,String title)
+    public void buildLocalNotification(Context context, Intent intentToHomeScreen,Intent intentToStopAlarmSound,int requestCode,String title)
     {
         //Pending intent to handle launch of Activity in intent above
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, requestCode, intentToRepeat, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getActivity(context, requestCode, intentToHomeScreen, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PendingIntent deleteIntent = PendingIntent.getBroadcast(context, requestCode, intentToStopAlarmSound, 0);
 
         //Build notification
-        Notification repeatedNotification = createBuilder(context, pendingIntent,title).build();
+        Notification repeatedNotification = createBuilder(context,title,pendingIntent,deleteIntent).build();
 
         //Send local notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -31,7 +33,7 @@ public class NotificationUtil {
         notificationManager.notify(requestCode, repeatedNotification);
     }
 
-    private NotificationCompat.Builder createBuilder(Context context, PendingIntent pendingIntent,String title) {
+    private NotificationCompat.Builder createBuilder(Context context, String title,PendingIntent pendingIntent,PendingIntent deleteIntent) {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "1001")
                 .setSmallIcon(R.drawable.ic_launcher_round_new)
@@ -39,6 +41,7 @@ public class NotificationUtil {
                 .setContentTitle(title)
                 .setContentText("Connect to BP device and record.")
                 .setColor(Color.parseColor("#009add"))
+                .setDeleteIntent(deleteIntent)
                 .setAutoCancel(true);
 
         return mBuilder;

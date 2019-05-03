@@ -23,18 +23,31 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String alarmTime = intent.getStringExtra("AlarmTime");
-        Log.d("AlarmReceiver","onReceive "+alarmTime);
 
-        //Intent to invoke app when click on notification.
+        String alarmTime = intent.getStringExtra("AlarmTime");
+        Log.d("AlarmReceiver","onReceive alarmTime "+alarmTime);
+
+        String ReceivedExtraType = intent.getStringExtra("ReceivedExtraType");
+        if(ReceivedExtraType!=null && ReceivedExtraType.equalsIgnoreCase("STOP_ALARM_SOUND"))
+        {
+            AlarmSound.getInstance(context).stopSound();
+            Log.d("AlarmReceiver","STOP_ALARM_SOUND");
+            return;
+        }
+
         //In this sample, we want to start/launch this sample app when user clicks on notification
-        Intent intentToRepeat = new Intent(context, MainActivity.class);
-        intentToRepeat.putExtra("isAlarmFired",true);
-        intentToRepeat.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //Intent to invoke app when click on notification.
+        Intent intentToHomeScreen = new Intent(context, MainActivity.class);
+        intentToHomeScreen.putExtra("isAlarmFired",true);
+        intentToHomeScreen.putExtra("FireTime",alarmTime);
+        intentToHomeScreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        Intent intentToStopAlarmSound = new Intent(context, AlarmReceiver.class);
+        intentToStopAlarmSound.putExtra("ReceivedExtraType","STOP_ALARM_SOUND");
 
         //Show Notification status bar
         Log.d("AlarmReceiver","Show Notification");
-        new NotificationUtil().buildLocalNotification(context,intentToRepeat,1001,"Time to check BP");
+        new NotificationUtil().buildLocalNotification(context,intentToHomeScreen,intentToStopAlarmSound,1001,"Time to check BP");
 
         //Play Sound in loop
         if(ApplicationBPConnect.isAlarmSoundEnabled)
@@ -55,8 +68,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
                     //set next alarm for evening.
                     String[] split = eveningReadingTime.split(":");
                     AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
-
-
+                    Log.d("AlarmReceiver","onReceive set next alarm for evening."+eveningReadingTime);
                 }else if(alarmTime.equalsIgnoreCase(eveningReadingTime))
                 {
                     //set next alarm for next day morning.
@@ -67,10 +79,15 @@ public class AlarmReceiver  extends BroadcastReceiver {
                         //Set Alarm for next day morning.
                         String[] split = morningReadingTime.split(":");
                         AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),1);
+                        Log.d("AlarmReceiver","onReceive Set Alarm for next day morning.."+morningReadingTime);
                     }else
                     {
                         //Do not set alarm for next day morning as today is end day
+                        Log.d("AlarmReceiver","onReceive Do not set alarm for next day morning as today is end day.");
                     }
+                }else
+                {
+                    Log.d("AlarmReceiver","onReceive Snooz Time Captured");
                 }
             }
         });
@@ -78,9 +95,6 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
     public static void setAlarm(Context context,int hour_of_day,int min,int dayOffsetFromToday)
     {
-        //Create alarm manager
-        AlarmManager alarmMgr0 = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
         //Create pending intent & register it to your alarm notifier class
         Intent intent0 = new Intent(context, AlarmReceiver.class);
         intent0.putExtra("AlarmTime",hour_of_day+":"+min);
@@ -88,14 +102,16 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
         //set timer you want alarm to work (here I have set it to 7.20pm)
         //Intent intent0 = new Intent(this, OldEntryRemover.class);
-        Calendar timeOff9 = Calendar.getInstance();
-        timeOff9.set(Calendar.HOUR_OF_DAY, hour_of_day);
-        timeOff9.set(Calendar.MINUTE, min);
-        timeOff9.set(Calendar.SECOND, 0);
-        timeOff9.add(Calendar.DATE,dayOffsetFromToday);
+        Calendar timeOff = Calendar.getInstance();
+        timeOff.set(Calendar.HOUR_OF_DAY, hour_of_day);
+        timeOff.set(Calendar.MINUTE, min);
+        timeOff.set(Calendar.SECOND, 0);
+        timeOff.add(Calendar.DATE,dayOffsetFromToday);
 
-        //set that timer as a RTC Wakeup to alarm manager object
-        alarmMgr0.set(AlarmManager.RTC_WAKEUP, timeOff9.getTimeInMillis(), pendingIntent0);
+        //Create alarm manager
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, timeOff.getTimeInMillis(), pendingIntent0);
+
         Log.d("setAlarm","setAlarm at "+hour_of_day+":"+min);
     }
 
