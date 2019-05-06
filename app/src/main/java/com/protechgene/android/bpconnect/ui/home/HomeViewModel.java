@@ -87,4 +87,74 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
     }
 
+
+    public void checkActiveProtocol()
+    {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<ProtocolModel> allProtocol = getRespository().getAllProtocol();
+
+                if(allProtocol==null || allProtocol.size()==0)
+                    getProtocolFromServer();
+                else
+                    getNavigator().isProtocolExists(true);
+            }
+        });
+    }
+
+    private void getProtocolFromServer()
+    {
+        String accessToken = getRespository().getAccessToken();
+        String userId = getRespository().getCurrentUserId();
+
+        disposables.add(getRespository().getProtocolDetail(accessToken,userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<GetProtocolResponse>() {
+                    @Override
+                    public void accept(GetProtocolResponse protocolResponse) throws Exception {
+
+                        //Throwable throwable = new Throwable("Data Syn to server");
+                        //getNavigator().handleError(throwable);
+                        if(protocolResponse.getData().get(0).getProtocolId() == null) {
+                            getNavigator().isProtocolExists(false);
+                        }
+                        else
+                        {
+                            Data data = protocolResponse.getData().get(0);
+
+                            String startDate = data.getStartDate();
+                            startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(startDate) * 1000,"MMM dd,yyyy");
+
+                            String endDate = data.getEndDate();
+                            endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000,"MMM dd,yyyy");
+
+                            final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,data.getMorningAlarm(),data.getEveningAlarm(),true);
+                            protocolModel.setProtocolCode(data.getProtocolId());
+
+                            //Save new protocol in DB
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getRespository().addNewProtocol(protocolModel);
+                                    getNavigator().isProtocolExists(true);
+                                }
+                            });
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getNavigator().isProtocolExists(false);
+                    }
+                }));
+    }
 }

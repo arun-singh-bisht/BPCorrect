@@ -60,4 +60,11 @@
         <li>Cuff positioning (bottom of cuff above the bend of elbow)</li>\n\n
         <li>Cuff sizing instructions</li>\n\n
     </string>
+
+    <string name="step1">Don\'t smoke,exercise, or drink caffeine or alcohol 30 min prior to measurement</string>
+    <string name="step2">Left arm resting comfortably at heart level</string>
+    <string name="step3">Don\'t talk</string>
+    <string name="step4">Sit still in a chair with back supported,legs uncrossed</string>
+    <string name="step5">Cuff positioning (bottom of cuff above the bend of elbow)</string>
+    <string name="step6">Cuff sizing instructions</string>
 </resources>

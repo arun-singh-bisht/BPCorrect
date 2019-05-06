@@ -28,6 +28,26 @@ public class FragmentUtil {
         }
     }
 
+    public static void loadFragment_Add(Context context,int containerViewId,
+                                    Fragment fragment,
+                                    String fragmentTag,
+                                    String backStackStateName) {
+
+        if(backStackStateName!=null) {
+            ((AppCompatActivity)context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(containerViewId, fragment, fragmentTag)
+                    .addToBackStack(backStackStateName)
+                    .commit();
+        }else
+        {
+            ((AppCompatActivity)context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(containerViewId, fragment, fragmentTag)
+                    .commit();
+        }
+    }
+
     public static void removeFragment(Context context)
     {
         FragmentManager fm =  ((AppCompatActivity)context).getSupportFragmentManager();

@@ -49,6 +49,7 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        img_right.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.img_left)
@@ -60,13 +61,13 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
     @OnClick(R.id.img_right)
     public void onAddIconClick()
     {
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(new ProtocolReadingFragment(), "EHC Protocol");
         adapter.addFragment(new BPAllReadingFragment(), "ALL");
-        adapter.addFragment(new ProtocolReadingFragment(), "Scheduled");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
     }
@@ -80,9 +81,9 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         Log.d("onPageSelected","position: "+position);
         if(position==0)
-            img_right.setVisibility(View.GONE);
-        else if(position==1)
             img_right.setVisibility(View.VISIBLE);
+        else if(position==1)
+            img_right.setVisibility(View.GONE);
     }
 
     @Override

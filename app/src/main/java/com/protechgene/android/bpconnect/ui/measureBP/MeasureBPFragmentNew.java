@@ -27,7 +27,7 @@ import io.feeeei.circleseekbar.CircleSeekBar;
 
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.isReadingTakenFromActualDevice;
 
-public class MeasureBPFragment extends BaseFragment implements MeasureBPFragmentNavigator {
+public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragmentNavigator {
 
     public static final String FRAGMENT_TAG = "MeasureBPFragment";
 
@@ -78,60 +78,14 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         measureBPFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(MeasureBPFragmentViewModel.class);
         measureBPFragmentViewModel.setNavigator(this);
 
-
-        measureBPFragmentViewModel.connectToDevice(getBaseActivity());
-
         Bundle args = getArguments();
         if(args!=null)
             isTypeProtocol = args.getBoolean("isTypeProtocol");
+
+        Log.d("initialize","isTypeProtocol "+isTypeProtocol);
+
+        measureBPFragmentViewModel.connectToDevice(getBaseActivity());
     }
-
-    @OnClick(R.id.img_left)
-    public void onBackIconClick()
-    {
-        FragmentUtil.removeFragment(getBaseActivity());
-    }
-
-    @OnClick(R.id.btn_done)
-    public void onStartButtonClick()
-    {
-        if(isCounterRunning)
-            return;
-
-        if(!isReadingDone) {
-
-            if(isReadingTakenFromActualDevice)
-            {
-                measureBPFragmentViewModel.onResume(false);
-                //showProgress("Wait...");
-            }else
-            {
-                Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
-                lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(80,130)+"");
-                lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(60,90)+"");
-                lifetrackInfobean.setPulse(MathUtil.getRandomNumber(70,100)+"");
-                lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()/1000)+"");
-                measureBPFragmentViewModel.saveReading(lifetrackInfobean);
-            }
-        }else {
-            FragmentUtil.removeFragment(getBaseActivity());
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        measureBPFragmentViewModel.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        measureBPFragmentViewModel.onDestroy();
-        if(rippleBackground!=null)
-        rippleBackground.stopRippleAnimation();
-    }
-
 
     @Override
     public void turningOnBluetooth() {
@@ -161,6 +115,137 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         Log.d("onActivityResult",""+requestCode+" "+resultCode);
     }
 
+    @Override
+    public void bpDevicePairedStatus(boolean status) {
+
+        if(!ApplicationBPConnect.isBPDeviceRequiredForTesting)
+            status = !status;
+
+        if(status)
+        {
+            startScannaing();
+
+        }else
+        {
+            measureBPFragmentViewModel.onDestroy();
+
+            //Show message to user to pair device first
+            showAlert("Error", "No device found. Pair to a BP measuring device first.", "OK", new AlertDialogCallback() {
+                @Override
+                public void onPositiveClick() {
+                    //Close this screen.
+                    FragmentUtil.removeFragment(getBaseActivity());
+                }
+            });
+
+            if(rippleBackground!=null)
+                rippleBackground.stopRippleAnimation();
+            text_transfer_status.setVisibility(View.GONE);
+        }
+    }
+
+    private void startScannaing()
+    {
+        if(rippleBackground!=null)
+            rippleBackground.startRippleAnimation();
+
+        text_transfer_status.setText("Searching for data...");
+        text_transfer_status.setVisibility(View.VISIBLE);
+
+        measureBPFragmentViewModel.onResume(isTypeProtocol);
+
+        CustomAlertDialog.showInstructionDialog(getBaseActivity());
+    }
+
+    //------------- receive Result from BLE device -----------------------------------------
+    @Override
+    public void result(final HealthReading healthReading) {
+
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+
+                text_bp_reading.setText(healthReading.getSystolic()+"/"+healthReading.getDiastolic());
+                text_heart_rate_reading.setText(healthReading.getPulse());
+                numberOfReadings = numberOfReadings+1;
+
+                if(rippleBackground!=null)
+                    rippleBackground.stopRippleAnimation();
+
+                if(isTypeProtocol && numberOfReadings<2) {
+
+                    activateCountDown();
+                }
+                else
+                {
+                    isReadingDone = true;
+                    text_transfer_status.setVisibility(View.GONE);
+                    view_wait.setVisibility(View.GONE);
+                    doneButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void activateCountDown()
+    {
+        isCounterRunning = true;
+        view_wait.setVisibility(View.VISIBLE);
+
+
+        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                text_transfer_status.setVisibility(View.GONE);
+                text_counter.setText(millisUntilFinished / 1000 + "");
+                seekbar.setCurProcess((int)(millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                isCounterRunning = false;
+                clearReadingData();
+
+                view_wait.setVisibility(View.GONE);
+                startScannaing();
+            }
+        }.start();
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+
+
+    @OnClick(R.id.img_left)
+    public void onBackIconClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
+    }
+
+    @OnClick(R.id.btn_done)
+    public void onStartButtonClick()
+    {
+        //Close Screen
+        FragmentUtil.removeFragment(getBaseActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        measureBPFragmentViewModel.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        measureBPFragmentViewModel.onDestroy();
+        if(rippleBackground!=null)
+            rippleBackground.stopRippleAnimation();
+        if(countDownTimer!=null)
+            countDownTimer.cancel();
+        countDownTimer = null;
+    }
 
     //-------------- Show Progress Message ---------------------------------------
     @Override
@@ -184,83 +269,12 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         hideProgress();
     }
 
-    //------------- receive Result from BLE device -----------------------------------------
-    @Override
-    public void result(final HealthReading healthReading) {
 
-        getBaseActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                hideProgress();
-                text_bp_reading.setText(healthReading.getSystolic()+"/"+healthReading.getDiastolic());
-                text_heart_rate_reading.setText(healthReading.getPulse());
-                numberOfReadings = numberOfReadings+1;
-
-                measureBPFragmentViewModel.onDestroy();
-                if(rippleBackground!=null)
-                    rippleBackground.stopRippleAnimation();
-
-                if(isTypeProtocol && numberOfReadings<2) {
-
-                    activateCountDown();
-                }
-                else
-                {
-                    isReadingDone = true;
-                   // startButton.setText("DONE");
-                    text_transfer_status.setVisibility(View.GONE);
-                    view_wait.setVisibility(View.GONE);
-                    doneButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-    }
 
     @Override
     public void handleError(Throwable throwable) {
         hideProgress();
         getBaseActivity().showSnakeBar(throwable.getMessage());
-    }
-
-    @Override
-    public void bpDevicePairedStatus(boolean status) {
-
-        if(!ApplicationBPConnect.isBPDeviceRequiredForTesting)
-            status = !status;
-
-        if(status)
-        {
-            //getBaseActivity().showSnakeBar("No BP Device Found");
-            //activate 'Start' button
-
-            if(rippleBackground!=null)
-                rippleBackground.startRippleAnimation();
-            text_transfer_status.setText("Searching for data...");
-            text_transfer_status.setVisibility(View.VISIBLE);
-
-            measureBPFragmentViewModel.onResume(false);
-
-            CustomAlertDialog.showInstructionDialog(getBaseActivity());
-
-        }else
-        {
-
-            measureBPFragmentViewModel.onDestroy();
-
-            //Show message to user to pair device first
-            showAlert("Error", "No device found. Pair to a BP measuring device first.", "OK", new AlertDialogCallback() {
-                @Override
-                public void onPositiveClick() {
-                    //Close this screen.
-                    FragmentUtil.removeFragment(getBaseActivity());
-                }
-            });
-
-            if(rippleBackground!=null)
-                rippleBackground.stopRippleAnimation();
-            text_transfer_status.setVisibility(View.GONE);
-        }
     }
 
     private void clearReadingData()
@@ -269,41 +283,4 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         text_heart_rate_reading.setText("0");
     }
 
-    private void activateCountDown()
-    {
-        isCounterRunning = true;
-        view_wait.setVisibility(View.VISIBLE);
-        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                text_counter.setText(millisUntilFinished / 1000 + "");
-                seekbar.setCurProcess((int)(millisUntilFinished / 1000));
-            }
-
-            public void onFinish() {
-                isCounterRunning = false;
-                clearReadingData();
-
-                view_wait.setVisibility(View.GONE);
-                measureBPFragmentViewModel.connectToDevice(getBaseActivity());
-                //measureBPFragmentViewModel.onResume();
-            }
-        }.start();
-
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                CustomAlertDialog.showInstructionDialog(getBaseActivity());
-            }
-        },1000*5);*/
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(countDownTimer!=null)
-            countDownTimer.cancel();
-        countDownTimer = null;
-
-    }
 }

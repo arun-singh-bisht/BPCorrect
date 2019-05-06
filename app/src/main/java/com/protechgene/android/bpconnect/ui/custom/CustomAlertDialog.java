@@ -234,8 +234,23 @@ public class CustomAlertDialog {
 
     public static void showInstructionDialog(Context context)
     {
+
+        View v = LayoutInflater.from(context).inflate(R.layout.custom_instruction_dialog_layout,null);
+        TextView ok = v.findViewById(R.id.dailog_ok_button);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(v);
+        AlertDialog alert = builder.create();
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert.dismiss();
+            }
+        });
+        alert.show();
+
         // setup the alert builder
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+       /* android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setTitle("Proper blood pressure measuring instructions");
 
         builder.setMessage(R.string.bulleted_list);
@@ -248,10 +263,16 @@ public class CustomAlertDialog {
 
         // create and show the alert dialog
         android.app.AlertDialog dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
-    public static  void dialogPlayVideo(Context context){
+
+    public interface VideoDialogCallback
+    {
+        void onVideoEnd(int request_code);
+    }
+
+    public static  void dialogPlayVideoNew(Context context,final VideoDialogCallback videoDialogCallback){
 
         View view_layout = LayoutInflater.from(context).inflate(R.layout.dialog_video_play_layout,null);
 
@@ -259,37 +280,35 @@ public class CustomAlertDialog {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(view_layout);
         dialog.setCancelable(false);
-
-
         final VideoView videoView = dialog.findViewById(R.id.video_view);
-
-        final ImageView play = dialog.findViewById(R.id.dialog_video_play_btn);
         Button ok = (Button) dialog.findViewById(R.id.dailog_ok_button);
         final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.dailog_progress_bar);
         Uri uri = Uri.parse("http://67.211.223.164:8080/video/bp_video.mp4");
         videoView.setVideoURI(uri);
-        play.setOnClickListener(new View.OnClickListener() {
+        progressBar.setVisibility(View.VISIBLE);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onClick(View view) {
-                play.setVisibility(View.GONE);
-                videoView.start();
-                progressBar.setVisibility(View.VISIBLE);
-                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+                mp.start();
+                progressBar.setVisibility(View.GONE);
+                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
                     @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        // TODO Auto-generated method stub
-                        mp.start();
+                    public void onVideoSizeChanged(MediaPlayer mp, int arg1,
+                                                   int arg2) {
                         progressBar.setVisibility(View.GONE);
-                        mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                            @Override
-                            public void onVideoSizeChanged(MediaPlayer mp, int arg1,
-                                                           int arg2) {
-                                progressBar.setVisibility(View.GONE);
-                                mp.start();
-                            }
-                        });
+                        mp.start();
                     }
                 });
+            }
+        });
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.stopPlayback();
+                dialog.dismiss();
+                videoDialogCallback.onVideoEnd(0);
             }
         });
         ok.setOnClickListener(new View.OnClickListener() {
@@ -297,6 +316,7 @@ public class CustomAlertDialog {
             public void onClick(View view) {
                 videoView.stopPlayback();
                 dialog.dismiss();
+                videoDialogCallback.onVideoEnd(0);
             }
         });
 

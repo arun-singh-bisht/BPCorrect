@@ -1,10 +1,13 @@
 package com.protechgene.android.bpconnect.ui.readingHistory;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
@@ -13,6 +16,7 @@ import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.ui.adapters.ReadingAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,19 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
     public TextView text_empty_msg;
 
 
+
+    @BindView(R.id.text_blood_pressure)
+    public TextView text_blood_pressure;
+    @BindView(R.id.text_sys_dia_title)
+    public TextView text_sys_dia_title;
+    @BindView(R.id.text_bpm)
+    public TextView text_bpm;
+
+
+
+    @BindView(R.id.card_reading_stats)
+    public CardView card_reading_stats;
+
     @BindView(R.id.text_sys_dia)
     public TextView text_sys_dia;
     @BindView(R.id.text_pulse)
@@ -52,15 +69,15 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
     @BindView(R.id.text_progress_percentage)
     public TextView text_progress_percentage;
 
-
-
+    @BindView(R.id.image_info)
+    public ImageView image_info;
 
     private ProtocolReadingsViewModel protocolReadingsViewModel;
     private ReadingAdapter bpReadingAdapter;
 
     @Override
     protected int layoutRes() {
-        return R.layout.fragment_bp_protocol_readings;
+        return R.layout.fragment_bp_protocol_readings_new;
     }
 
     @Override
@@ -145,6 +162,75 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
 
                 seekbar.setCurProcess(taken);
                 text_progress_percentage.setText((taken*100)/totalReadings +"%");
+
+                int sys = avgSys;
+                int dia = avgDia;
+                int color = 0;
+
+                int stage =0;
+                String bp_stage_name ="";
+
+                if(sys<120 && dia<80)
+                {
+                    color = R.color.reading_normal_green;
+                    stage = R.string.bp_normal;
+                    bp_stage_name = "Normal";
+                }else if(sys<130 && dia<80)
+                {
+                    color = R.color.reading_elevated;
+                    stage = R.string.bp_elevated;
+                    bp_stage_name = "Elevated";
+                }else if(sys<140 || dia<90)
+                {
+                    color = R.color.reading_hyper_stage_first;
+                    stage = R.string.bp_hypertension_stage_1;
+                    bp_stage_name = "Hypertension Stage 1";
+                }else if(sys<180 || dia<120)
+                {
+                    color = R.color.reading_hyper_stage_second;
+                    stage = R.string.bp_hypertension_stage_2;
+                    bp_stage_name = "Hypertension Stage 2";
+                }else
+                {
+                    color = R.color.reading_hyper_stage_crisis;
+                    stage = R.string.bp_hypertension_crisis;
+                    bp_stage_name = "Hypertensive Crisis";
+                }
+                setCardBgColor(color);
+                setInfoMessage(stage,bp_stage_name);
+            }
+        });
+    }
+
+    private void setCardBgColor(int color)
+    {
+        card_reading_stats.setCardBackgroundColor(getResources().getColor(color));
+
+        int label_color;
+        if(color == R.color.reading_normal_green || color == R.color.reading_hyper_stage_second || color==R.color.reading_hyper_stage_crisis)
+            label_color = Color.WHITE;
+        else
+            label_color = Color.BLACK;
+
+
+        text_blood_pressure.setTextColor(label_color);
+        text_sys_dia.setTextColor(label_color);
+        text_sys_dia_title.setTextColor(label_color);
+        text_pulse.setTextColor(label_color);
+        text_bpm.setTextColor(label_color);
+    }
+
+    private void setInfoMessage(int stage_res,String title)
+    {
+        image_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(stage_res==0)
+                    return;
+
+                String mystring = getBaseActivity().getResources().getString(stage_res);
+                CustomAlertDialog.showDefaultDialog(getBaseActivity(),title,mystring);
             }
         });
     }

@@ -33,6 +33,11 @@
     <color name="bp_gray">#E9E7E8</color>
 
 
-
+    <!--Reading Color Code-->
+    <color name="reading_normal_green">#4caf50</color>
+    <color name="reading_elevated">#ffeb3b</color>
+    <color name="reading_hyper_stage_first">#FF8C00</color>
+    <color name="reading_hyper_stage_second">#ff5959</color>
+    <color name="reading_hyper_stage_crisis">#5a3921</color>
 
 </resources>

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/tools">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardElevation="1dp"
-        card_view:cardCornerRadius="4dp"
+        card_view:cardCornerRadius="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="13dp"
@@ -28,6 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -59,7 +61,7 @@
                 android:layout_height="27dp"
                 android:background="@drawable/sample_new"
                 android:layout_alignParentRight="true"
-                android:visibility="visible"
+                android:visibility="gone"
                 />
 
             <ImageView
@@ -68,9 +70,10 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_action_info"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:tint="#ffffff"
+                android:layout_marginRight="10dp"
+                android:tint="#AAAAAA"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 />
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView

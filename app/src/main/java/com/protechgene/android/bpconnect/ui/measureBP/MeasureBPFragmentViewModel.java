@@ -113,6 +113,8 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     private ArrayList<BluetoothDevice> deviceList;
     ArrayList<String> pairedDeviceList = new ArrayList<String>(); //ACGS-10
 
+    private boolean isReadingTaken = false;
+    private boolean measureReadingForProtocol;
     private Context mContext;
 
 
@@ -153,13 +155,16 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                        getNavigator().bpDevicePairedStatus(false);
                    }
                }
-
            }
        });
 
    }
 
-    protected void onResume() {
+    protected void onResume(boolean measureReadingForProtocol) {
+
+        this.measureReadingForProtocol = measureReadingForProtocol;
+        isReadingTaken = false;
+
         isDevicePaired();
 
         if (mIsSendCancel) {
@@ -663,10 +668,6 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         bloodpressure.setHide(!isExistData);*/
     }
 
-
-
-
-
     private void receivedData(String characteristicUuidString, Bundle bundle) {
 
         if (ADGattUUID.WeightScaleMeasurement.toString().equals(characteristicUuidString) ||
@@ -764,6 +765,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             //getNavigator().result(infoBeanObj);
 
             //Save Reading data - Local DB + Server
+            Log.d("saveReading","ADGattUUID.BloodPressureMeasurement.toString().equals(characteristicUuidString)");
             saveReading(infoBeanObj);
 
             //Insert new data into DB
@@ -972,8 +974,8 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
         public void saveReading(final Lifetrack_infobean lifetrackInfobean)
         {
-            getNavigator().showIndicator("Processing data...");
-
+            //getNavigator().showIndicator("Processing data...");
+            Log.d("saveReading","saveReading");
             lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis())+"");
 
             AsyncTask.execute(new Runnable() {
@@ -1012,7 +1014,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                         {
                             //Reading Done before morning protocol time
                             healthReading.setProtocol_id("");
-                        }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW)
+                        }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW && measureReadingForProtocol)
                         {
                             //Reading Done in 10 min of Morning Protocol Time, so it is valid protocol reading
                             healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
@@ -1026,7 +1028,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                             {
                                 //Reading Done before evening protocol time
                                 healthReading.setProtocol_id("");
-                            }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW)
+                            }else if(compareResult<PROTOCOL_READING_ACCEPTED_TIME_WINDOW && measureReadingForProtocol)
                             {
                                 //Reading Done in 10 min of evening Protocol Time, so it is valid protocol reading
                                 healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
@@ -1048,12 +1050,18 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                     healthReading.setSystolic(lifetrackInfobean.getSystolic());
                     healthReading.setReadingID(0);
 
+
+                    if(isReadingTaken)
+                        return;
+
                     //Save This reading IN DB
+                    Log.d("saveReading","addNewHealthRecord");
                     getRespository().addNewHealthRecord(healthReading);
                     //Deliver Reading to UI
                     getNavigator().result(healthReading);
 
                     uploadReadingToServer(healthReading);
+                    isReadingTaken = true;
 
                 }
             });

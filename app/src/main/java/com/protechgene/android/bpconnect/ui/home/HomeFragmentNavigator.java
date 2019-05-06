@@ -7,4 +7,5 @@ public interface HomeFragmentNavigator {
 
     void showProfileDetails();
 
+    void isProtocolExists(boolean statuc);
 }
