@@ -61,7 +61,7 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
     @OnClick(R.id.img_right)
     public void onAddIconClick()
     {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
     }
 
     private void setupViewPager(ViewPager viewPager) {

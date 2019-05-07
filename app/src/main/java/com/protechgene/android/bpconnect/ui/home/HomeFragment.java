@@ -3,6 +3,7 @@ package com.protechgene.android.bpconnect.ui.home;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -46,12 +47,14 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
 
     @Override
-    protected void initialize() {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
 
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
 
-        mHomeViewModel.getProfileDetails();
+        //mHomeViewModel.getProfileDetails();
         //CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
         Log.d("HomeFragment","initialize");
 
@@ -81,40 +84,45 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         }
     }
 
+    @Override
+    protected void initialize() {
+        mHomeViewModel.getProfileDetails();
+    }
+
 
     @OnClick(R.id.card_measure_bp)
     public void openMeasureBPFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new MeasureBPFragmentNew(),MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new MeasureBPFragmentNew(),MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
     }
 
     @OnClick(R.id.card_readings)
     public void openReadingsFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new BPReadingFragment(),BPReadingFragment.FRAGMENT_TAG,"BPReadingFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new BPReadingFragment(),BPReadingFragment.FRAGMENT_TAG,"BPReadingFragmentTransition");
     }
 
     @OnClick(R.id.card_learn)
     public void openTutorialFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
     }
 
     @OnClick(R.id.card_devices)
     public void openDeviceFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new DevicesFragment(),DevicesFragment.FRAGMENT_TAG,"DevicesFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new DevicesFragment(),DevicesFragment.FRAGMENT_TAG,"DevicesFragmentTransition");
     }
 
     @OnClick(R.id.card_reminder)
     public void openRemiderFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
     }
 
     @OnClick(R.id.card_settings)
     public void openSettingsFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new SettingsFragment(),SettingsFragment.FRAGMENT_TAG,"SettingsFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new SettingsFragment(),SettingsFragment.FRAGMENT_TAG,"SettingsFragmentTransition");
     }
 
     @OnClick(R.id.layout_profile)
     public void openProfileFragment() {
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,new ProfileFragment(),ProfileFragment.FRAGMENT_TAG,"ProfileFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ProfileFragment(),ProfileFragment.FRAGMENT_TAG,"ProfileFragmentTransition");
     }
 
 
@@ -163,7 +171,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         Bundle args = new Bundle();
         args.putBoolean("isTypeProtocol",true);
         MeasureBPFragmentNew.setArguments(args);
-        FragmentUtil.loadFragment_Add(getBaseActivity(),R.id.container_fragment,MeasureBPFragmentNew,MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,MeasureBPFragmentNew,MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
     }
 
     @Override

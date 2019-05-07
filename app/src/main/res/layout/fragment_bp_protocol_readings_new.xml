@@ -260,7 +260,7 @@
                     android:layout_height="20dp"
                     android:src="@drawable/ic_action_info"
                     android:tint="#666666"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_gravity="bottom|right"
                     android:layout_margin="10dp"
                     />

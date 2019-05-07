@@ -153,31 +153,37 @@ public class ProtocolReadingsViewModel extends BaseViewModel<ProtocolReadingsFra
                         String todayDate = DateUtils.getDateString(0,"MMM dd,yyyy");
                         int l = (int)DateUtils.daysDifferenceBetweenDates(startDay, todayDate,"MMM dd,yyyy");
 
-                        readingTakenIdeal = l*4;
-                        String currentTime = DateUtils.getDateString(0, "HH:mm");
-                        String morningReadingTime = protocolModel.getMorningReadingTime();
+                        if(l>=0)
+                        {
+                            readingTakenIdeal = l*4;
+                            String currentTime = DateUtils.getDateString(0, "HH:mm");
+                            String morningReadingTime = protocolModel.getMorningReadingTime();
 
-                        long compareResult = DateUtils.compareTimeString(currentTime, morningReadingTime, "HH:mm");
-                        if(compareResult>0)
-                            readingTakenIdeal = readingTakenIdeal+2;
+                            long compareResult = DateUtils.compareTimeString(currentTime, morningReadingTime, "HH:mm");
+                            if(compareResult>0)
+                                readingTakenIdeal = readingTakenIdeal+2;
 
-                        String eveningReadingTime = protocolModel.getEveningReadingTime();
+                            String eveningReadingTime = protocolModel.getEveningReadingTime();
 
-                        compareResult = DateUtils.compareTimeString(currentTime, eveningReadingTime, "HH:mm");
-                        if(compareResult>0)
-                            readingTakenIdeal = readingTakenIdeal+2;
+                            compareResult = DateUtils.compareTimeString(currentTime, eveningReadingTime, "HH:mm");
+                            if(compareResult>0)
+                                readingTakenIdeal = readingTakenIdeal+2;
 
 
-                        Log.d("DaysDifference","DaysDifference "+startDay+" - "+todayDate+" = "+l);
-                        Log.d("DaysDifference","readingTakenIdeal "+readingTakenIdeal);
+                            Log.d("DaysDifference","DaysDifference "+startDay+" - "+todayDate+" = "+l);
+                            Log.d("DaysDifference","readingTakenIdeal "+readingTakenIdeal);
 
-                        readingMissed = readingTakenIdeal - readingTakenActual;
+                            readingMissed = readingTakenIdeal - readingTakenActual;
+
+                        }
 
                         Collections.reverse(valueList);
                         getNavigator().showReadingData(valueList);
 
                         if(count==0)
                             count =1;
+
+
                         getNavigator().showSummeyData(avgSys/count,avgDia/count,avgpulse/count,totalReadings,readingTakenActual,readingMissed);
 
                     }

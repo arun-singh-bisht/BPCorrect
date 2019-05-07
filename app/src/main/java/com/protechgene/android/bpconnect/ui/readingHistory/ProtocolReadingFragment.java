@@ -170,6 +170,9 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
                 int stage =0;
                 String bp_stage_name ="";
 
+                if(sys==0 && dia==0)
+                    return;
+
                 if(sys<120 && dia<80)
                 {
                     color = R.color.reading_normal_green;
@@ -222,6 +225,7 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
 
     private void setInfoMessage(int stage_res,String title)
     {
+        image_info.setVisibility(View.VISIBLE);
         image_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
