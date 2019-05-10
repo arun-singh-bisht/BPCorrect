@@ -1,6 +1,7 @@
 package com.protechgene.android.bpconnect.ui.signup;
 
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.login.LoginActivity;
 
 import butterknife.BindView;
@@ -56,14 +58,20 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
     @Override
     public void openLoginScreen() {
         hideProgress();
-        showSnakeBar("Patient Added SuccessFully");
-        new Handler().postDelayed(new Runnable() {
+
+        CustomAlertDialog.showDialogSingleButton(this, "A verification mail has been sent to your registered email. Please verify that link before login.", new CustomAlertDialog.I_CustomAlertDialog() {
             @Override
-            public void run() {
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-                finish();
+            public void onPositiveClick(Dialog dialog, int request_code) {
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
-        },3*1000);
+
+            @Override
+            public void onNegativeClick(Dialog dialog, int request_code) {
+
+            }
+        });
     }
 
     @Override

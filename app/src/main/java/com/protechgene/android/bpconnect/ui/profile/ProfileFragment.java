@@ -107,8 +107,15 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
         text_dob.setText(mProfileFragmentViewModel.getUserDoB());
         text_address.setText(mProfileFragmentViewModel.getUserAddress());
         text_mobile.setText(mProfileFragmentViewModel.getUserMobile());
-        text_gender_value.setText(mProfileFragmentViewModel.getUserGender());
         text_about.setText(mProfileFragmentViewModel.getUserAbout());
+
+
+        //Set Gender
+        String gender = mProfileFragmentViewModel.getUserGender();
+        if(gender==null || gender.isEmpty() || gender.equalsIgnoreCase("null"))
+            gender = "-";
+
+        text_gender_value.setText(gender);
 
         //Set Height
         String userHeight = mProfileFragmentViewModel.getUserHeight();
@@ -129,7 +136,7 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
             userWeight = "-";
         else
         {
-            userWeight = userWeight+" kg";
+            userWeight = userWeight+" lb";
         }
         text_weight_value.setText(userWeight);
 

@@ -66,7 +66,7 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new ProtocolReadingFragment(), "EHC Protocol");
+        adapter.addFragment(new ProtocolReadingFragment(), "This week's readings");
         adapter.addFragment(new BPAllReadingFragment(), "ALL");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);

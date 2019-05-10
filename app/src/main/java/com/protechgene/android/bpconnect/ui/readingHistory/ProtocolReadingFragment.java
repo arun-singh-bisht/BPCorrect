@@ -37,16 +37,12 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
     @BindView(R.id.text_empty_msg)
     public TextView text_empty_msg;
 
-
-
     @BindView(R.id.text_blood_pressure)
     public TextView text_blood_pressure;
     @BindView(R.id.text_sys_dia_title)
     public TextView text_sys_dia_title;
     @BindView(R.id.text_bpm)
     public TextView text_bpm;
-
-
 
     @BindView(R.id.card_reading_stats)
     public CardView card_reading_stats;
@@ -71,6 +67,13 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
 
     @BindView(R.id.image_info)
     public ImageView image_info;
+
+    @BindView(R.id.view_average_statics)
+    public View view_average_statics;
+
+    @BindView(R.id.view_no_average_message)
+    public View view_no_average_message;
+
 
     private ProtocolReadingsViewModel protocolReadingsViewModel;
     private ReadingAdapter bpReadingAdapter;
@@ -170,8 +173,14 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
                 int stage =0;
                 String bp_stage_name ="";
 
-                if(sys==0 && dia==0)
+                if(sys==0 && dia==0) {
+                    view_average_statics.setVisibility(View.GONE);
+                    view_no_average_message.setVisibility(View.VISIBLE);
                     return;
+                }
+
+                view_average_statics.setVisibility(View.VISIBLE);
+                view_no_average_message.setVisibility(View.GONE);
 
                 if(sys<120 && dia<80)
                 {

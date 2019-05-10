@@ -16,6 +16,7 @@ import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentNew;
+import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragment;
 import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
 import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
@@ -39,6 +40,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     private boolean protocolStatus;
     private String alarmFireTime;
+    private  Dialog videoDialog;
 
     @Override
     protected int layoutRes() {
@@ -54,14 +56,15 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
 
-        //mHomeViewModel.getProfileDetails();
-        //CustomAlertDialog.showDialog(getActivity(), "Do you want to share your readings\nwith your doctor's office?","ALLOW","DON'T ALLOW",R.layout.custom_dialo_with_checkbox,this);
         Log.d("HomeFragment","initialize");
 
         boolean isAlarmFired = false;
+        boolean isNewUser = false;
         Bundle args = getArguments();
-        if(args!=null)
+        if(args!=null) {
             isAlarmFired = args.getBoolean("isAlarmFired");
+            isNewUser = args.getBoolean("isNewUser");
+        }
 
         if(isAlarmFired)
         {
@@ -71,16 +74,20 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         }else
         {
             //CustomAlertDialog.showInstructionDialog(getBaseActivity());
-            mHomeViewModel.checkActiveProtocol();
-            CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
+            if(isNewUser)
+            {
+                //mHomeViewModel.checkActiveProtocol();
+                videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
 
-                @Override
-                public void onVideoEnd(int request_code) {
+                    @Override
+                    public void onVideoEnd(int request_code) {
 
-                    if(!protocolStatus)
+                        //if (!protocolStatus)
                         openRemiderFragment();
-                }
-            });
+                    }
+                });
+
+            }
         }
     }
 
@@ -142,11 +149,29 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         String userEmail = mHomeViewModel.getUserEmail();
 
         if(userName==null || userName.equalsIgnoreCase("null")) {
+            //First Time App User
+            if(videoDialog!=null)
+                videoDialog.dismiss();
+
             userName = "BPConnect User";
             userEmail = "View and edit profile";
+            text_profile_name.setText(userName + "");
+            text_profile_email.setText(userEmail + "");
+
+            //Open Profile Edit Screen
+            ProfileEditFragment profileEditFragment = new ProfileEditFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isProfileComplete",false);
+            profileEditFragment.setArguments(bundle);
+
+            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,profileEditFragment,ProfileEditFragment.FRAGMENT_TAG,null);
+
+        }else {
+            //Already an App User
+
+            text_profile_name.setText(userName + "");
+            text_profile_email.setText(userEmail + "");
         }
-        text_profile_name.setText(userName+"");
-        text_profile_email.setText(userEmail+"");
     }
 
     @Override

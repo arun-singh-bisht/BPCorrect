@@ -200,38 +200,6 @@ public class CustomAlertDialog {
     }
 
 
-    public static void showVideoDialog(final Context context)
-    {
-        final Dialog dialog = new Dialog(context,R.style.Theme_AppCompat_Dialog);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_dialog_video);
-        dialog.setCancelable(false);
-        dialog.findViewById(R.id.text_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        final VideoView simpleVideoView = dialog.findViewById(R.id.video_view);
-        dialog.findViewById(R.id.image_play).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Hide Play Button
-                dialog.findViewById(R.id.image_play).setVisibility(View.GONE);
-                //Load Video
-                String link="http://67.211.223.164:8080/video/bp_video.mp4";
-                Uri video = Uri.parse(link);
-                MediaController mediaController = new MediaController(context);
-                mediaController.setAnchorView(simpleVideoView);
-                simpleVideoView.setMediaController(mediaController);
-                simpleVideoView.setVideoURI(video);
-                simpleVideoView.start();
-            }
-        });
-
-        dialog.show();
-    }
-
     public static void showInstructionDialog(Context context)
     {
 
@@ -272,7 +240,7 @@ public class CustomAlertDialog {
         void onVideoEnd(int request_code);
     }
 
-    public static  void dialogPlayVideoNew(Context context,final VideoDialogCallback videoDialogCallback){
+    public static Dialog dialogPlayVideoNew(Context context,final VideoDialogCallback videoDialogCallback){
 
         View view_layout = LayoutInflater.from(context).inflate(R.layout.dialog_video_play_layout,null);
 
@@ -321,5 +289,6 @@ public class CustomAlertDialog {
         });
 
         dialog.show();
+        return dialog;
     }
 }

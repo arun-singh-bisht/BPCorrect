@@ -192,9 +192,11 @@
                     />
 
                 <LinearLayout
+                    android:id="@+id/view_average_statics"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     android:gravity="center">
 
 
@@ -251,6 +253,25 @@
                         android:textSize="12sp"
                         />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/view_no_average_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    >
+
+                    <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not sufficient records"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:layout_gravity="center_horizontal"
+                        />
 
                 </LinearLayout>
 

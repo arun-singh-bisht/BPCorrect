@@ -61,10 +61,10 @@
         <li>Cuff sizing instructions</li>\n\n
     </string>
 
-    <string name="step1">Don\'t smoke,exercise, or drink caffeine or alcohol 30 min prior to measurement</string>
-    <string name="step2">Left arm resting comfortably at heart level</string>
-    <string name="step3">Don\'t talk</string>
-    <string name="step4">Sit still in a chair with back supported,legs uncrossed</string>
-    <string name="step5">Cuff positioning (bottom of cuff above the bend of elbow)</string>
-    <string name="step6">Cuff sizing instructions</string>
+    <string name="step1">Make sure it been 30 minutes since you\'ve exercised, smoked, or had any caffeine or alcohol.</string>
+    <string name="step2">Empty your bladder.</string>
+    <string name="step3">Rest in a chair with your back supported.</string>
+    <string name="step4">Place the bottom of the cuff just above the bend of your bare elbow.</string>
+    <string name="step5">Rest your arm on a flat surface like a table or armrest so that the cuff is at the level of your heart.</string>
+    <string name="step6">Relax. Don\'t talk. Make sure your legs are uncrossed with feet flat on the floor.</string>
 </resources>

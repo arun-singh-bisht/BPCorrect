@@ -30,10 +30,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Check your blood pressure in the \nmorning and evening for\none week"
+            android:text="It's important to check your blood pressure\n twice a day in the morning and evening\n for one week"
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="60dp"
             />
 
         <android.support.design.widget.FloatingActionButton
@@ -45,7 +45,7 @@
             app:backgroundTint="@color/bp_red"
             app:elevation="4dp"
             app:fabSize="normal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             />
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
             android:layout_width="wrap_content"

@@ -3,6 +3,8 @@ package com.protechgene.android.bpconnect.ui.profile;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.DatePickerFragment;
+import com.protechgene.android.bpconnect.ui.home.HomeFragment;
 
 import java.util.Calendar;
 
@@ -45,7 +48,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     EditText edit_about;
 
 
-
+    boolean isProfileComplete = true;
+    int PICK_IMAGE_REQUEST = 284;
 
     @Override
     protected int layoutRes() {
@@ -62,11 +66,30 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     private void initView()
     {
-        TextView txt_title =  getView().findViewById(R.id.txt_title);
-        txt_title.setText("Edit Profile");
+
+        Bundle args = getArguments();
+        if(args!=null)
+           isProfileComplete = args.getBoolean("isProfileComplete");
+
+        if(!isProfileComplete)
+        {
+            TextView txt_title =  getView().findViewById(R.id.txt_title);
+            txt_title.setText("Create Profile");
+
+            ((ImageView)getView().findViewById(R.id.img_left)).setImageResource(R.drawable.ic_action_close);
+
+        }else
+        {
+            TextView txt_title =  getView().findViewById(R.id.txt_title);
+            txt_title.setText("Edit Profile");
+
+            ((ImageView)getView().findViewById(R.id.img_left)).setImageResource(R.drawable.ic_action_back);
+        }
 
         getView().findViewById(R.id.img_right).setVisibility(View.VISIBLE);
         ((ImageView)getView().findViewById(R.id.img_right)).setImageResource(R.drawable.ic_action_done);
+
+
 
         String name = mProfileEditFragmentViewModel.getUserName();
         if(name==null || name.equalsIgnoreCase("null"))
@@ -84,7 +107,11 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @OnClick(R.id.img_left)
     public void onIconBackClick() {
-        FragmentUtil.removeFragment(getBaseActivity());
+
+        if(isProfileComplete)
+            FragmentUtil.removeFragment(getBaseActivity());
+        else
+            getBaseActivity().finish();
     }
 
     @OnClick(R.id.img_right)
@@ -103,11 +130,30 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         mProfileEditFragmentViewModel.updateProfile(profileDetailModel);
     }
 
+    @OnClick(R.id.profile_edit_frag_change_pic)
+    public void selectImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
     @Override
     public void onProfileUpdate() {
         hideProgress();
-        FragmentUtil.removeFragment(getBaseActivity());
-        getBaseActivity().showSnakeBar("Profile Updated");
+        if(isProfileComplete)
+        {
+            FragmentUtil.removeFragment(getBaseActivity());
+            getBaseActivity().showSnakeBar("Profile Updated");
+        }else
+        {
+            HomeFragment homeFragment = new HomeFragment();
+            Bundle args = new Bundle();
+            args.putBoolean("isNewUser",true);
+            homeFragment.setArguments(args);
+            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
+        }
+
     }
 
     @Override

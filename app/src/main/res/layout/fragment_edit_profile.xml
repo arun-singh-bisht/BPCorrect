@@ -27,16 +27,20 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:src="@drawable/download"
-            app:civ_border_color="#ffffff"
-            app:civ_border_width="2dp" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/default_pic"
+                android:id="@+id/profile_edit_frag_change_pic"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="2dp" />
 
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:id="@+id/camera_icon"
+                android:tint="#ffffff"
                 android:src="@drawable/ic_action_camera"
                 android:layout_centerInParent="true"
                 />
@@ -158,7 +162,7 @@
                 android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_action_weight"
                 android:drawableTint="#968F8F"
-                android:hint="Weight (kg)"
+                android:hint="Weight (lb)"
                 android:singleLine="true"
                 android:maxLength="3"
                 android:inputType="number"

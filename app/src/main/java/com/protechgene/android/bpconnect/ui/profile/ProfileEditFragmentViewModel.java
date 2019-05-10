@@ -74,6 +74,12 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
+        if(profileDetailModel.getDob()==null || profileDetailModel.getDob().isEmpty())
+        {
+            throwable = new IllegalArgumentException("Enter your date of birth");
+            getNavigator().handleError(throwable);
+            return;
+        }
         if(profileDetailModel.getAddress1()==null || profileDetailModel.getAddress1().isEmpty())
         {
             throwable = new IllegalArgumentException("Enter your address");
@@ -86,7 +92,8 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
-        if(profileDetailModel.getWeight()==null || profileDetailModel.getWeight().isEmpty())
+
+        /*if(profileDetailModel.getWeight()==null || profileDetailModel.getWeight().isEmpty())
         {
             throwable = new IllegalArgumentException("Enter your weight");
             getNavigator().handleError(throwable);
@@ -103,7 +110,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             throwable = new IllegalArgumentException("Enter your gender");
             getNavigator().handleError(throwable);
             return;
-        }
+        }*/
 
         String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();

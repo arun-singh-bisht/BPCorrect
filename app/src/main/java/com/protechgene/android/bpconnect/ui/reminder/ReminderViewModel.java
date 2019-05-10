@@ -18,6 +18,7 @@ import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Dat
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+import com.protechgene.android.bpconnect.ui.custom.SupportedTimePickerFragment;
 import com.protechgene.android.bpconnect.ui.custom.TimePickerFragment;
 
 import java.util.Calendar;
@@ -30,7 +31,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> implements TimePickerFragment.TimePickedListener {
+public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> implements SupportedTimePickerFragment.TimePickedListener {
 
     private Context context;
     private String selectedMorningTime;
@@ -62,7 +63,10 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
     public void createProtocol(Context context)
     {
         this.context = context;
-        TimePickerFragment picker = new TimePickerFragment(this,1001,"Morning Reminder Time",6,0);
+        /*TimePickerFragment picker = new TimePickerFragment(this,1001,"Morning Reminder Time",6,0);
+        picker.show(((Activity)context).getFragmentManager(), "timePicker");*/
+
+        SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,1001,"Morning Reminder Time",6,0);
         picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
@@ -73,8 +77,8 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         String[] time = activeProtocol.getMorningReadingTime().split(":");
         int hour = Integer.parseInt(time[0]);
         int min = Integer.parseInt(time[1]);
-        TimePickerFragment picker = new TimePickerFragment(this,1003,"Morning Reminder Time",hour,min);
-        picker.show(((Activity)context).getFragmentManager(), "timePicker");
+        //TimePickerFragment picker = new TimePickerFragment(this,1003,"Morning Reminder Time",hour,min);
+        //picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
     public void updateEveningAlarmTime(Context context,ProtocolModel activeProtocol)
@@ -84,8 +88,8 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         String[] time = activeProtocol.getEveningReadingTime().split(":");
         int hour = Integer.parseInt(time[0]);
         int min = Integer.parseInt(time[1]);
-        TimePickerFragment picker = new TimePickerFragment(this,1004,"Evening Reminder Time",hour,min);
-        picker.show(((Activity)context).getFragmentManager(), "timePicker");
+        //TimePickerFragment picker = new TimePickerFragment(this,1004,"Evening Reminder Time",hour,min);
+        //picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
     public void deleteProtocol(final Context context, ProtocolModel protocolModel)
@@ -114,7 +118,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
             {
                 selectedMorningTime = HOUR_OF_DAY+":"+MINUTE;
 
-                TimePickerFragment picker = new TimePickerFragment(this,1002,"Evening Reminder Time",18,0);
+                SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,1002,"Evening Reminder Time",18,0);
                 picker.show(((Activity)context).getFragmentManager(), "timePicker");
             }else
             {

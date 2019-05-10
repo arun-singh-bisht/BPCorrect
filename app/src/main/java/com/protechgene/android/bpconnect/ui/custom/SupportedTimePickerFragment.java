@@ -4,26 +4,27 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.ibotta.android.support.pickerdialogs.SupportedTimePickerDialog;
+import com.protechgene.android.bpconnect.R;
+
 import java.util.Calendar;
 
-public class TimePickerFragment extends DialogFragment implements
-        TimePickerDialog.OnTimeSetListener {
+public class SupportedTimePickerFragment extends DialogFragment implements
+        SupportedTimePickerDialog.OnTimeSetListener {
 
     private int mId;
     private TimePickedListener mListener;
     private String title;
     private int hour_of_day;
     private int min;
-    public TimePickerFragment (TimePickedListener mListener,int id,String title,int hour_of_day,int min) {
+    public SupportedTimePickerFragment(TimePickedListener mListener, int id, String title, int hour_of_day, int min) {
         this.mListener = mListener;
        mId = id;
        this.title = title;
@@ -34,8 +35,8 @@ public class TimePickerFragment extends DialogFragment implements
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // use the current time as the default values for the picker
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_DARK
-                ,this, hour_of_day, min, true);
+        SupportedTimePickerDialog timePickerDialog = new SupportedTimePickerDialog(getActivity(), R.style.SpinnerTimePickerDialogTheme
+                ,this, hour_of_day, min, false);
 
 
         TextView tvTitle = new TextView(getActivity());
