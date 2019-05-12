@@ -25,6 +25,11 @@ public class DatabaseHelper implements DatabaseHelperInterface {
     }
 
     @Override
+    public List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli, long offsetTime) {
+        return mAppDatabase.getHealthReadingDAO().getLastAlarmRecords(lastAlarmTimeInMilli, offsetTime);
+    }
+
+    @Override
     public void deleteAllHealthRecords() {
         mAppDatabase.getHealthReadingDAO().deleteAllRecords();
     }

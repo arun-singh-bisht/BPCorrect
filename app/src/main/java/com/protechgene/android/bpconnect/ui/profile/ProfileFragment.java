@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
@@ -51,6 +53,8 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
     @BindView(R.id.text_about)
     TextView text_about;
 
+    @BindView(R.id.profile_pic_cir_img)
+    CircularImageView profile_pic;
 
 
     @Override
@@ -99,9 +103,11 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
 
     @Override
     public void showProfileDetails() {
-        String name = mProfileFragmentViewModel.getUserName();
-        if(name==null || name.equalsIgnoreCase("null"))
-            name = "BPConnect User";
+        String name = mProfileFragmentViewModel.getUserFirstName();
+        if(name==null || name.equalsIgnoreCase("null") || name.isEmpty())
+            name = "BPCorrect User";
+        else
+            name =  mProfileFragmentViewModel.getUserFirstName() +" "+ mProfileFragmentViewModel.getUserLastName();
         text_profile_name.setText(name);
         text_email.setText(mProfileFragmentViewModel.getUserEmail());
         text_dob.setText(mProfileFragmentViewModel.getUserDoB());
@@ -156,5 +162,9 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
 
         }
         text_age_value.setText(userDoB);
+
+        String image_url = mProfileFragmentViewModel.getProfilePic();
+        if(image_url != null)
+            Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(profile_pic);
     }
 }

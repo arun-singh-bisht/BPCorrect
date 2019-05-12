@@ -59,6 +59,26 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     }
 
     @Override
+    public String getUserFirstName() {
+        return mSharedPreferences.getString(PREF_KEY_CURRENT_USER_FIRST_NAME, null);
+    }
+
+    @Override
+    public void setUserFirstName(String firstName) {
+        mSharedPreferences.edit().putString(PREF_KEY_CURRENT_USER_FIRST_NAME, firstName).apply();
+    }
+
+    @Override
+    public String getUserLastName() {
+        return mSharedPreferences.getString(PREF_KEY_CURRENT_USER_LAST_NAME, null);
+    }
+
+    @Override
+    public void setUserLastName(String lastName) {
+        mSharedPreferences.edit().putString(PREF_KEY_CURRENT_USER_LAST_NAME, lastName).apply();
+    }
+
+    @Override
     public String getCurrentUserProfilePicUrl() {
         return mSharedPreferences.getString(PREF_KEY_CURRENT_USER_PROFILE_PIC_URL, null);
     }
@@ -207,5 +227,15 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     @Override
     public void setHistoryDataSyncStatus(boolean status) {
         mSharedPreferences.edit().putBoolean(PREF_KEY_IS_DATA_SYNC,status).apply();
+    }
+
+    @Override
+    public void setPrefKeyProfileImg(String url) {
+        mSharedPreferences.edit().putString(PREF_KEY_PROFILE_IMG, url).apply();
+    }
+
+    @Override
+    public String getPrefKeyProfileImg() {
+        return mSharedPreferences.getString(PREF_KEY_PROFILE_IMG, "");
     }
 }

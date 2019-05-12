@@ -11,6 +11,8 @@ public interface PreferencesHelperInterface {
      String PREF_KEY_CURRENT_USER_EMAIL = "PREF_KEY_CURRENT_USER_EMAIL";
      String PREF_KEY_CURRENT_USER_ID = "PREF_KEY_CURRENT_USER_ID";
      String PREF_KEY_CURRENT_USER_NAME = "PREF_KEY_CURRENT_USER_NAME";
+     String PREF_KEY_CURRENT_USER_FIRST_NAME = "PREF_KEY_CURRENT_USER_FIRST_NAME";
+     String PREF_KEY_CURRENT_USER_LAST_NAME = "PREF_KEY_CURRENT_USER_LAST_NAME";
      String PREF_KEY_CURRENT_USER_PROFILE_PIC_URL = "PREF_KEY_CURRENT_USER_PROFILE_PIC_URL";
      String PREF_KEY_PATIENT_ID = "PREF_KEY_PATIENT_ID";
      String PREF_KEY_PATIENT_GENDER = "PREF_KEY_PATIENT_GENDER";
@@ -21,6 +23,7 @@ public interface PreferencesHelperInterface {
      String PREF_KEY_PATIENT_WEIGHT = "PREF_KEY_PATIENT_WEIGHT";
      String PREF_KEY_PATIENT_HEIGHT = "PREF_KEY_PATIENT_HEIGHT";
      String PREF_KEY_PATIENT_ABOUT = "PREF_KEY_PATIENT_ABOUT";
+     String PREF_KEY_PROFILE_IMG = "PREF_KEY_PROFILE_IMG";
 
      String PREF_KEY_BP_DEVICE_NAME = "PREF_KEY_BP_DEVICE_NAME";
      String PREF_KEY_BP_DEVICE_ADDRESS = "PREF_KEY_BP_DEVICE_ADDRESS";
@@ -43,6 +46,16 @@ public interface PreferencesHelperInterface {
      String getCurrentUserName();
 
      void setCurrentUserName(String userName);
+
+
+     String getUserFirstName();
+
+     void setUserFirstName(String firstName);
+
+     String getUserLastName();
+
+     void setUserLastName(String lastName);
+
 
      String getCurrentUserProfilePicUrl();
 
@@ -103,5 +116,9 @@ public interface PreferencesHelperInterface {
      boolean isHistoryDataSync();
 
      void setHistoryDataSyncStatus(boolean status);
+
+     void setPrefKeyProfileImg(String url);
+
+     String getPrefKeyProfileImg();
 
 }

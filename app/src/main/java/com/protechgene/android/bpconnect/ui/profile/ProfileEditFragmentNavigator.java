@@ -5,6 +5,10 @@ public interface ProfileEditFragmentNavigator {
 
     void handleError(Throwable throwable);
 
+    void onProfileImageUploaded(String imageServerUrl);
+
     void onProfileUpdate();
+
+
 
 }

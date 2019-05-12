@@ -78,7 +78,6 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
         measureBPFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(MeasureBPFragmentViewModel.class);
         measureBPFragmentViewModel.setNavigator(this);
 
-
         measureBPFragmentViewModel.connectToDevice(getBaseActivity());
 
         Bundle args = getArguments();
@@ -218,6 +217,11 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
     }
 
     @Override
+    public void isProtocolTypeReading(boolean b) {
+
+    }
+
+    @Override
     public void handleError(Throwable throwable) {
         hideProgress();
         getBaseActivity().showSnakeBar(throwable.getMessage());
@@ -231,8 +235,6 @@ public class MeasureBPFragment extends BaseFragment implements MeasureBPFragment
 
         if(status)
         {
-            //getBaseActivity().showSnakeBar("No BP Device Found");
-            //activate 'Start' button
 
             if(rippleBackground!=null)
                 rippleBackground.startRippleAnimation();

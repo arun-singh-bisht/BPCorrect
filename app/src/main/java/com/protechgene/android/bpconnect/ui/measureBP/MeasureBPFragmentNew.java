@@ -78,14 +78,28 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         measureBPFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(MeasureBPFragmentViewModel.class);
         measureBPFragmentViewModel.setNavigator(this);
 
-        Bundle args = getArguments();
+       /* Bundle args = getArguments();
         if(args!=null)
             isTypeProtocol = args.getBoolean("isTypeProtocol");
 
-        Log.d("initialize","isTypeProtocol "+isTypeProtocol);
+        Log.d("initialize","isTypeProtocol "+isTypeProtocol);*/
 
-        measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+        //measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+        measureBPFragmentViewModel.isReadingForProtocol();
     }
+
+    @Override
+    public void isProtocolTypeReading(final boolean b) {
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                isTypeProtocol = b;
+                showToast(b?"Protocol Reading":"Normal Reading");
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity());
+            }
+        });
+    }
+
 
     @Override
     public void turningOnBluetooth() {
@@ -149,8 +163,8 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         if(rippleBackground!=null)
             rippleBackground.startRippleAnimation();
 
-        text_transfer_status.setText("Searching for data...");
         text_transfer_status.setVisibility(View.VISIBLE);
+        text_transfer_status.setText("Searching for data...");
 
         measureBPFragmentViewModel.onResume(isTypeProtocol);
 
@@ -188,6 +202,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         });
 
     }
+
 
     private void activateCountDown()
     {

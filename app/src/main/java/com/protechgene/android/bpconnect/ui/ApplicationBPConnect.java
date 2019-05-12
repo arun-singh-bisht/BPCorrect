@@ -11,7 +11,7 @@ public class ApplicationBPConnect extends Application {
     public static int PROTOCOL_EVENING_MAXIMUM_TIME = 24; // 12:00 AM
 
 
-    public static long PROTOCOL_READING_ACCEPTED_TIME_WINDOW = 1000*60*10; //10 min
+    public static long PROTOCOL_READING_ACCEPTED_TIME_WINDOW = 1000*60*15 ; //15 min
     public static String PROTOCOL_READING__MORNING = "PROTOCOL_READING__MORNING";
     public static String PROTOCOL_READING__EVENING = "PROTOCOL_READING__EVENING";
 

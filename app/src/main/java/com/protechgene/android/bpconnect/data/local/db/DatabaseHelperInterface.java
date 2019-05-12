@@ -13,6 +13,8 @@ public interface DatabaseHelperInterface  {
 
     List<HealthReading> getAllRecords();
 
+    List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli,long offsetTime);
+
     void deleteAllHealthRecords();
 
     //Protocol MEthods

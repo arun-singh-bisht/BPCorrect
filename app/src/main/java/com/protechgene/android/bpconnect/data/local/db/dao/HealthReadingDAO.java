@@ -22,6 +22,10 @@ public interface HealthReadingDAO {
     @Query("SELECT * FROM health_table")
     List<HealthReading> getAllRecords();
 
+    @Query("SELECT * FROM health_table WHERE reading_time >= :lastAlarmTimeInMilli AND reading_time<= :offsetTime")
+    List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli,long offsetTime);
+
+
     @Query("DELETE FROM health_table")
     void deleteAllRecords();
 }

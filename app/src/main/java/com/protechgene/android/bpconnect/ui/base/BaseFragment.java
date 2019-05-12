@@ -102,6 +102,7 @@ public abstract class BaseFragment extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title)
                 .setMessage(msg)
+                .setCancelable(false)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(positivrBtnText, new DialogInterface.OnClickListener() {
                     @Override

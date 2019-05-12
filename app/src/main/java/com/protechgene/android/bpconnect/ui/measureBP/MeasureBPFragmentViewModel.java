@@ -35,6 +35,7 @@ import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 import org.json.JSONArray;
@@ -970,8 +971,6 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     }
 
 
-    //This is Testing code . Delete this after testing
-
         public void saveReading(final Lifetrack_infobean lifetrackInfobean)
         {
             //getNavigator().showIndicator("Processing data...");
@@ -1018,7 +1017,6 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                         {
                             //Reading Done in 10 min of Morning Protocol Time, so it is valid protocol reading
                             healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
-                            healthReading.setReading_time(PROTOCOL_READING__MORNING);
                         }else
                         {
                             //Reading done in evening
@@ -1032,7 +1030,10 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                             {
                                 //Reading Done in 10 min of evening Protocol Time, so it is valid protocol reading
                                 healthReading.setProtocol_id(protocolModel.getProtocolCode()+"");
-                                healthReading.setReading_time(PROTOCOL_READING__EVENING);
+                            }else
+                            {
+                                //Reading Done after evening protocol expire window time
+                                healthReading.setProtocol_id("");
                             }
                         }
 
@@ -1045,6 +1046,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                     //Set Other Details
                     healthReading.setSync(false);
                     healthReading.setLogTime(lifetrackInfobean.getDateTimeStamp());
+                    healthReading.setReading_time(Long.parseLong(lifetrackInfobean.getDateTimeStamp()));
                     healthReading.setPulse(lifetrackInfobean.getPulse());
                     healthReading.setDiastolic(lifetrackInfobean.getDiastolic());
                     healthReading.setSystolic(lifetrackInfobean.getSystolic());
@@ -1126,5 +1128,103 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                             //getNavigator().handleError(throwable);
                         }
                     }));
+        }
+
+
+        public void isReadingForProtocol()
+        {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    List<ProtocolModel> allProtocol = getRespository().getAllProtocol();
+
+                    if(allProtocol !=null && allProtocol.size()>0)
+                    {
+                        ProtocolModel protocolModel = allProtocol.get(0);
+                        String startDay = protocolModel.getStartDay();
+                        String morningReadingTime = protocolModel.getMorningReadingTime();
+                        String eveningReadingTime = protocolModel.getEveningReadingTime();
+
+                        String todayDate = DateUtils.getDateString(0, "MMM dd,yyyy");
+                        long l = DateUtils.compareTimeString(startDay, todayDate, "MMM dd,yyyy");
+                        if(l<=0)
+                        {
+                            //Protocol has Started
+                            String currentTime = DateUtils.getTimeString(0, "HH:mm");
+
+                            long l1 = DateUtils.compareTimeString(currentTime, eveningReadingTime,"HH:mm");
+                            //Check For Evening Alarm Readings
+                            if(l1>=0)
+                            {
+                                //After Evening Alarm Time
+
+                                String s = DateUtils.convertDateStringToMillisec(todayDate+" "+eveningReadingTime, "MMM dd,yyyy HH:mm");
+                                long l2 = Long.parseLong(s) * 1000;
+                                List<HealthReading> lastAlarmRecords = getRespository().getLastAlarmRecords(l2, l2 + ApplicationBPConnect.PROTOCOL_READING_ACCEPTED_TIME_WINDOW);
+
+                                if(lastAlarmRecords!=null && lastAlarmRecords.size()>0)
+                                {
+                                    //Evening Alarm Protocol Reading has already been taken
+                                    getNavigator().isProtocolTypeReading(false);
+                                }
+                                else
+                                {
+                                    //Evening Alarm Protocol Reading not taken yet
+                                    long l3 = System.currentTimeMillis();
+                                    if(l3>=l2 && l3<=(l2+ApplicationBPConnect.PROTOCOL_READING_ACCEPTED_TIME_WINDOW))
+                                    {
+                                        getNavigator().isProtocolTypeReading(true);
+                                    }else
+                                    {
+                                        getNavigator().isProtocolTypeReading(false);
+                                    }
+                                }
+                            }else
+                            {
+                                //Check For Morning Alarm Readings
+
+                                l1 = DateUtils.compareTimeString(currentTime, morningReadingTime,"HH:mm");
+                                if(l1>=0)
+                                {
+                                    //After Morning Alarm Time
+
+                                    String s = DateUtils.convertDateStringToMillisec(todayDate+" "+morningReadingTime, "MMM dd,yyyy HH:mm");
+                                    long l2 = Long.parseLong(s) *1000 ;
+                                    List<HealthReading> lastAlarmRecords = getRespository().getLastAlarmRecords(l2, l2 + ApplicationBPConnect.PROTOCOL_READING_ACCEPTED_TIME_WINDOW);
+
+                                    if(lastAlarmRecords!=null && lastAlarmRecords.size()>0)
+                                    {
+                                        //Morning Alarm Protocol Reading has already been taken
+                                        getNavigator().isProtocolTypeReading(false);
+                                    }
+                                    else
+                                    {
+                                        //Morning Alarm Protocol Reading not taken yet
+                                        long l3 = System.currentTimeMillis();
+                                        if(l3>=l2 && l3<=(l2+ApplicationBPConnect.PROTOCOL_READING_ACCEPTED_TIME_WINDOW))
+                                        {
+                                            getNavigator().isProtocolTypeReading(true);
+                                        }else
+                                        {
+                                            getNavigator().isProtocolTypeReading(false);
+                                        }
+                                    }
+                                }else
+                                {
+                                    getNavigator().isProtocolTypeReading(false);
+                                }
+                            }
+
+                        }else
+                        {
+                            getNavigator().isProtocolTypeReading(false);
+                        }
+                    }else
+                    {
+                        getNavigator().isProtocolTypeReading(false);
+                    }
+                }
+            });
         }
 }

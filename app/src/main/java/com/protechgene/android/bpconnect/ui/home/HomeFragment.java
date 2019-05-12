@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.AlarmSound;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
@@ -37,6 +39,10 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @BindView(R.id.text_profile_email)
     TextView text_profile_email;
+
+    @BindView(R.id.image_profile_pic)
+    CircularImageView image_profile_pic;
+
 
     private boolean protocolStatus;
     private String alarmFireTime;
@@ -86,8 +92,10 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                         openRemiderFragment();
                     }
                 });
-
             }
+            //Syn History Reading Data
+            mHomeViewModel.synHistoryData();
+
         }
     }
 
@@ -145,7 +153,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void showProfileDetails() {
-        String userName = mHomeViewModel.getUserName();
+        String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
 
         if(userName==null || userName.equalsIgnoreCase("null")) {
@@ -168,9 +176,13 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         }else {
             //Already an App User
-
+            userName =  mHomeViewModel.getUserFirstName() +" "+ mHomeViewModel.getUserLastName();
             text_profile_name.setText(userName + "");
             text_profile_email.setText(userEmail + "");
+
+            String image_url = mHomeViewModel.getProfilePic();
+            if(image_url != null)
+                Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(image_profile_pic);
         }
     }
 
@@ -182,6 +194,14 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     @Override
     public void isProtocolExists(boolean status) {
         protocolStatus = status;
+    }
+
+    @Override
+    public void historyDataSyncStatus(boolean status) {
+        if(status)
+            getBaseActivity().showSnakeBar("App Data Sync Successful");
+        else
+            getBaseActivity().showSnakeBar("App Data Sync Failure");
     }
 
 

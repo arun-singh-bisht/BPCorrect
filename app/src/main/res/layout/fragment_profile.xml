@@ -25,8 +25,9 @@
         <com.mikhaellopez.circularimageview.CircularImageView
             android:layout_width="130dp"
             android:layout_height="130dp"
-            android:src="@drawable/download"
+            android:src="@drawable/default_pic"
             app:civ_border_color="#ffffff"
+            android:id="@+id/profile_pic_cir_img"
             app:civ_border_width="2dp" />
 
         <LinearLayout

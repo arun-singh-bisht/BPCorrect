@@ -12,9 +12,19 @@ public class ProfileFragmentViewModel extends BaseViewModel<ProfileFragmentNavig
         super(repository);
     }
 
-    public String getUserName()
+   /* public String getUserName()
     {
         return getRespository().getCurrentUserName();
+    }*/
+
+    public String getUserFirstName()
+    {
+        return getRespository().getUserFirstName();
+    }
+
+    public String getUserLastName()
+    {
+        return getRespository().getUserLastName();
     }
 
     public String getUserEmail()
@@ -55,5 +65,10 @@ public class ProfileFragmentViewModel extends BaseViewModel<ProfileFragmentNavig
     public String getUserAbout()
     {
         return getRespository().getPatientAbout();
+    }
+
+    public String getProfilePic()
+    {
+        return getRespository().getPrefKeyProfileImg();
     }
 }

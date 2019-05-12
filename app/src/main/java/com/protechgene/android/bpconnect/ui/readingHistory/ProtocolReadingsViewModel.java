@@ -190,30 +190,4 @@ public class ProtocolReadingsViewModel extends BaseViewModel<ProtocolReadingsFra
                 }
             });
     }
-
-    class AsynDataAccess extends AsyncTask<Void,Void,Void>
-    {
-        List<HealthReading> allRecords = null;
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            allRecords = getRespository().getAllRecords();
-
-            /*try {
-                Thread.sleep(3000);
-                allRecords = getRespository().getAllRecords();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            getNavigator().showReadingData(allRecords);
-
-        }
-    }
 }

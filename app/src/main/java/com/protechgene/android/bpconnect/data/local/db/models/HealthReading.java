@@ -40,18 +40,7 @@ public class HealthReading {
     private String protocol_id;
 
     @ColumnInfo(name = "reading_time")
-    private String reading_time;
-
-   /* public HealthReading(int readingID, String systolic, String diastolic, String pulse, String logTime, boolean isSync,boolean is_abberant,String protocol_id) {
-        this.readingID = readingID;
-        this.systolic = systolic;
-        this.diastolic = diastolic;
-        this.pulse = pulse;
-        this.logTime = logTime;
-        this.isSync = isSync;
-        this.is_abberant = is_abberant;
-        this.protocol_id = protocol_id;
-    }*/
+    private long reading_time;
 
     public HealthReading() {
     }
@@ -116,11 +105,11 @@ public class HealthReading {
         this.protocol_id = protocol_id;
     }
 
-    public String getReading_time() {
+    public long getReading_time() {
         return reading_time;
     }
 
-    public void setReading_time(String reading_time) {
+    public void setReading_time(long reading_time) {
         this.reading_time = reading_time;
     }
 

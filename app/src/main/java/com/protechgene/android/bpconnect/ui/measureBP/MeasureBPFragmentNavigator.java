@@ -14,4 +14,5 @@ public interface MeasureBPFragmentNavigator {
     void dismissIndicator();
     void result(HealthReading healthReading);
 
+    void isProtocolTypeReading(boolean b);
 }

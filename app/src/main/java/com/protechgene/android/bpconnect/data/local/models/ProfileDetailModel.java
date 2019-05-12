@@ -3,6 +3,7 @@ package com.protechgene.android.bpconnect.data.local.models;
 public class ProfileDetailModel {
 
     private String firstname;
+    private String lastname;
     private String gender;
     private String dob;
     private String mobile1;
@@ -10,6 +11,7 @@ public class ProfileDetailModel {
     private String weight;
     private String height;
     private String about;
+    private String photo_url;
 
     public ProfileDetailModel() {
     }
@@ -20,6 +22,14 @@ public class ProfileDetailModel {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getGender() {
@@ -76,5 +86,13 @@ public class ProfileDetailModel {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    public String getPhoto_url() {
+        return photo_url;
+    }
+
+    public void setPhoto_url(String photo_url) {
+        this.photo_url = photo_url;
     }
 }

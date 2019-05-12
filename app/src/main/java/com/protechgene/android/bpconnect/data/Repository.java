@@ -104,6 +104,26 @@ public class Repository implements ApiInterface,
     public void setCurrentUserName(String userName) { mSharedPrefsHelper.setCurrentUserName(userName); }
 
     @Override
+    public String getUserFirstName() {
+        return mSharedPrefsHelper.getUserFirstName();
+    }
+
+    @Override
+    public void setUserFirstName(String firstName) {
+        mSharedPrefsHelper.setUserFirstName(firstName);
+    }
+
+    @Override
+    public String getUserLastName() {
+        return mSharedPrefsHelper.getUserLastName();
+    }
+
+    @Override
+    public void setUserLastName(String lastName) {
+        mSharedPrefsHelper.setUserLastName(lastName);
+    }
+
+    @Override
     public String getCurrentUserProfilePicUrl() { return mSharedPrefsHelper.getCurrentUserProfilePicUrl(); }
 
     @Override
@@ -246,6 +266,16 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public void setPrefKeyProfileImg(String url) {
+        mSharedPrefsHelper.setPrefKeyProfileImg(url);
+    }
+
+    @Override
+    public String getPrefKeyProfileImg() {
+        return mSharedPrefsHelper.getPrefKeyProfileImg();
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }
@@ -299,8 +329,8 @@ public class Repository implements ApiInterface,
 
 
     @Override
-    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String gender, String dob, String mobile1, String address1,String weight,String height,String about) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, gender, dob, mobile1, address1,weight,height,about);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname,String lastname, String gender, String dob, String mobile1, String address1,String weight,String height,String about,String photo_url) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname,lastname, gender, dob, mobile1, address1,weight,height,about,photo_url);
         return responseObservable;
     }
 
@@ -322,6 +352,11 @@ public class Repository implements ApiInterface,
     @Override
     public List<HealthReading> getAllRecords() {
         return mDatabaseHelper.getAllRecords();
+    }
+
+    @Override
+    public List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli, long offsetTime) {
+        return mDatabaseHelper.getLastAlarmRecords(lastAlarmTimeInMilli, offsetTime);
     }
 
     @Override

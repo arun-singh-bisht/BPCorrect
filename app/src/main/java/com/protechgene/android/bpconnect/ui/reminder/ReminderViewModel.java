@@ -12,19 +12,16 @@ import android.util.Log;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
-import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import com.protechgene.android.bpconnect.ui.custom.SupportedTimePickerFragment;
-import com.protechgene.android.bpconnect.ui.custom.TimePickerFragment;
 
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.internal.Utils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -32,6 +29,12 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> implements SupportedTimePickerFragment.TimePickedListener {
+
+    private int CREATE_PROTOCOL_MORNING_TIME = 1001;
+    private int CREATE_PROTOCOL_EVENING_TIME = 1002;
+    private int UPDATE_PROTOCOL_MORNING_TIME = 1003;
+    private int UPDATE_PROTOCOL_EVENING_TIME = 1004;
+
 
     private Context context;
     private String selectedMorningTime;
@@ -66,7 +69,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         /*TimePickerFragment picker = new TimePickerFragment(this,1001,"Morning Reminder Time",6,0);
         picker.show(((Activity)context).getFragmentManager(), "timePicker");*/
 
-        SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,1001,"Morning Reminder Time",6,0);
+        SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,CREATE_PROTOCOL_MORNING_TIME,"Morning Reminder Time",6,0);
         picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
@@ -77,8 +80,8 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         String[] time = activeProtocol.getMorningReadingTime().split(":");
         int hour = Integer.parseInt(time[0]);
         int min = Integer.parseInt(time[1]);
-        //TimePickerFragment picker = new TimePickerFragment(this,1003,"Morning Reminder Time",hour,min);
-        //picker.show(((Activity)context).getFragmentManager(), "timePicker");
+        SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,UPDATE_PROTOCOL_MORNING_TIME,"Morning Reminder Time",hour,min);
+        picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
     public void updateEveningAlarmTime(Context context,ProtocolModel activeProtocol)
@@ -88,8 +91,8 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         String[] time = activeProtocol.getEveningReadingTime().split(":");
         int hour = Integer.parseInt(time[0]);
         int min = Integer.parseInt(time[1]);
-        //TimePickerFragment picker = new TimePickerFragment(this,1004,"Evening Reminder Time",hour,min);
-        //picker.show(((Activity)context).getFragmentManager(), "timePicker");
+        SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,UPDATE_PROTOCOL_EVENING_TIME,"Evening Reminder Time",hour,min);
+        picker.show(((Activity)context).getFragmentManager(), "timePicker");
     }
 
     public void deleteProtocol(final Context context, ProtocolModel protocolModel)
@@ -111,21 +114,21 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         int HOUR_OF_DAY = time.get(Calendar.HOUR_OF_DAY);
         int MINUTE = time.get(Calendar.MINUTE);
 
-        if(id == 1001)
+        if(id == CREATE_PROTOCOL_MORNING_TIME)
         {
             //Selected Morning Time
             if(HOUR_OF_DAY>= ApplicationBPConnect.PROTOCOL_MORNING_MINIMUM_TIME && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_MORNING_MAXIMUM_TIME)
             {
                 selectedMorningTime = HOUR_OF_DAY+":"+MINUTE;
 
-                SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,1002,"Evening Reminder Time",18,0);
+                SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this,CREATE_PROTOCOL_EVENING_TIME,"Evening Reminder Time",18,0);
                 picker.show(((Activity)context).getFragmentManager(), "timePicker");
             }else
             {
                 //Show invalid Time Message
                 getNavigator().invalidTimeSelection("Morning Alarm should be between 4:00 AM to 12:00 PM");
             }
-        }else if(id == 1002)
+        }else if(id == CREATE_PROTOCOL_EVENING_TIME)
         {
             //Selected Evening Time
             if(HOUR_OF_DAY>=ApplicationBPConnect.PROTOCOL_EVENING_MINIMUM_TIME && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_EVENING_MAXIMUM_TIME)
@@ -175,11 +178,13 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 //Show invalid Time Message
                 getNavigator().invalidTimeSelection("Evening Alarm should be between 4:00 PM to 12:00 AM");
             }
-        }else if(id == 1003)
+        }else if(id == UPDATE_PROTOCOL_MORNING_TIME)
         {
             //Selected Morning Time
-            if(HOUR_OF_DAY>=4 && HOUR_OF_DAY<12)
+            if(HOUR_OF_DAY>=ApplicationBPConnect.PROTOCOL_MORNING_MINIMUM_TIME  && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_MORNING_MAXIMUM_TIME)
             {
+                final String previousMorningAlarmTime = activeProtocol.getMorningReadingTime();
+
                 final String selectedMorningTime = HOUR_OF_DAY+":"+MINUTE;
                 activeProtocol.setMorningReadingTime(selectedMorningTime);
                 getNavigator().onProtocolCreated(activeProtocol);
@@ -191,16 +196,43 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                     }
                 });
 
+                //update Alarm
+                String todayDate = DateUtils.getDateString(0, "MMM dd,yyyy");
+                String protocolStartDate = activeProtocol.getStartDay();
+                long k = DateUtils.compareTimeString(todayDate, protocolStartDate,"MMM dd,yyyy");
+                if(k<0)
+                {
+                    //protocol will start from next day
+                    //Remove All Old Alarms and set New
+                    AlarmReceiver.deleteAllAlarm(context);
+                    String[] split = selectedMorningTime.split(":");
+                    AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),1);
+                }else
+                {
+                    //protocol has already started
+                    String currrentTime = DateUtils.getDateString(0, "HH:mm");
+                    k = DateUtils.compareTimeString(currrentTime, previousMorningAlarmTime,"HH:mm");
+                    if(k<0)
+                    {
+                        //Morning alarm will go off in few hours, you can still change the alarm time
+                        //Remove All Old Alarms and set New
+                        AlarmReceiver.deleteAllAlarm(context);
+                        String[] split = selectedMorningTime.split(":");
+                        AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                    }
+                }
             }else
             {
                 //Show invalid Time Message
                 getNavigator().invalidTimeSelection("Morning Alarm should be between 4:00 AM to 12:00 PM");
             }
-        }else if(id == 1004)
+        }else if(id == UPDATE_PROTOCOL_EVENING_TIME)
         {
             //Selected Evening Time
-            if(HOUR_OF_DAY>=16 && HOUR_OF_DAY<24)
+            if(HOUR_OF_DAY>=ApplicationBPConnect.PROTOCOL_EVENING_MINIMUM_TIME && HOUR_OF_DAY<ApplicationBPConnect.PROTOCOL_EVENING_MAXIMUM_TIME)
             {
+                final String previousEveningAlarmTime = activeProtocol.getEveningReadingTime();
+
                 String selectedEveningTime = HOUR_OF_DAY+":"+MINUTE;
                 activeProtocol.setEveningReadingTime(selectedEveningTime);
                 getNavigator().onProtocolCreated(activeProtocol);
@@ -211,6 +243,37 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                         getRespository().addNewProtocol(activeProtocol);
                     }
                 });
+
+                //update Alarm
+                String todayDate = DateUtils.getDateString(0, "MMM dd,yyyy");
+                String protocolStartDate = activeProtocol.getStartDay();
+                long k = DateUtils.compareTimeString(todayDate, protocolStartDate,"MMM dd,yyyy");
+                if(k<0)
+                {
+                    //protocol will start from next day
+                    //Do Nothing...
+                }else
+                {
+                    //protocol has already started
+                    String currrentTime = DateUtils.getDateString(0, "HH:mm");
+                    String morningReadingTime = activeProtocol.getMorningReadingTime();
+
+                    long t1 = DateUtils.compareTimeString(currrentTime, morningReadingTime,"HH:mm");
+                    long t2 = DateUtils.compareTimeString(currrentTime, previousEveningAlarmTime,"HH:mm");
+                    if(t1>0 && t2<0)
+                    {
+                        //Evening alarm will go off in few hours, you can still change the alarm time
+                        //Remove All Old Alarms and set New
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlarmReceiver.deleteAllAlarm(context);
+                                String[] split = selectedEveningTime.split(":");
+                                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                            }
+                        });
+                    }
+                }
 
             }else
             {

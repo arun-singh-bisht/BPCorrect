@@ -4,12 +4,25 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.bikomobile.multipart.Multipart;
+import com.bumptech.glide.Glide;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.myhexaville.smartimagepicker.ImagePicker;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
@@ -18,18 +31,31 @@ import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.DatePickerFragment;
 import com.protechgene.android.bpconnect.ui.home.HomeFragment;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileEditFragment extends BaseFragment implements ProfileEditFragmentNavigator, DatePickerFragment.DatePickedListener {
 
     public static final String FRAGMENT_TAG = "ProfileEditFragment";
     private ProfileEditFragmentViewModel mProfileEditFragmentViewModel;
 
-    @BindView(R.id.edit_name)
-    EditText edit_name;
+
+    int PICK_IMAGE_REQUEST = 284;
+    int PICK_CAMERA_CODE = 954;
+    Uri uriImage = null;
+    Bitmap cameraBitmap = null;
+
+    @BindView(R.id.profile_edit_frag_change_pic)
+    CircularImageView circularImageView_img;
+    @BindView(R.id.edit_first_name)
+    EditText edit_first_name;
+    @BindView(R.id.edit_last_name)
+    EditText edit_last_name;
     @BindView(R.id.edit_email)
     EditText edit_email;
     @BindView(R.id.edit_dob)
@@ -46,10 +72,13 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     EditText edit_gender;
     @BindView(R.id.edit_about)
     EditText edit_about;
+    @BindView(R.id.camera_icon)
+    View camera_icon;
 
 
     boolean isProfileComplete = true;
-    int PICK_IMAGE_REQUEST = 284;
+    ImagePicker imagePicker;
+    Uri profileImageUri;
 
     @Override
     protected int layoutRes() {
@@ -91,10 +120,11 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
 
 
-        String name = mProfileEditFragmentViewModel.getUserName();
+        String name = mProfileEditFragmentViewModel.getUserFirstName();
         if(name==null || name.equalsIgnoreCase("null"))
-            name = "BPConnect User";
-        edit_name.setText(name);
+            name = "BPCorrect User";
+        edit_first_name.setText(name);
+        edit_last_name.setText(mProfileEditFragmentViewModel.getUserLastName());
         edit_email.setText(mProfileEditFragmentViewModel.getUserEmail());
         edit_dob.setText(mProfileEditFragmentViewModel.getUserDoB());
         edit_address.setText(mProfileEditFragmentViewModel.getUserAddress());
@@ -103,6 +133,11 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         edit_height.setText(mProfileEditFragmentViewModel.getUserHeight());
         edit_gender.setText(mProfileEditFragmentViewModel.getUserGender());
         edit_about.setText(mProfileEditFragmentViewModel.getUserAbout());
+
+        String image_url = mProfileEditFragmentViewModel.getProfileImg();
+        if(image_url != null)
+            Glide.with(getContext()).load(image_url).placeholder(R.drawable.default_pic).load("http://67.211.223.164:8080"+
+                    image_url).into(circularImageView_img);
     }
 
     @OnClick(R.id.img_left)
@@ -117,49 +152,87 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @OnClick(R.id.img_right)
     public void onIconDoneClick() {
         showProgress("Updating Profile...");
-
-        ProfileDetailModel profileDetailModel = new ProfileDetailModel();
-        profileDetailModel.setFirstname(edit_name.getText().toString());
-        profileDetailModel.setGender(edit_gender.getText().toString());
-        profileDetailModel.setDob(edit_dob.getText().toString());
-        profileDetailModel.setMobile1(edit_mobile.getText().toString());
-        profileDetailModel.setAddress1(edit_address.getText().toString());
-        profileDetailModel.setWeight(edit_weight.getText().toString());
-        profileDetailModel.setHeight(edit_height.getText().toString());
-        profileDetailModel.setAbout(edit_about.getText().toString());
-        mProfileEditFragmentViewModel.updateProfile(profileDetailModel);
+        mProfileEditFragmentViewModel.uploadProfileImage(getBaseActivity(),uriImage);
     }
 
     @OnClick(R.id.profile_edit_frag_change_pic)
     public void selectImage(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+        imagePicker = new ImagePicker(getActivity(),
+                this,
+                imageUri -> {/*on image picked */
+                    circularImageView_img.setImageURI(imageUri);
+                    uriImage = imageUri;
+                })
+                .setWithImageCrop(
+                        1 ,
+                        1 );
+        imagePicker.choosePicture(true /*show camera intents*/);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        imagePicker.handleActivityResult(resultCode, requestCode, data);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        imagePicker.handlePermission(requestCode, grantResults);
+    }
+
+    @Override
+    public void onProfileImageUploaded(String imageServerUrl) {
+        updateProfile(imageServerUrl);
+    }
+
+    void updateProfile(String photo_url){
+        Log.d("sohit", "update: "+photo_url);
+        try{
+            ProfileDetailModel profileDetailModel = new ProfileDetailModel();
+            profileDetailModel.setFirstname(edit_first_name.getText().toString());
+            profileDetailModel.setLastname(edit_last_name.getText().toString());
+            profileDetailModel.setGender(edit_gender.getText().toString());
+            profileDetailModel.setDob(edit_dob.getText().toString());
+            profileDetailModel.setMobile1(edit_mobile.getText().toString());
+            profileDetailModel.setAddress1(edit_address.getText().toString());
+            profileDetailModel.setWeight(edit_weight.getText().toString());
+            profileDetailModel.setHeight(edit_height.getText().toString());
+            profileDetailModel.setAbout(edit_about.getText().toString());
+            if(photo_url != null)
+                profileDetailModel.setPhoto_url(photo_url);
+            else
+                profileDetailModel.setPhoto_url("");
+
+            mProfileEditFragmentViewModel.updateProfile(profileDetailModel);
+        }catch (Exception e){
+            handleError(e);
+        }
     }
 
     @Override
     public void onProfileUpdate() {
-        hideProgress();
-        if(isProfileComplete)
-        {
-            FragmentUtil.removeFragment(getBaseActivity());
-            getBaseActivity().showSnakeBar("Profile Updated");
-        }else
-        {
-            HomeFragment homeFragment = new HomeFragment();
-            Bundle args = new Bundle();
-            args.putBoolean("isNewUser",true);
-            homeFragment.setArguments(args);
-            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
-        }
 
-    }
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                if(isProfileComplete)
+                {
+                    FragmentUtil.removeFragment(getBaseActivity());
+                    getBaseActivity().showSnakeBar("Profile Updated");
+                }else
+                {
+                    HomeFragment homeFragment = new HomeFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean("isNewUser",true);
+                    homeFragment.setArguments(args);
+                    FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
+                }
+            }
+        });
 
-    @Override
-    public void handleError(Throwable throwable) {
-        hideProgress();
-        getBaseActivity().showSnakeBar(throwable.getMessage());
     }
 
     @OnClick(R.id.edit_dob)
@@ -226,7 +299,6 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         dialog.show();
     }
 
-
     @Override
     public void onDatePicked(Calendar c) {
         int mYear = c.get(Calendar.YEAR);
@@ -236,5 +308,14 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         edit_dob.setText(mYear+"-"+mMonth+"-"+mDay);
     }
 
-
+    @Override
+    public void handleError(Throwable throwable) {
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                getBaseActivity().showSnakeBar(throwable.getMessage());
+            }
+        });
+    }
 }

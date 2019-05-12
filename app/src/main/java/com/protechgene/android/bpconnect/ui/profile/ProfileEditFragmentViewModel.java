@@ -1,10 +1,23 @@
 package com.protechgene.android.bpconnect.ui.profile;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.util.Log;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.bikomobile.multipart.Multipart;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+
+import java.io.ByteArrayOutputStream;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -19,9 +32,19 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
         super(repository);
     }
 
-    public String getUserName()
+    public String getUserID()
     {
-        return getRespository().getCurrentUserName();
+        return getRespository().getCurrentUserId();
+    }
+
+    public String getUserFirstName()
+    {
+        return getRespository().getUserFirstName();
+    }
+
+    public String getUserLastName()
+    {
+        return getRespository().getUserLastName();
     }
 
     public String getUserEmail()
@@ -64,13 +87,25 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
         return getRespository().getPatientAbout();
     }
 
+    public String getProfileImg()
+    {
+        return getRespository().getPrefKeyProfileImg();
+    }
+
+
     public void updateProfile(final ProfileDetailModel profileDetailModel)
     {
 
         Throwable throwable =null;
         if(profileDetailModel.getFirstname()==null || profileDetailModel.getFirstname().isEmpty())
         {
-            throwable = new IllegalArgumentException("Enter your profile name");
+            throwable = new IllegalArgumentException("Enter your first name");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        if(profileDetailModel.getLastname()==null || profileDetailModel.getLastname().isEmpty())
+        {
+            throwable = new IllegalArgumentException("Enter your last name");
             getNavigator().handleError(throwable);
             return;
         }
@@ -115,7 +150,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
         String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
 
-        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getAbout())
+        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getAbout(),profileDetailModel.getPhoto_url())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -131,6 +166,8 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                         //Save user Details
                         Repository respository = getRespository();
                         respository.setCurrentUserName(profileResponse.getData().get(0).getFirstname());
+                        respository.setUserFirstName(profileResponse.getData().get(0).getFirstname());
+                        respository.setUserLastName(profileResponse.getData().get(0).getLastname());
                         respository.setPatientGender(profileResponse.getData().get(0).getGender());
                         respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
                         respository.setPatientDOB(profileResponse.getData().get(0).getDob());
@@ -151,5 +188,55 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                     }
                 }));
 
+    }
+
+    public void uploadProfileImage(Context context,Uri uriImage)
+    {
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+
+                    Bitmap cameraBitmap = null;
+                    if(uriImage != null)
+                        cameraBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uriImage);
+
+                    if(cameraBitmap != null){
+
+                        byte[] data = getFileDataFromDrawable(cameraBitmap);
+                        Multipart multipart = new Multipart(context);
+
+                        multipart.addFile("image/png","file",""+System.currentTimeMillis(),data);
+                        multipart.launchRequest("http://67.211.223.164:8080/ProtechSentinel/common/upload/image?userId="+getUserID(), new Response.Listener<NetworkResponse>() {
+                            @Override
+                            public void onResponse(NetworkResponse response) {
+                                if(response.statusCode == 200){
+                                    String imageServerUrl = new String(response.data);
+                                    getRespository().setPrefKeyProfileImg(imageServerUrl);
+                                    getNavigator().onProfileImageUploaded(imageServerUrl);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                getNavigator().onProfileImageUploaded(null);
+                            }
+                        });
+                    }else {
+                        getNavigator().onProfileImageUploaded(null);
+                    }
+                }catch (Exception e){
+                    getNavigator().onProfileImageUploaded(null);
+                }
+            }
+        });
+
+    }
+
+    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 }

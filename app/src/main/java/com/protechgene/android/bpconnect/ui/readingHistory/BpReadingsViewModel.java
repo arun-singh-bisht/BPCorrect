@@ -26,20 +26,17 @@ public class BpReadingsViewModel extends BaseViewModel<BPAllReadingsFragmentNavi
         super(repository);
     }
 
-
-
    public void getBpReadings()
     {
 
-        String accessToken = getRespository().getAccessToken();
-        String currentUserId = getRespository().getCurrentUserId();
-        String patientId = getRespository().getPatientId();
-        String fromDay = "1546300800"; // 1 January 2019 00:00:00
-        String toDay = (System.currentTimeMillis() + (5*60*60*1000))/1000 +"";
-        String noDay = "30";
-
         if(!getRespository().isHistoryDataSync())
         {
+            String accessToken = getRespository().getAccessToken();
+            String currentUserId = getRespository().getCurrentUserId();
+            String fromDay = "1546300800"; // 1 January 2019 00:00:00
+            String toDay = (System.currentTimeMillis() + (5*60*60*1000))/1000 +"";
+            String noDay = "30";
+
             disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
