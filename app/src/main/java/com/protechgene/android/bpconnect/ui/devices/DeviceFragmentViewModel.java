@@ -9,6 +9,7 @@ import android.util.Log;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
 import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
+import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentNavigator;
 
@@ -69,6 +70,17 @@ public class DeviceFragmentViewModel extends BaseViewModel<DeviceFragmentNavigat
                     Log.d("PairedDevices","deviceName:"+deviceName+" deviceHardwareAddress:"+deviceHardwareAddress);
                 }
             }
+           // IHealthDeviceController iHealthDeviceController = new IHealthDeviceController(context);
+            //List<String> connectedDevices = iHealthDeviceController.getConnectedDevices();
+
+            String deviceName_iHealthbp3l = getRespository().getDeviceName_iHealthbp3l();
+            String deviceAddress_iHealthbp3l = getRespository().getDeviceAddress_iHealthbp3l();
+            if(deviceName_iHealthbp3l!=null && !deviceName_iHealthbp3l.isEmpty())
+            {
+                BPDeviceModel bpDeviceModel = new BPDeviceModel("iHealth Ease "+deviceName_iHealthbp3l,deviceAddress_iHealthbp3l);
+                bpDeviceList.add(bpDeviceModel);
+            }
+
             getNavigator().pairedDevices(bpDeviceList);
 
         }else {
@@ -76,5 +88,10 @@ public class DeviceFragmentViewModel extends BaseViewModel<DeviceFragmentNavigat
             getNavigator().turningOnBluetooth();
             //Bluetooth is OFF
         }
+    }
+
+    public boolean isAuthorizeForBP3L(Context mContext)
+    {
+        return IHealthDeviceController.isAuthorizedToAccessDevice(mContext);
     }
 }

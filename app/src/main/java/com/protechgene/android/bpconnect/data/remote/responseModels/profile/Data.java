@@ -42,9 +42,25 @@ public class Data {
     private String weight;
     @SerializedName("height")
     private String height;
+    @SerializedName("city")
+    private String city;
+    @SerializedName("zipcode")
+    private String zipcode;
+    @SerializedName("state")
+    private String state;
+    @SerializedName("health_org_name")
+    private String org_name;
+    @SerializedName("provider")
+    private String provider;
 
 
+    public String getProvider() {
+        return provider;
+    }
 
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
     public String getFirstname() {
         return firstname;
     }
@@ -53,6 +69,13 @@ public class Data {
         this.firstname = firstname;
     }
 
+    public String getOrg_name() {
+        return org_name;
+    }
+
+    public void setOrg_name(String org_name) {
+        this.org_name = org_name;
+    }
     public String getGender() {
         return gender;
     }
@@ -196,4 +219,29 @@ public class Data {
     public void setHeight(String height) {
         this.height = height;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 }

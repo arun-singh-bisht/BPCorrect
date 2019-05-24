@@ -39,8 +39,8 @@ public class ProtocolReadingsViewModel extends BaseViewModel<ProtocolReadingsFra
 
                 if(allProtocol==null || allProtocol.size()==0)
                 {
-                    getProtocolFromServer();
-                    //getNavigator().isProtocolExists(false,null);
+                    //getProtocolFromServer();
+                    getNavigator().isProtocolExists(false,null);
                 }
                 else
                     getNavigator().isProtocolExists(true,allProtocol.get(0));

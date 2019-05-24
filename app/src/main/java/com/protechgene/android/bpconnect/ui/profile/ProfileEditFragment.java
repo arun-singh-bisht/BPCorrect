@@ -26,13 +26,17 @@ import com.myhexaville.smartimagepicker.ImagePicker;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
+import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.DataOptions;
+import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.DatePickerFragment;
 import com.protechgene.android.bpconnect.ui.home.HomeFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,7 +52,21 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     int PICK_IMAGE_REQUEST = 284;
     int PICK_CAMERA_CODE = 954;
     Uri uriImage = null;
-    Bitmap cameraBitmap = null;
+
+    // edit by sohit
+    int mYear = 0;
+    int mMonth = 0;
+    int mDay = 0;
+    @BindView(R.id.btn_save)
+    TextView btn_save;
+    @BindView(R.id.edit_city)
+    EditText edit_city;
+    @BindView(R.id.edit_zipcode)
+    EditText edit_zipcode;
+    @BindView(R.id.edit_state)
+    EditText edit_state;
+    String state_code = null;
+
 
     @BindView(R.id.profile_edit_frag_change_pic)
     CircularImageView circularImageView_img;
@@ -70,8 +88,8 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     EditText edit_height;
     @BindView(R.id.edit_gender)
     EditText edit_gender;
-    @BindView(R.id.edit_about)
-    EditText edit_about;
+//    @BindView(R.id.edit_about)
+//    EditText edit_about;
     @BindView(R.id.camera_icon)
     View camera_icon;
 
@@ -115,7 +133,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
             ((ImageView)getView().findViewById(R.id.img_left)).setImageResource(R.drawable.ic_action_back);
         }
 
-        getView().findViewById(R.id.img_right).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.img_right).setVisibility(View.GONE);
         ((ImageView)getView().findViewById(R.id.img_right)).setImageResource(R.drawable.ic_action_done);
 
 
@@ -127,17 +145,38 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         edit_last_name.setText(mProfileEditFragmentViewModel.getUserLastName());
         edit_email.setText(mProfileEditFragmentViewModel.getUserEmail());
         edit_dob.setText(mProfileEditFragmentViewModel.getUserDoB());
-        edit_address.setText(mProfileEditFragmentViewModel.getUserAddress());
         edit_mobile.setText(mProfileEditFragmentViewModel.getUserMobile());
         edit_weight.setText(mProfileEditFragmentViewModel.getUserWeight());
         edit_height.setText(mProfileEditFragmentViewModel.getUserHeight());
         edit_gender.setText(mProfileEditFragmentViewModel.getUserGender());
-        edit_about.setText(mProfileEditFragmentViewModel.getUserAbout());
+        edit_city.setText(mProfileEditFragmentViewModel.getUserCity());
+        edit_zipcode.setText(mProfileEditFragmentViewModel.getUserZipcode());
+        // edit by sohit fetch address code and set name
+        edit_address.setText(mProfileEditFragmentViewModel.getUserAddress());
+        state_code =  mProfileEditFragmentViewModel.getUserState();
+        if(!state_code.equals(""))
+            mProfileEditFragmentViewModel.selectCity(getBaseActivity(),true);
+        // remove about edit text
+       // edit_about.setText(mProfileEditFragmentViewModel.getUserAbout());
 
         String image_url = mProfileEditFragmentViewModel.getProfileImg();
         if(image_url != null)
-            Glide.with(getContext()).load(image_url).placeholder(R.drawable.default_pic).load("http://67.211.223.164:8080"+
-                    image_url).into(circularImageView_img);
+            Glide.with(getContext()).load("http://67.211.223.164:8080"+
+                    image_url).placeholder(R.drawable.default_pic).into(circularImageView_img);
+
+
+    }
+
+    @Override
+    public void setDefaultAddress(StateCityOptions stateCityOptions) {
+        List<DataOptions> data = stateCityOptions.getData();
+          for(DataOptions d : data){
+              if(d.getCode().equals(state_code)){
+                  Log.d("sohit", "setDefaultAddress: "+d.getName());
+                  state_code = d.getCode();
+                  edit_state.setText(d.getName());
+              }
+          }
     }
 
     @OnClick(R.id.img_left)
@@ -149,11 +188,58 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
             getBaseActivity().finish();
     }
 
-    @OnClick(R.id.img_right)
+    // right click submit
+    /*@OnClick(R.id.img_right)
     public void onIconDoneClick() {
         showProgress("Updating Profile...");
         mProfileEditFragmentViewModel.uploadProfileImage(getBaseActivity(),uriImage);
+    }*/
+
+    @OnClick(R.id.btn_save)
+    public void onSaveBtn(){
+        showProgress("Updating Profile...");
+        mProfileEditFragmentViewModel.uploadProfileImage(getBaseActivity(),uriImage);
     }
+
+    // edit by sohit
+    @OnClick(R.id.edit_state)
+    public void onselectAddress(){
+            mProfileEditFragmentViewModel.selectCity(getBaseActivity(),false);
+    }
+
+    @Override
+    public void openDailogOptions(StateCityOptions stateCityOptions){
+        List<DataOptions> dataOptions = stateCityOptions.getData();
+         int size = stateCityOptions.getData().size();
+        String name[] = new String[size];
+
+        for(int i=0;i<size;i++){
+            name[i] = dataOptions.get(i).getName();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setTitle("Select State");
+
+        builder.setItems(name, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                edit_state.setText(dataOptions.get(which).getName());
+                state_code = dataOptions.get(which).getCode();
+                Log.d("sohit", "onClick: "+dataOptions.get(which).getName());
+                Log.d("sohit", "onClick: code  "+dataOptions.get(which).getCode());
+
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+    }
+
+
+
 
     @OnClick(R.id.profile_edit_frag_change_pic)
     public void selectImage(){
@@ -161,7 +247,10 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         imagePicker = new ImagePicker(getActivity(),
                 this,
                 imageUri -> {/*on image picked */
-                    circularImageView_img.setImageURI(imageUri);
+                    Log.d("sohit", "selectImage: uri "+imageUri);
+
+                    Glide.with(getContext()).load(imageUri).placeholder(R.drawable.default_pic).into(circularImageView_img);
+                 //   circularImageView_img.setImageURI(imageUri);
                     uriImage = imageUri;
                 })
                 .setWithImageCrop(
@@ -191,24 +280,45 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         Log.d("sohit", "update: "+photo_url);
         try{
             ProfileDetailModel profileDetailModel = new ProfileDetailModel();
-            profileDetailModel.setFirstname(edit_first_name.getText().toString());
-            profileDetailModel.setLastname(edit_last_name.getText().toString());
-            profileDetailModel.setGender(edit_gender.getText().toString());
-            profileDetailModel.setDob(edit_dob.getText().toString());
+            profileDetailModel.setFirstname(edit_first_name.getText().toString().trim());
+            profileDetailModel.setLastname(edit_last_name.getText().toString().trim());
+            profileDetailModel.setGender(edit_gender.getText().toString().trim());
+            profileDetailModel.setCity(edit_city.getText().toString().trim());
+            profileDetailModel.setZipcode(edit_zipcode.getText().toString().trim());
+
+            // edit by sohit
+            if(mYear != 0 && mMonth != 0 && mDay !=0){
+                profileDetailModel.setDob(mYear+"-"+mMonth+"-"+mDay);
+            }else
+            {
+                    profileDetailModel.setDob(convertdob(edit_dob.getText().toString()));
+            }
             profileDetailModel.setMobile1(edit_mobile.getText().toString());
-            profileDetailModel.setAddress1(edit_address.getText().toString());
+            // edit by sohit
+            profileDetailModel.setAddress1(edit_address.getText().toString().trim());
             profileDetailModel.setWeight(edit_weight.getText().toString());
             profileDetailModel.setHeight(edit_height.getText().toString());
-            profileDetailModel.setAbout(edit_about.getText().toString());
+            profileDetailModel.setZipcode(edit_zipcode.getText().toString().trim());
+            profileDetailModel.setCity(edit_city.getText().toString().trim());
+            //   profileDetailModel.setAbout(edit_about.getText().toString());
+            if(state_code != null)
+                profileDetailModel.setState(state_code);
+            // edit by sohit else part
             if(photo_url != null)
                 profileDetailModel.setPhoto_url(photo_url);
             else
-                profileDetailModel.setPhoto_url("");
+                profileDetailModel.setPhoto_url(mProfileEditFragmentViewModel.getProfileImg());
 
             mProfileEditFragmentViewModel.updateProfile(profileDetailModel);
         }catch (Exception e){
             handleError(e);
         }
+    }
+
+    // edit by sohit
+    public String convertdob(String dob) {
+        String ar[] = dob.split("-");
+        return ar[2]+"-"+ar[0]+"-"+ar[1];
     }
 
     @Override
@@ -301,11 +411,12 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
     @Override
     public void onDatePicked(Calendar c) {
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH)+1;
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH)+1;
+        mDay = c.get(Calendar.DAY_OF_MONTH);
 
-        edit_dob.setText(mYear+"-"+mMonth+"-"+mDay);
+        // edit by sohit yyyy-mm-dd to mm-dd-yyyy
+        edit_dob.setText(mMonth+"-"+mDay+"-"+mYear);
     }
 
     @Override

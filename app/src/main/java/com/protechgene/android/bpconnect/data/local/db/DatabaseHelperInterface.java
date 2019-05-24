@@ -15,6 +15,8 @@ public interface DatabaseHelperInterface  {
 
     List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli,long offsetTime);
 
+    //List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli,long offsetTime,String protocolId);
+
     void deleteAllHealthRecords();
 
     //Protocol MEthods

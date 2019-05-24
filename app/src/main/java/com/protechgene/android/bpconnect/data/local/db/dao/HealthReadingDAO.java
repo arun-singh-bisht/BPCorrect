@@ -22,7 +22,7 @@ public interface HealthReadingDAO {
     @Query("SELECT * FROM health_table")
     List<HealthReading> getAllRecords();
 
-    @Query("SELECT * FROM health_table WHERE reading_time >= :lastAlarmTimeInMilli AND reading_time<= :offsetTime")
+    @Query("SELECT * FROM health_table WHERE reading_time >= :lastAlarmTimeInMilli AND reading_time<= :offsetTime AND protocol_id IS NOT NULL AND protocol_id <> '' ")
     List<HealthReading> getLastAlarmRecords(long lastAlarmTimeInMilli,long offsetTime);
 
 

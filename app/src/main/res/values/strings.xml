@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BP Correct</string>
+    <string name="app_name">BPCorrect</string>
 
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -67,4 +67,11 @@
     <string name="step4">Place the bottom of the cuff just above the bend of your bare elbow.</string>
     <string name="step5">Rest your arm on a flat surface like a table or armrest so that the cuff is at the level of your heart.</string>
     <string name="step6">Relax. Don\'t talk. Make sure your legs are uncrossed with feet flat on the floor.</string>
+
+    <string name="reminder_info_tv">Relax. Don\'t talk. Make sure your legs are \n uncrossed with feet flat on the floor.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

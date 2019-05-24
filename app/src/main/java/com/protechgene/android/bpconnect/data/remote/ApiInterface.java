@@ -4,10 +4,13 @@ package com.protechgene.android.bpconnect.data.remote;
 import com.google.gson.JsonArray;
 import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.ChangePasswordModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.sharereadingprovider.ShareReading;
 
 import org.json.JSONArray;
 
@@ -34,7 +37,7 @@ public interface ApiInterface {
     Observable<ProfileResponse> profileDetails(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId);
 
     @POST("ProtechSentinel/common/update/patient")
-    Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId, @Query("firstname") String firstname,@Query("lastname") String lastname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1,@Query("weight") String weight,@Query("height") String height,@Query("address2") String about,@Query("photo_url") String photo);
+    Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId, @Query("firstname") String firstname,@Query("lastname") String lastname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1,@Query("weight") String weight,@Query("height") String height,@Query("photo_url") String photo,@Query("state") String state,@Query("city") String city,@Query("zipcode") String zipcode);
 
     @GET("ProtechSentinel/common/get/chart/data/according/to/user")
     Observable<BpReadingsResponse> getBpReadings(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId, @Query("fromdate") String fromdate, @Query("todate") String todate, @Query("dayno") String dayno);
@@ -51,4 +54,15 @@ public interface ApiInterface {
 
     @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
     Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
+
+    // edit by sohit address select state and city and password
+     @GET("ProtechSentinel/common/get/state/list")
+    Observable<StateCityOptions> getOptionCity();
+
+     @POST("ProtechSentinel/common/change/password")
+     Observable<ResetPasswordResponse> changePassword(@Query("password") String password,@Query("access_token")String access_token,@Query("userId") String userid);
+
+     @POST("ProtechSentinel/common/share/reading")
+     Observable<ShareReading> getShareReading(@Query("patient_id") String userid,@Query("access_token")String accessToken,@Query("request_type") String request_type,@Query("status") Boolean status);
+
 }

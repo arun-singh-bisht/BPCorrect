@@ -13,6 +13,35 @@ public class ProfileDetailModel {
     private String about;
     private String photo_url;
 
+    //edit by sohit
+    private String state;
+    private String city;
+    private String zipcode;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public ProfileDetailModel() {
     }
 

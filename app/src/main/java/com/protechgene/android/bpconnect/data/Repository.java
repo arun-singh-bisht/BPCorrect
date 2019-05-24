@@ -14,10 +14,13 @@ import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelperInterfac
 import com.protechgene.android.bpconnect.data.remote.ApiInterface;
 import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.ChangePasswordModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.sharereadingprovider.ShareReading;
 import com.protechgene.android.bpconnect.di.module.AppModule;
 import com.protechgene.android.bpconnect.di.module.RestModule;
 import com.protechgene.android.bpconnect.di.module.RoomModule;
@@ -102,6 +105,8 @@ public class Repository implements ApiInterface,
 
     @Override
     public void setCurrentUserName(String userName) { mSharedPrefsHelper.setCurrentUserName(userName); }
+
+
 
     @Override
     public String getUserFirstName() {
@@ -276,6 +281,76 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public String getDeviceName_iHealthbp3l() {
+        return mSharedPrefsHelper.getDeviceName_iHealthbp3l();
+    }
+
+    @Override
+    public void setDeviceName_iHealthbp3l(String name) {
+        mSharedPrefsHelper.setDeviceName_iHealthbp3l(name);
+    }
+
+    @Override
+    public String getDeviceAddress_iHealthbp3l() {
+        return mSharedPrefsHelper.getDeviceAddress_iHealthbp3l();
+    }
+
+    @Override
+    public void setDeviceAddress_iHealthbp3l(String address) {
+        mSharedPrefsHelper.setDeviceAddress_iHealthbp3l(address);
+    }
+
+    @Override
+    public void setPrefKeyPatientState(String state) {
+        mSharedPrefsHelper.setPrefKeyPatientState(state);
+    }
+
+    @Override
+    public String getPrefKeyPatientState() {
+        return mSharedPrefsHelper.getPrefKeyPatientState();
+    }
+
+    @Override
+    public void setPrefKeyPatientCity(String city) {
+        mSharedPrefsHelper.setPrefKeyPatientCity(city);
+    }
+
+    @Override
+    public String getPrefKeyPatientCity() {
+        return mSharedPrefsHelper.getPrefKeyPatientCity();
+    }
+
+    @Override
+    public void setPrefKeyPatientZipcode(String zipcode) {
+        mSharedPrefsHelper.setPrefKeyPatientZipcode(zipcode);
+    }
+
+    @Override
+    public String getPrefKeyPatientZipcode() {
+        return mSharedPrefsHelper.getPrefKeyPatientZipcode();
+    }
+
+    @Override
+    public void setPrefKeyOrgName(String orgName) {
+         mSharedPrefsHelper.setPrefKeyOrgName(orgName);
+    }
+
+    @Override
+    public String getPrefKeyOrgName() {
+        return mSharedPrefsHelper.getPrefKeyOrgName();
+    }
+
+    @Override
+    public void setPrefKeyProviderName(String providerName) {
+        mSharedPrefsHelper.setPrefKeyProviderName(providerName);
+    }
+
+    @Override
+    public String getPrefKeyProviderName() {
+        return mSharedPrefsHelper.getPrefKeyProviderName();
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPrefsHelper.clearSharedPref();
     }
@@ -325,12 +400,30 @@ public class Repository implements ApiInterface,
     public Observable<GetProtocolResponse> getProtocolDetail(String access_token, String userId) {
         Observable<GetProtocolResponse> responseObservable = mApiInterface.getProtocolDetail(access_token,userId);
         return responseObservable;
+}
+
+    @Override
+    public Observable<StateCityOptions> getOptionCity() {
+        Observable<StateCityOptions> responseObservable = mApiInterface.getOptionCity();
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<ResetPasswordResponse> changePassword(String password, String access_token, String userid) {
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.changePassword(password,access_token,userid);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<ShareReading> getShareReading(String userid, String accessToken, String request_type, Boolean status) {
+        Observable<ShareReading> responseObservable = mApiInterface.getShareReading(userid,accessToken,request_type,status);
+        return responseObservable;
     }
 
 
     @Override
-    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname,String lastname, String gender, String dob, String mobile1, String address1,String weight,String height,String about,String photo_url) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname,lastname, gender, dob, mobile1, address1,weight,height,about,photo_url);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname,String lastname, String gender, String dob, String mobile1, String address1,String weight,String height,String photo_url,String state,String city,String zipcode) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname,lastname, gender, dob, mobile1, address1,weight,height,photo_url,state,city,zipcode);
         return responseObservable;
     }
 

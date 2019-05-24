@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/nav_bar_bg">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/profile_bg"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PROFILE"
+        android:id="@+id/nav_profile_title"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_16ssp"/>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav_profile_layout"
+        android:layout_marginTop="25dp"
+        android:layout_below="@id/nav_profile_title">
+
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/profile_pic"
+            app:civ_border_width="1dp"
+            android:id="@+id/nav_profile_img"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/nav_profile_img"
+            app:layout_constraintBottom_toBottomOf="@id/nav_profile_img"
+            app:layout_constraintLeft_toRightOf="@id/nav_profile_img"
+            android:orientation="vertical"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Andera Pinter"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/_20ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nav_address_tv"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/_12ssp"
+                android:text="San Francisco, CA"/>
+
+        </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:id="@+id/nav_options_layout"
+        android:layout_below="@id/nav_profile_layout"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="14dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/nav_profile_icon"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.3">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:padding="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@android:color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/nav_measure_bp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.3">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Measure Blood Pressure"
+                    android:padding="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@android:color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="14dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/bp_readings"
+                android:tint="@android:color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.3"
+                android:showDividers="end"
+                android:divider="@android:color/white">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Blood Pressure Readings"
+                    android:padding="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@android:color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:adjustViewBounds="true"
+                android:tint="@android:color/white"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/learn"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.3"
+                android:showDividers="end"
+                android:divider="@android:color/white">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Learn"
+                    android:padding="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@android:color/white"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="14dp"
+                android:adjustViewBounds="true"
+                android:tint="@android:color/white"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/manage_devices"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.3"
+                android:showDividers="end"
+                android:divider="@android:color/white">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Manage Devices"
+                    android:padding="15dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nav_options_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign out"
+            android:id="@+id/nav_sign_out_tv"
+            android:padding="8dp"
+            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/nav_logout"
+            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_15ssp"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+</RelativeLayout>

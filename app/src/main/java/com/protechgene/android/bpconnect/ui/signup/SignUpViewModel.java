@@ -10,6 +10,9 @@ import com.protechgene.android.bpconnect.data.remote.responseModels.SignUp.SignU
 import com.protechgene.android.bpconnect.data.remote.responseModels.User;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -36,7 +39,18 @@ public class SignUpViewModel extends BaseViewModel<SignUpNavigator> {
             throwable = new IllegalArgumentException("Enter Password");
             getNavigator().handleError(throwable);
             return;
-        }else if(!password.equals(confirmPassword))
+        }if(password.length()<8)
+        {
+            throwable = new IllegalArgumentException("Enter password min 8 character");
+            getNavigator().handleError(throwable);
+            return;
+        }if(!isValidPassword(password))
+        {
+            throwable = new IllegalArgumentException("Use at least 1 symbols %,1,A,a");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        else if(!password.equals(confirmPassword))
         {
             throwable = new IllegalArgumentException("Confirm Password does not match");
             getNavigator().handleError(throwable);
@@ -74,5 +88,15 @@ public class SignUpViewModel extends BaseViewModel<SignUpNavigator> {
                     }
                 }));
 
+    }
+
+    public static boolean isValidPassword(final String password) {
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
     }
 }

@@ -16,6 +16,27 @@
         android:padding="10dp"
         >
 
+
+
+
+
+
+
+
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:drawableLeft="@drawable/ic_password"
+            android:drawablePadding="15dp"
+            android:drawableTint="#968F8F"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:id="@+id/text_change_password"
+            />
+
+
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,6 +47,42 @@
             android:drawableTint="#968F8F"
             android:padding="10dp"
             android:id="@+id/text_signout"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:drawableLeft="@drawable/ic_menu_share"
+                android:drawablePadding="15dp"
+                android:drawableTint="#968F8F"
+                android:text="Share Reading with provider"
+                android:padding="10dp"
+                android:id="@+id/text_share_reading"
+                />
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/switcher_provider"
+                />
+        </LinearLayout>
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_red_light"
+            android:text="You are not a part of any practice"
+            android:gravity="center_vertical"
+            android:id="@+id/text_not_provider"
             />
 
     </LinearLayout>

@@ -6,8 +6,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.protechgene.android.bpconnect.data.Repository;
+import com.protechgene.android.bpconnect.ui.changepassword.ChangePasswordViewModel;
 import com.protechgene.android.bpconnect.ui.devices.DeviceFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.devices.PairNewDeviceViewModel;
+import com.protechgene.android.bpconnect.ui.devices.PairNewDeviceViewModelBP3N;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordViewModel;
 import com.protechgene.android.bpconnect.ui.home.HomeViewModel;
 import com.protechgene.android.bpconnect.ui.login.LoginViewModel;
@@ -73,6 +75,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ReminderViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(ProtocolReadingsViewModel.class)) {
             return (T) new ProtocolReadingsViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(ChangePasswordViewModel.class)) {
+            return (T) new ChangePasswordViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(PairNewDeviceViewModelBP3N.class)) {
+            return (T) new PairNewDeviceViewModelBP3N(mRepository);
         }
 
 

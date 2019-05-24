@@ -14,11 +14,16 @@ import com.android.volley.VolleyError;
 import com.bikomobile.multipart.Multipart;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
+import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -93,6 +98,64 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
     }
 
 
+
+    //
+    public String getUserState(){
+        return getRespository().getPrefKeyPatientState();
+    }
+    public String getUserCity(){
+        return getRespository().getPrefKeyPatientCity();
+    }
+    public String getUserZipcode(){
+        return getRespository().getPrefKeyPatientZipcode();
+    }
+
+    public void setUserState(String state){
+        getRespository().setPrefKeyPatientState(state);
+    }
+
+    public void setUserCity(String city){
+        getRespository().setPrefKeyPatientCity(city);
+    }
+
+    public void setUserZipCode(String zipCode){
+        getRespository().setPrefKeyPatientState(zipCode);
+    }
+
+
+
+    public void selectCity(Context context,Boolean isDefault){
+        disposables.add(getRespository().getOptionCity()
+                .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<StateCityOptions>() {
+                    @Override
+                    public void accept(StateCityOptions stateCityOptions) throws Exception {
+                        Log.d("sohit", "accept: "+stateCityOptions.getData().size());
+                        Log.d("sohit", "name: "+stateCityOptions.getData().get(0).getName());
+
+                        if(isDefault)
+                            getNavigator().setDefaultAddress(stateCityOptions);
+                        else
+                        getNavigator().openDailogOptions(stateCityOptions);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }));
+
+    }
+
+
     public void updateProfile(final ProfileDetailModel profileDetailModel)
     {
 
@@ -115,9 +178,33 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
-        if(profileDetailModel.getAddress1()==null || profileDetailModel.getAddress1().isEmpty())
+        if(profileDetailModel.getAddress1()== null || profileDetailModel.getAddress1().isEmpty())
         {
             throwable = new IllegalArgumentException("Enter your address");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        if(profileDetailModel.getState()== null || profileDetailModel.getState().isEmpty())
+        {
+            throwable = new IllegalArgumentException("Enter your state");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        if(profileDetailModel.getCity()== null || profileDetailModel.getCity().isEmpty())
+        {
+            throwable = new IllegalArgumentException("Enter your city");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        if(profileDetailModel.getZipcode()== null || profileDetailModel.getZipcode().isEmpty() )
+        {
+            throwable = new IllegalArgumentException("Enter your zipcode");
+            getNavigator().handleError(throwable);
+            return;
+        }
+        if(profileDetailModel.getZipcode().length() < 5 || profileDetailModel.getZipcode().length() > 6)
+        {
+            throwable = new IllegalArgumentException("Enter valid zipcode");
             getNavigator().handleError(throwable);
             return;
         }
@@ -150,7 +237,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
         String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
 
-        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getAbout(),profileDetailModel.getPhoto_url())
+        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getPhoto_url(),profileDetailModel.getState(),profileDetailModel.getCity(),profileDetailModel.getZipcode())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -169,12 +256,20 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                         respository.setUserFirstName(profileResponse.getData().get(0).getFirstname());
                         respository.setUserLastName(profileResponse.getData().get(0).getLastname());
                         respository.setPatientGender(profileResponse.getData().get(0).getGender());
+                        // edit by sohit convert date format
+                        Log.d("convert"," date : "+convertdob(profileResponse.getData().get(0).getDob()));
+                        respository.setPatientDOB(convertdob(profileResponse.getData().get(0).getDob()));
+
+                        // edit by sohit
                         respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
-                        respository.setPatientDOB(profileResponse.getData().get(0).getDob());
+                        respository.setPrefKeyPatientCity(profileResponse.getData().get(0).getCity());
+                        respository.setPrefKeyPatientZipcode(profileResponse.getData().get(0).getZipcode());
+                        respository.setPrefKeyPatientState(profileResponse.getData().get(0).getState());
                         respository.setPatientMobile(profileResponse.getData().get(0).getMobile1());
                         respository.setPatientWeight(profileResponse.getData().get(0).getWeight());
                         respository.setPatientHeight(profileResponse.getData().get(0).getHeight());
-                        respository.setPatientAbout(profileResponse.getData().get(0).getAddress2());
+                        //respository.setPatientAbout(profileResponse.getData().get(0).getAddress2());
+
 
                         //respository.setPatientId(profileResponse.getData().get(0).getPatientId().toString());
 
@@ -188,6 +283,14 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                     }
                 }));
 
+    }
+
+
+
+    // edit by sohit
+    public String convertdob(String dob) {
+      String ar[] = dob.split("-");
+        return ar[1]+"-"+ar[2]+"-"+ar[0];
     }
 
     public void uploadProfileImage(Context context,Uri uriImage)
@@ -208,16 +311,18 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                         Multipart multipart = new Multipart(context);
 
                         multipart.addFile("image/png","file",""+System.currentTimeMillis(),data);
-                        multipart.launchRequest("http://67.211.223.164:8080/ProtechSentinel/common/upload/image?userId="+getUserID(), new Response.Listener<NetworkResponse>() {
+                        multipart.launchRequest("http://67.211.223.164:8080/ProtechSentinel/common/upload/image?userId=" + getUserID(), new Response.Listener<NetworkResponse>() {
                             @Override
                             public void onResponse(NetworkResponse response) {
-                                if(response.statusCode == 200){
+                                if (response.statusCode == 200) {
                                     String imageServerUrl = new String(response.data);
                                     getRespository().setPrefKeyProfileImg(imageServerUrl);
                                     getNavigator().onProfileImageUploaded(imageServerUrl);
+                                } else {
+                                    getNavigator().onProfileImageUploaded(null);
                                 }
                             }
-                        }, new Response.ErrorListener() {
+                        },new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 getNavigator().onProfileImageUploaded(null);

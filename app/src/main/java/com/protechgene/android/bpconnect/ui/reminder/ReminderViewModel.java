@@ -55,7 +55,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 List<ProtocolModel> allProtocol = getRespository().getAllProtocol();
 
                 if(allProtocol==null || allProtocol.size()==0)
-                    getProtocolFromServer();
+                    getNavigator().isProtocolExists(false,null);
                 else
                     getNavigator().isProtocolExists(true,allProtocol.get(0));
             }
@@ -196,6 +196,9 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                     }
                 });
 
+                //Send created Protocol to server
+                sendProtocolToServer(activeProtocol);
+
                 //update Alarm
                 String todayDate = DateUtils.getDateString(0, "MMM dd,yyyy");
                 String protocolStartDate = activeProtocol.getStartDay();
@@ -204,9 +207,16 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 {
                     //protocol will start from next day
                     //Remove All Old Alarms and set New
-                    AlarmReceiver.deleteAllAlarm(context);
-                    String[] split = selectedMorningTime.split(":");
-                    AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),1);
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlarmReceiver.deleteAllAlarm(context);
+                            String[] split = selectedMorningTime.split(":");
+                            AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),1);
+                        }
+                    });
+
+
                 }else
                 {
                     //protocol has already started
@@ -216,9 +226,15 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                     {
                         //Morning alarm will go off in few hours, you can still change the alarm time
                         //Remove All Old Alarms and set New
-                        AlarmReceiver.deleteAllAlarm(context);
-                        String[] split = selectedMorningTime.split(":");
-                        AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlarmReceiver.deleteAllAlarm(context);
+                                String[] split = selectedMorningTime.split(":");
+                                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                            }
+                        });
+
                     }
                 }
             }else
@@ -243,6 +259,9 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                         getRespository().addNewProtocol(activeProtocol);
                     }
                 });
+
+                //Send created Protocol to server
+                sendProtocolToServer(activeProtocol);
 
                 //update Alarm
                 String todayDate = DateUtils.getDateString(0, "MMM dd,yyyy");
@@ -315,93 +334,6 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                         //getNavigator().handleError(throwable);
                     }
                 }));
-    }
-
-    private void getProtocolFromServer()
-    {
-        String accessToken = getRespository().getAccessToken();
-        String userId = getRespository().getCurrentUserId();
-
-        disposables.add(getRespository().getProtocolDetail(accessToken,userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-
-                    }
-                })
-                .subscribe(new Consumer<GetProtocolResponse>() {
-                    @Override
-                    public void accept(GetProtocolResponse protocolResponse) throws Exception {
-
-                        //Throwable throwable = new Throwable("Data Syn to server");
-                        //getNavigator().handleError(throwable);
-                        if(protocolResponse.getData().get(0).getProtocolId() == null)
-                            getNavigator().isProtocolExists(false,null);
-                        else
-                        {
-                            Data data = protocolResponse.getData().get(0);
-
-                            String startDate = data.getStartDate();
-                            startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(startDate) * 1000,"MMM dd,yyyy");
-
-                            String endDate = data.getEndDate();
-                            endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000,"MMM dd,yyyy");
-
-                            final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,data.getMorningAlarm(),data.getEveningAlarm(),true);
-                            protocolModel.setProtocolCode(data.getProtocolId());
-
-                            //Save new protocol in DB
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getRespository().addNewProtocol(protocolModel);
-                                    getNavigator().isProtocolExists(true,protocolModel);
-                                }
-                            });
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-
-                        //getNavigator().handleError(throwable);
-                        getNavigator().isProtocolExists(false,null);
-                    }
-                }));
-    }
-
-
-    /**
-     * This is the real time /wall clock time
-     * @param context
-     */
-    public static void scheduleRepeatingRTCNotification(Context context, String hour, String min) {
-        //get calendar instance to be able to select what time notification should be scheduled
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        //Setting time of the day (8am here) when notification will be sent every day (default)
-        calendar.set(Calendar.HOUR_OF_DAY,
-                Integer.getInteger(hour, 8),
-                Integer.getInteger(min, 0));
-
-        //Setting intent to class where Alarm broadcast message will be handled
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        //Setting alarm pending intent
-        PendingIntent alarmIntentRTC = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //getting instance of AlarmManager service
-        AlarmManager alarmManagerRTC = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
-        //Setting alarm to wake up device every day for clock time.
-        //AlarmManager.RTC_WAKEUP is responsible to wake up device for sure, which may not be good practice all the time.
-        // Use this when you know what you're doing.
-        //Use RTC when you don't need to wake up device, but want to deliver the notification whenever device is woke-up
-        //We'll be using RTC.WAKEUP for demo purpose only
-        alarmManagerRTC.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntentRTC);
     }
 
     public void onDestroy()

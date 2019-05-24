@@ -25,9 +25,39 @@ public interface PreferencesHelperInterface {
      String PREF_KEY_PATIENT_ABOUT = "PREF_KEY_PATIENT_ABOUT";
      String PREF_KEY_PROFILE_IMG = "PREF_KEY_PROFILE_IMG";
 
+
+     // edit by sohit
+     String PREF_KEY_PATIENT_STATE = "PREF_KEY_PATIENT_STATE";
+     String PREF_KEY_PATIENT_CITY = "PREF_KEY_PATIENT_CITY";
+     String PREF_KEY_PATIENT_ZIPCODE = "PREF_KEY_PATIENT_ZIPCODE";
+     String PREF_KEY_ORG_NAME = "PREF_KEY_ORG_NAME";
+     String PREF_KEY_PROVIDER_NAME = "PREF_KEY_PROVIDER_NAME";
+
      String PREF_KEY_BP_DEVICE_NAME = "PREF_KEY_BP_DEVICE_NAME";
      String PREF_KEY_BP_DEVICE_ADDRESS = "PREF_KEY_BP_DEVICE_ADDRESS";
      String PREF_KEY_BP_DEVICE_UUID = "PREF_KEY_BP_DEVICE_UUID";
+
+     String PREF_KEY_BP_DEVICE_NAME_iHealthbp3l = "PREF_KEY_BP_DEVICE_NAME_iHealthbp3l";
+     String PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l = "PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l";
+
+
+
+     // edit by sohit
+     void setPrefKeyPatientState(String state);
+     String getPrefKeyPatientState();
+
+     void setPrefKeyPatientCity(String city);
+     String getPrefKeyPatientCity();
+
+     void setPrefKeyPatientZipcode(String zipcode);
+     String getPrefKeyPatientZipcode();
+
+     void setPrefKeyOrgName(String orgName);
+     String getPrefKeyOrgName();
+
+     void setPrefKeyProviderName(String providerName);
+     String getPrefKeyProviderName();
+
 
      void clearSharedPref();
 
@@ -46,6 +76,8 @@ public interface PreferencesHelperInterface {
      String getCurrentUserName();
 
      void setCurrentUserName(String userName);
+
+
 
 
      String getUserFirstName();
@@ -120,5 +152,10 @@ public interface PreferencesHelperInterface {
      void setPrefKeyProfileImg(String url);
 
      String getPrefKeyProfileImg();
+
+     String getDeviceName_iHealthbp3l();
+     void setDeviceName_iHealthbp3l(String name) ;
+     String getDeviceAddress_iHealthbp3l() ;
+     void setDeviceAddress_iHealthbp3l(String address) ;
 
 }

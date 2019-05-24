@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_action_person"
                 android:drawableTint="#968F8F"
-                android:hint="First Name"
+                android:hint="First Name*"
                 android:singleLine="true"
                 android:text=""
                 android:textSize="@dimen/input_text_size" />
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_action_person"
                 android:drawableTint="#968F8F"
-                android:hint="Last Name"
+                android:hint="Last Name*"
                 android:singleLine="true"
                 android:text=""
                 android:textSize="@dimen/input_text_size" />
@@ -97,7 +97,7 @@
                 android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_action_email"
                 android:drawableTint="#968F8F"
-                android:hint="Email"
+                android:hint="Email*"
                 android:singleLine="true"
                 android:focusable="false"
                 android:clickable="false"
@@ -119,8 +119,30 @@
                 android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_action_date"
                 android:drawableTint="#968F8F"
-                android:hint="Date of birth"
+                android:hint="Date of birth*"
                 android:singleLine="true"
+                android:clickable="true"
+                android:focusable="false"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_gender"
+                android:drawableTint="#968F8F"
+                android:hint="Gender*"
+                android:singleLine="true"
+                android:maxLength="20"
                 android:clickable="true"
                 android:focusable="false"
                 android:text=""
@@ -140,9 +162,68 @@
                 android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_action_location"
                 android:drawableTint="#968F8F"
-                android:hint="Address"
+                android:hint="Address*"
                 android:singleLine="true"
                 android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_location"
+                android:drawableTint="#968F8F"
+                android:hint="State*"
+                android:clickable="true"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_location"
+                android:drawableTint="#968F8F"
+                android:hint="City*"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/input_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+                android:id="@+id/edit_zipcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/ic_action_location"
+                android:drawableTint="#968F8F"
+                android:hint="ZipCode*"
+                android:singleLine="true"
+                android:text=""
+                android:inputType="number"
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>
 
@@ -159,7 +240,7 @@
                 android:drawablePadding="5dp"
                 android:drawableRight="@drawable/ic_action_phone"
                 android:drawableTint="#968F8F"
-                android:hint="Phone"
+                android:hint="Phone*"
                 android:singleLine="true"
                 android:maxLength="10"
                 android:inputType="number"
@@ -210,35 +291,15 @@
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+
+
+     <!--   <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
             >
 
-            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
-                android:id="@+id/edit_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="5dp"
-                android:drawableRight="@drawable/ic_action_gender"
-                android:drawableTint="#968F8F"
-                android:hint="Gender"
-                android:singleLine="true"
-                android:maxLength="20"
-                android:clickable="true"
-                android:focusable="false"
-                android:text=""
-                android:textSize="@dimen/input_text_size" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
-            >
-
-            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+           &lt;!&ndash; <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
                 android:id="@+id/edit_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -248,8 +309,21 @@
                 android:hint="About"
                 android:maxLines="10"
                 android:text=""
-                android:textSize="@dimen/input_text_size" />
-        </android.support.design.widget.TextInputLayout>
+                android:textSize="@dimen/input_text_size" />&ndash;&gt;
+        </android.support.design.widget.TextInputLayout>-->
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/round_bg_textview"
+            android:gravity="center"
+            android:padding="@dimen/sign_in_button_padding"
+            android:text="Save"
+            android:visibility="visible"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/get_a_pay_text_size" />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:id="@+id/btn_signup"

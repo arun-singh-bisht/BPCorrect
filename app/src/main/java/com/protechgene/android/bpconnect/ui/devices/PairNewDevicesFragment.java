@@ -3,12 +3,14 @@ package com.protechgene.android.bpconnect.ui.devices;
 import android.arch.lifecycle.ViewModelProviders;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
 import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
@@ -22,8 +24,10 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
     public static final String FRAGMENT_TAG = "PairNewDevicesFragment";
     private DevicesAdapter bpReadingAdapter;
     RippleBackground rippleBackground;
-    private PairNewDeviceViewModel pairNewDeviceViewModel;
-    private BluetoothDevice device;
+    private PairDeviceViewModelInterface pairNewDeviceViewModel;
+    private DeviceCharacteristic deviceCharacteristic;
+    private String deviceModel = "";
+
 
     @BindView(R.id.image_found_device)
     View deviceFound;
@@ -39,8 +43,20 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
 
     @Override
     protected void initialize() {
-        pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModel.class);
-        pairNewDeviceViewModel.setNavigator(this);
+        //Get Device Model Type
+        Bundle arguments = getArguments();
+        deviceModel = arguments.getString("deviceModel");
+
+        if(deviceModel.equalsIgnoreCase("A&D__651BLE"))
+        {
+            pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModel.class);
+            ((PairNewDeviceViewModel)pairNewDeviceViewModel).setNavigator(this);
+            //pairNewDeviceViewModel.initScan(getBaseActivity());
+        }else if(deviceModel.equalsIgnoreCase("iHealth_BP3L"))
+        {
+            pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelBP3N.class);
+            ((PairNewDeviceViewModelBP3N)pairNewDeviceViewModel).setNavigator(this);
+        }
 
         initView();
     }
@@ -53,7 +69,6 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
 
     private void initView()
     {
-
         TextView txt_title =  getView().findViewById(R.id.txt_title);
         txt_title.setText("Pair New Device");
 
@@ -84,17 +99,17 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
     }
 
     @Override
-    public void onDeviceFound(BluetoothDevice device) {
+    public void onDeviceFound(DeviceCharacteristic deviceCharacteristic) {
         deviceFound.setVisibility(View.VISIBLE);
         TextView text_device_name = (TextView)getView().findViewById(R.id.text_device_name);
-        text_device_name.setText(device.getName());
-        this.device = device;
+        text_device_name.setText(deviceCharacteristic.getDeviceName());
+        this.deviceCharacteristic = deviceCharacteristic;
     }
 
     @OnClick(R.id.image_found_device)
     public void onSelectDevice()
     {
-        pairNewDeviceViewModel.connectToDevice(device.getAddress());
+        pairNewDeviceViewModel.connectToDevice(deviceCharacteristic.getDeviceName(),deviceCharacteristic.getDeviceMac(),"");
     }
 
     @Override

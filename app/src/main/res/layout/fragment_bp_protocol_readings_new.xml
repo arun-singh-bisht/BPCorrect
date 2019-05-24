@@ -267,7 +267,7 @@
                     <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Not sufficient records"
+                        android:text="Average Can't be Calculated Yet"
                         android:gravity="center"
                         android:textSize="12sp"
                         android:layout_gravity="center_horizontal"

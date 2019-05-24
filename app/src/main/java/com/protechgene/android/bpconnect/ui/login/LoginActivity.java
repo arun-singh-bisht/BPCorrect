@@ -42,8 +42,8 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
     @Override
     @OnClick(R.id.btn_login)
     public void login() {
-        String email = edit_email.getText().toString();
-        String password = edit_password.getText().toString();
+        String email = edit_email.getText().toString().trim();
+        String password = edit_password.getText().toString().trim();
 
         showProgress("Please wait...");
         mLoginViewModel.login(email, password);

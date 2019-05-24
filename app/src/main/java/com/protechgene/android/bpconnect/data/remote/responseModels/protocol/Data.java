@@ -23,6 +23,7 @@ public class Data {
     @SerializedName("status")
     private String status;
 
+
     public String getEndDate() {
         return endDate;
     }

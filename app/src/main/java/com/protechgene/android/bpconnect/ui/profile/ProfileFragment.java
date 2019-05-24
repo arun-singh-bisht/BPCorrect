@@ -111,7 +111,9 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
         text_profile_name.setText(name);
         text_email.setText(mProfileFragmentViewModel.getUserEmail());
         text_dob.setText(mProfileFragmentViewModel.getUserDoB());
-        text_address.setText(mProfileFragmentViewModel.getUserAddress());
+
+        String address = mProfileFragmentViewModel.getUserAddress()+" "+mProfileFragmentViewModel.getUserCity()+" "+mProfileFragmentViewModel.getUserState()+" "+mProfileFragmentViewModel.getUserZipcode();
+        text_address.setText(address);
         text_mobile.setText(mProfileFragmentViewModel.getUserMobile());
         text_about.setText(mProfileFragmentViewModel.getUserAbout());
 
@@ -154,7 +156,7 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
         {
             Date date1= null;
             try {
-                date1 = new SimpleDateFormat("yyyy-mm-dd").parse(userDoB);
+                date1 = new SimpleDateFormat("mm-dd-yyyy").parse(userDoB);
                 userDoB = DateUtils.getAge(date1)+" yr";
             } catch (ParseException e) {
                 e.printStackTrace();

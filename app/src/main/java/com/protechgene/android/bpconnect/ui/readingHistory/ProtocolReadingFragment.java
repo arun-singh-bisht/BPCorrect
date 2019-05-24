@@ -160,8 +160,8 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
                 text_sys_dia.setText(avgSys+"/"+avgDia);
                 text_pulse.setText(avgPulse+"");
                 text_total_readings_value.setText(totalReadings+"");
-                text_reading_taken.setText(taken+"");
-                text_reading_missed.setText(missed+"");
+                text_reading_taken.setText(taken+"  of  28");
+                text_reading_missed.setText(missed+"  of 28");
 
                 seekbar.setCurProcess(taken);
                 text_progress_percentage.setText((taken*100)/totalReadings +"%");

@@ -1,11 +1,26 @@
 package com.protechgene.android.bpconnect.ui.home;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -92,9 +107,13 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                         openRemiderFragment();
                     }
                 });
+            }else
+            {
+                //Syn History Reading Data
+                //showProgress("Syn app data...");
+                mHomeViewModel.synHistoryData();
             }
-            //Syn History Reading Data
-            mHomeViewModel.synHistoryData();
+
 
         }
     }
@@ -107,8 +126,94 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @OnClick(R.id.card_measure_bp)
     public void openMeasureBPFragment() {
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new MeasureBPFragmentNew(),MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
-    }
+
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Caution");
+        alertDialog.setMessage("It's important to rest for 5 minutes before measuring your blood pressure to get an accurate reading.");
+        alertDialog.setPositiveButton("Ready to check my BP", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new MeasureBPFragmentNew(),MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
+            }
+        });
+
+
+        alertDialog.setNegativeButton("Start 5-minute timer", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+
+                dialog.dismiss();
+
+                Dialog dialog1 = new Dialog(getContext());
+                 View view = LayoutInflater.from(getContext()).inflate(R.layout.count_down_layout_dialog, null);
+                 dialog1.setCancelable(false);
+                dialog1.setContentView(view);
+
+                dialog1.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                Window window = dialog1.getWindow();
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                  TextView tv = (TextView) dialog1.findViewById(R.id.count_down_tv);
+                final VideoView videoView = dialog1.findViewById(R.id.video_view);
+                ImageView close_btn = (ImageView) dialog1.findViewById(R.id.close_btn);
+                        videoView.setBackgroundColor(getResources().getColor(android.R.color.black));
+                final ProgressBar progressBar = (ProgressBar) dialog1.findViewById(R.id.dailog_progress_bar);
+                close_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                    }
+                });
+                Uri uri = Uri.parse("http://67.211.223.164:8080/video/bp_video.mp4");
+                videoView.setVideoURI(uri);
+                progressBar.setVisibility(View.VISIBLE);
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        // TODO Auto-generated method stub
+                        mp.start();
+                        mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                            @Override
+                            public void onVideoSizeChanged(MediaPlayer mp, int arg1,
+                                                           int arg2) {
+                                videoView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                progressBar.setVisibility(View.GONE);
+                                mp.start();
+                            }
+                        });
+                    }
+                });
+
+                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        videoView.stopPlayback();
+                        //dialog1.dismiss();
+                    }
+                });
+                dialog1.show();
+
+                new CountDownTimer(1000*60*5, 1000) {
+                    public void onTick(long millisUntilFinished) {
+
+                        long min = millisUntilFinished/(1000*60);
+                        long sec = (millisUntilFinished%(1000*60))/1000;
+
+                        String second = (sec < 10)? "0"+sec : ""+sec;
+                        tv.setText("Time Left - 0"+min+":"+second);
+                    }
+
+                    public void onFinish() {
+                        videoView.stopPlayback();
+                        dialog1.dismiss();
+                        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new MeasureBPFragmentNew(),MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
+                    }
+                }.start();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+        }
 
     @OnClick(R.id.card_readings)
     public void openReadingsFragment() {
@@ -198,10 +303,18 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void historyDataSyncStatus(boolean status) {
-        if(status)
-            getBaseActivity().showSnakeBar("App Data Sync Successful");
-        else
-            getBaseActivity().showSnakeBar("App Data Sync Failure");
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                if(status)
+                    getBaseActivity().showSnakeBar("App Data Sync Successful");
+                else
+                    getBaseActivity().showSnakeBar("App Data Sync Failure");
+            }
+        });
+
+
     }
 
 

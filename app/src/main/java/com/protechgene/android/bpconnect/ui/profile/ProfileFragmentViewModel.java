@@ -71,4 +71,12 @@ public class ProfileFragmentViewModel extends BaseViewModel<ProfileFragmentNavig
     {
         return getRespository().getPrefKeyProfileImg();
     }
+
+    public String getUserState(){return getRespository().getPrefKeyPatientState(); }
+
+    public String getUserCity(){return getRespository().getPrefKeyPatientCity(); }
+
+    public String getUserZipcode(){return getRespository().getPrefKeyPatientZipcode(); }
+
+
 }

@@ -1,7 +1,10 @@
 package com.protechgene.android.bpconnect.ui.devices;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.Utils.GpsUtils;
@@ -18,6 +22,8 @@ import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,15 +95,38 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
         gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {
-                if(isGPSEnable)
-                    openScanningScreen();
+                if(isGPSEnable) {
+                    openScanningScreen(0);
+                    //showDeviceMenu();
+                }
             }
         });
     }
 
-    private void openScanningScreen()
+    private void openScanningScreen(int forModel)
     {
-        FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,new PairNewDevicesFragment(),PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
+        PairNewDevicesFragment pairNewDevicesFragment = new PairNewDevicesFragment();
+        Bundle bundle = new Bundle();
+
+
+        if(forModel==0)
+        {
+            //for A&D Device
+            bundle.putString("deviceModel","A&D__651BLE");
+            pairNewDevicesFragment.setArguments(bundle);
+            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
+        }else if(forModel==1)
+        {
+            //for iHealth BP3L
+            boolean isPass = deviceFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
+            if (isPass) {
+                bundle.putString("deviceModel","iHealth_BP3L");
+                pairNewDevicesFragment.setArguments(bundle);
+                FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
+            } else {
+                getBaseActivity().showSnakeBar("Not authorized to access this device.");
+            }
+        }
     }
 
     @Override
@@ -127,6 +156,8 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
     @Override
     public void pairedDevices(List<BPDeviceModel> bpDeviceList) {
 
+
+
         if (bpDeviceList.size()==0)
             text_empty_msg.setVisibility(View.VISIBLE);
         else
@@ -138,8 +169,33 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GpsUtils.GPS_REQUEST && resultCode==getBaseActivity().RESULT_OK)
-            openScanningScreen();
+        {
+            showDeviceMenu();
+            //openScanningScreen(0);
+        }
+
 
         Log.d("onActivityResult",""+requestCode+" "+resultCode);
+    }
+
+
+    private void showDeviceMenu()
+    {
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setTitle("Select Model");
+
+        // add a list
+        final String[] gender = {"A&D UA-651BLE", "iHealth BP3L"};
+        builder.setItems(gender, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openScanningScreen(which);
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -13,6 +13,56 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     }
 
     @Override
+    public void setPrefKeyPatientState(String state) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_STATE,state).apply();
+    }
+
+    @Override
+    public String getPrefKeyPatientState() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_STATE,"");
+    }
+
+    @Override
+    public void setPrefKeyPatientCity(String city) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_CITY,city).apply();
+    }
+
+    @Override
+    public String getPrefKeyPatientCity() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_CITY,"");
+    }
+
+    @Override
+    public void setPrefKeyPatientZipcode(String zipcode) {
+        mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ZIPCODE,zipcode).apply();
+    }
+
+    @Override
+    public String getPrefKeyPatientZipcode() {
+        return mSharedPreferences.getString(PREF_KEY_PATIENT_ZIPCODE,"");
+    }
+
+    @Override
+    public void setPrefKeyOrgName(String orgName) {
+        mSharedPreferences.edit().putString(PREF_KEY_ORG_NAME,orgName).apply();
+    }
+
+    @Override
+    public String getPrefKeyOrgName() {
+        return mSharedPreferences.getString(PREF_KEY_ORG_NAME,"");
+    }
+
+    @Override
+    public void setPrefKeyProviderName(String providerName) {
+        mSharedPreferences.edit().putString(PREF_KEY_PROVIDER_NAME,providerName);
+    }
+
+    @Override
+    public String getPrefKeyProviderName() {
+        return mSharedPreferences.getString(PREF_KEY_PROVIDER_NAME,"");
+    }
+
+    @Override
     public void clearSharedPref() {
         mSharedPreferences.edit().clear().commit();
     }
@@ -237,5 +287,25 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     @Override
     public String getPrefKeyProfileImg() {
         return mSharedPreferences.getString(PREF_KEY_PROFILE_IMG, "");
+    }
+
+    @Override
+    public String getDeviceName_iHealthbp3l() {
+        return mSharedPreferences.getString(PREF_KEY_BP_DEVICE_NAME_iHealthbp3l, "");
+    }
+
+    @Override
+    public void setDeviceName_iHealthbp3l(String name) {
+        mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_NAME_iHealthbp3l, name).apply();
+    }
+
+    @Override
+    public String getDeviceAddress_iHealthbp3l() {
+        return mSharedPreferences.getString(PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l, "");
+    }
+
+    @Override
+    public void setDeviceAddress_iHealthbp3l(String address) {
+        mSharedPreferences.edit().putString(PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l, address).apply();
     }
 }

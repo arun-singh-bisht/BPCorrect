@@ -84,13 +84,16 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                         respository.setUserLastName(profileResponse.getData().get(0).getLastname());
                         respository.setPatientGender(profileResponse.getData().get(0).getGender());
                         respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
-                        respository.setPatientDOB(profileResponse.getData().get(0).getDob());
+                        // edit by sohit covertdob
+                        respository.setPatientDOB(convertdob(profileResponse.getData().get(0).getDob()));
                         respository.setPatientMobile(profileResponse.getData().get(0).getMobile1());
-                        respository.setPatientId(profileResponse.getData().get(0).getPatientId().toString());
+                        respository.setPatientId(profileResponse.getData().get(0).getPatientId()+"");
                         respository.setPatientWeight(profileResponse.getData().get(0).getWeight());
                         respository.setPatientHeight(profileResponse.getData().get(0).getHeight());
                         respository.setPatientAbout(profileResponse.getData().get(0).getAddress2());
                         respository.setPrefKeyProfileImg(profileResponse.getData().get(0).getPhoto_url());
+                        respository.setPrefKeyOrgName(profileResponse.getData().get(0).getOrg_name());
+                        respository.setPrefKeyProviderName(profileResponse.getData().get(0).getProvider());
 
                         getNavigator().showProfileDetails();
                     }
@@ -104,88 +107,25 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
     }
 
-    public void checkActiveProtocol()
-    {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                List<ProtocolModel> allProtocol = getRespository().getAllProtocol();
-
-                if(allProtocol==null || allProtocol.size()==0)
-                    getProtocolFromServer();
-                else
-                    getNavigator().isProtocolExists(true);
-            }
-        });
+    // edit by sohit
+    public String convertdob(String dob) {
+        if(dob==null)
+            return null;
+        String ar[] = dob.split("-");
+        return ar[1]+"-"+ar[2]+"-"+ar[0];
     }
 
-    private void getProtocolFromServer()
-    {
-        String accessToken = getRespository().getAccessToken();
-        String userId = getRespository().getCurrentUserId();
-
-        disposables.add(getRespository().getProtocolDetail(accessToken,userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-
-                    }
-                })
-                .subscribe(new Consumer<GetProtocolResponse>() {
-                    @Override
-                    public void accept(GetProtocolResponse protocolResponse) throws Exception {
-
-                        //Throwable throwable = new Throwable("Data Syn to server");
-                        //getNavigator().handleError(throwable);
-                        if(protocolResponse.getData().get(0).getProtocolId() == null) {
-                            getNavigator().isProtocolExists(false);
-                        }
-                        else
-                        {
-                            Data data = protocolResponse.getData().get(0);
-
-                            String startDate = data.getStartDate();
-                            startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(startDate) * 1000,"MMM dd,yyyy");
-
-                            String endDate = data.getEndDate();
-                            endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000,"MMM dd,yyyy");
-
-                            final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,data.getMorningAlarm(),data.getEveningAlarm(),true);
-                            protocolModel.setProtocolCode(data.getProtocolId());
-
-                            //Save new protocol in DB
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getRespository().addNewProtocol(protocolModel);
-                                    getNavigator().isProtocolExists(true);
-                                }
-                            });
-                        }
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        getNavigator().isProtocolExists(false);
-                    }
-                }));
-    }
 
     public void synHistoryData()
     {
 
         if(!getRespository().isHistoryDataSync())
         {
-            String accessToken = getRespository().getAccessToken();
-            String currentUserId = getRespository().getCurrentUserId();
-            String fromDay = "1546300800"; // 1 January 2019 00:00:00
-            String toDay = (System.currentTimeMillis() + (5*60*60*1000))/1000 +"";
-            String noDay = "30";
 
-            disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
+            String accessToken = getRespository().getAccessToken();
+            String userId = getRespository().getCurrentUserId();
+
+            disposables.add(getRespository().getProtocolDetail(accessToken,userId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(new Consumer<Disposable>() {
@@ -194,55 +134,124 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
                         }
                     })
-                    .subscribe(new Consumer<BpReadingsResponse>() {
+                    .subscribe(new Consumer<GetProtocolResponse>() {
                         @Override
-                        public void accept(BpReadingsResponse bpReadingsResponse) throws Exception {
+                        public void accept(GetProtocolResponse protocolResponse) throws Exception {
 
-                            //Save user Details
-                            List<Chartdata> chartdata = bpReadingsResponse.getData().get(0).getChartdata();
+                            if(protocolResponse.getData().get(0).getProtocolId() == null) {
+                                //getNavigator().isProtocolExists(false,null);
+                            }
+                            else {
+                                Data data = protocolResponse.getData().get(0);
 
-                            List<ActualValue> actualValues = new ArrayList<>();
-                            for(int i=0;i<chartdata.size();i++)
-                            {
-                                actualValues.addAll(chartdata.get(i).getActualValues());
+                                String startDate = data.getStartDate();
+                                startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(startDate) * 1000, "MMM dd,yyyy");
+
+                                String endDate = data.getEndDate();
+                                endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000, "MMM dd,yyyy");
+
+                                final ProtocolModel protocolModel = new ProtocolModel(0, startDate, endDate, data.getMorningAlarm(), data.getEveningAlarm(), true);
+                                protocolModel.setProtocolCode(data.getProtocolId());
+
+
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //getRespository().addNewProtocol(protocolModel);
+                                        //Remove all Previous Data
+                                        getRespository().deleteAllProtocol();
+                                        getRespository().deleteAllHealthRecords();
+                                        //Save new protocol in DB
+                                        getRespository().addNewProtocol(protocolModel);
+                                    }
+                                });
+
                             }
 
-                            //Save InDB
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    for(int i=0;i<actualValues.size();i++)
-                                    {
-                                        ActualValue actualValue = actualValues.get(i);
-
-                                        HealthReading healthReading = new HealthReading();
-                                        healthReading.setSystolic(actualValue.getSBP());
-                                        healthReading.setDiastolic(actualValue.getDBP());
-                                        healthReading.setLogTime((Long.parseLong(actualValue.getTimestamp())*1000)+"");
-                                        healthReading.setReading_time((Long.parseLong(actualValue.getTimestamp())*1000));
-                                        healthReading.setPulse(actualValue.getPULSE());
-                                        healthReading.setSync(true);
-                                        healthReading.setIs_abberant(actualValue.getIs_abberant());
-                                        healthReading.setProtocol_id(actualValue.getProtocol_id());
-
-                                        getRespository().addNewHealthRecord(healthReading);
-                                    }
-
-                                    getNavigator().historyDataSyncStatus(true);
-                                    getRespository().setHistoryDataSyncStatus(true);
-                                }
-                            });
-
-
+                            synBPReadingData();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
 
+                            //getNavigator().handleError(throwable);
                             getNavigator().historyDataSyncStatus(false);
                         }
                     }));
+        }else
+        {
+            getNavigator().historyDataSyncStatus(true);
         }
+
+    }
+
+    public void synBPReadingData()
+    {
+        String accessToken = getRespository().getAccessToken();
+        String currentUserId = getRespository().getCurrentUserId();
+        String fromDay = "1546300800"; // 1 January 2019 00:00:00
+        String toDay = (System.currentTimeMillis() + (5*60*60*1000))/1000 +"";
+        String noDay = "30";
+
+        disposables.add(getRespository().getBpReadings(accessToken, currentUserId, fromDay, toDay, noDay)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<BpReadingsResponse>() {
+                    @Override
+                    public void accept(BpReadingsResponse bpReadingsResponse) throws Exception {
+
+                        //Save user Details
+                        List<Chartdata> chartdata = bpReadingsResponse.getData().get(0).getChartdata();
+
+                        List<ActualValue> actualValues = new ArrayList<>();
+                        for(int i=0;i<chartdata.size();i++)
+                        {
+                            actualValues.addAll(chartdata.get(i).getActualValues());
+                        }
+
+                        //Save InDB
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for(int i=0;i<actualValues.size();i++)
+                                {
+                                    ActualValue actualValue = actualValues.get(i);
+
+                                    HealthReading healthReading = new HealthReading();
+                                    healthReading.setSystolic(actualValue.getSBP());
+                                    healthReading.setDiastolic(actualValue.getDBP());
+                                    healthReading.setLogTime((Long.parseLong(actualValue.getTimestamp())*1000)+"");
+                                    healthReading.setReading_time((Long.parseLong(actualValue.getTimestamp())*1000));
+                                    healthReading.setPulse(actualValue.getPULSE());
+                                    healthReading.setSync(true);
+                                    healthReading.setIs_abberant(actualValue.getIs_abberant());
+                                    healthReading.setProtocol_id(actualValue.getProtocol_id());
+
+                                    getRespository().addNewHealthRecord(healthReading);
+                                }
+
+
+                                getRespository().setHistoryDataSyncStatus(true);
+                                getNavigator().historyDataSyncStatus(true);
+                            }
+
+                        });
+
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                        getNavigator().historyDataSyncStatus(false);
+                    }
+                }));
     }
 }

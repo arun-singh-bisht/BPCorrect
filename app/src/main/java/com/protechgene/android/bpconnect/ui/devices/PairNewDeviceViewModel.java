@@ -15,12 +15,13 @@ import android.util.Log;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.ADGattUUID;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
+import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 import java.lang.reflect.Method;
 
 
-public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator> {
+public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator> implements PairDeviceViewModelInterface {
 
 
     private Context context;
@@ -134,6 +135,7 @@ public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator
             }
         }
     };
+
 
     public void initScan(Context context)
     {
@@ -274,7 +276,10 @@ public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator
                     editor.commit();*/
 
                     Log.d("onFindDevice","DEVICE_SCAN_MODE_BP "+device.getName()+" "+device.getUuids()+" "+device.getAddress());
-                    getNavigator().onDeviceFound(device);
+                    DeviceCharacteristic deviceCharacteristic = new DeviceCharacteristic();
+                    deviceCharacteristic.setDeviceName(device.getName());
+                    deviceCharacteristic.setDeviceMac(device.getAddress());
+                    getNavigator().onDeviceFound(deviceCharacteristic);
                 }
 
                 if(mBleService != null) {
@@ -284,14 +289,13 @@ public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator
         }
     }
 
-    public void connectToDevice(String address)
+    public void connectToDevice(String deviceName,String mac,String username)
     {
         if(mBleService != null) {
-            mBleService.connectDevice(address);
-            BluetoothDevice bluetoothDevice = BleConnectService.getBluetoothDevice(context, address);
+            mBleService.connectDevice(mac);
+            BluetoothDevice bluetoothDevice = BleConnectService.getBluetoothDevice(context, mac);
             getRespository().setBPDeviceName(bluetoothDevice.getName());
             getRespository().setBPDeviceAddress(bluetoothDevice.getAddress());
-            //getRespository().setBPDeviceUUID(bluetoothDevice.getUuids());
         }
     }
 
@@ -324,8 +328,6 @@ public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator
             // to do Nothing
         }
     }
-
-
 
     private void onServiceDisconnected() {
         // OverRide Method

@@ -40,4 +40,7 @@
     <color name="reading_hyper_stage_second">#ff5959</color>
     <color name="reading_hyper_stage_crisis">#5a3921</color>
 
+
+    <color name="line_color">#e3e2e2</color>
+
 </resources>
