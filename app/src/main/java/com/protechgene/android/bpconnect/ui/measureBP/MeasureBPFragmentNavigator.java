@@ -19,6 +19,7 @@ public interface MeasureBPFragmentNavigator {
     void showIndicator(String message);
     void dismissIndicator();
     void result(HealthReading healthReading);
+    void onReadingError(String msg);
 
     void isReadingForProtocol_Result(boolean b,String protocolCode,int readingTaken);
 }

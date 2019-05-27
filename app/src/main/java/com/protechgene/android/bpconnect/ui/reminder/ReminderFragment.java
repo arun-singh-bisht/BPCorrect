@@ -72,6 +72,16 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         reminderViewModel.createProtocol(getBaseActivity());
     }
 
+
+    @OnClick(R.id.save_btn)
+    public void onsaveClick()
+    {
+        FragmentUtil.removeFragment(getBaseActivity());
+    }
+
+
+
+
     @OnClick(R.id.image_edit_morning_alarm)
     public void onEditMorningAlarm()
     {

@@ -167,13 +167,15 @@
                 android:tint="#ffffff"
                 />
 
-            <ImageView
+            <Button
                 android:id="@+id/image_edit_morning_alarm"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ic_action_edit"
                 android:layout_alignParentRight="true"
-                android:tint="#ffffff"
+                android:background="@drawable/edit_button"
+                android:text="Edit"
+                android:textColor="@android:color/white"
                 android:padding="10dp"
                 android:visibility="visible"
                 android:layout_centerVertical="true"
@@ -235,73 +237,110 @@
         android:background="#7DB5D1"
         >
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_12sdp">
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/moon"
-                android:tint="#ffffff"
-                android:padding="8dp"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reminder_1_layout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
 
-            <ImageView
-                android:id="@+id/image_edit_evening_alarm"
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/moon"
+                    android:tint="#ffffff"
+                    android:padding="8dp"
+                    />
+
+                <Button
+                    android:id="@+id/image_edit_evening_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_action_edit"
+                    android:layout_alignParentRight="true"
+                    android:tint="#ffffff"
+                    android:background="@drawable/edit_button"
+                    android:text="Edit"
+                    android:textColor="@android:color/white"
+                    android:padding="10dp"
+                    android:layout_centerVertical="true"
+                    android:visibility="visible"
+                    />
+            </RelativeLayout>
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_edit"
-                android:layout_alignParentRight="true"
-                android:tint="#ffffff"
-                android:padding="10dp"
-                android:layout_centerVertical="true"
-                android:visibility="visible"
-                />
-        </RelativeLayout>
-
-
-        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Evening"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            >
-
-            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-                android:id="@+id/text_evening_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6:00"
-                android:textSize="45sp"
+                android:text="Evening"
+                android:id="@+id/reminder_evening"
+                app:layout_constraintTop_toBottomOf="@id/reminder_1_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
                 android:textColor="#ffffff"
-                android:layout_centerVertical="true"
-                />
-            <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PM"
-                android:textSize="25sp"
-                android:textColor="#ffffff"
-                android:layout_centerInParent="true"
+                android:textSize="16sp"
                 />
 
-            <Switch
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone"
-                />
+                android:layout_marginTop="10dp"
+                android:id="@+id/reminder_2_layout"
+                app:layout_constraintTop_toBottomOf="@id/reminder_evening"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                >
 
-        </RelativeLayout>
+                <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                    android:id="@+id/text_evening_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6:00"
+                    android:textSize="45sp"
+                    android:textColor="#ffffff"
+                    android:layout_centerVertical="true"
+                    />
+                <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PM"
+                    android:textSize="25sp"
+                    android:textColor="#ffffff"
+                    android:layout_centerInParent="true"
+                    />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/save_btn_layout"
+                android:text="Done"
+                android:textColor="@android:color/white"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reminder_2_layout" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
 
     </LinearLayout>
 

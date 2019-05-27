@@ -4,12 +4,9 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
@@ -111,8 +108,14 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 //measureBPFragmentViewModel.connectToDevice(getBaseActivity());
                 if(SELECTED_BP_MODEL!=null)
                 {
-                    //measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
-                    onDeviceConnected_iHealthBP3L(deviceName_BP3L,deviceMac__BP3L);
+                    if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_AND_UA_651BLE))
+                    {
+                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                    }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_IHEALTH_BP3L))
+                    {
+                        onDeviceConnected_iHealthBP3L(deviceName_BP3L,deviceMac__BP3L);
+                    }
+
                 }else
                 {
                     showBPDevicesMenu();
@@ -160,6 +163,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
 
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
+         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -321,7 +325,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     {
         if(rippleBackground!=null)
             rippleBackground.startRippleAnimation();
-        measureBPFragmentViewModel.startMeasuringBPFromBP3LDevice(deviceName_BP3L,deviceMac__BP3L);
+        measureBPFragmentViewModel.startMeasuringBPFromBP3LDevice(deviceName_BP3L,deviceMac__BP3L,isTypeProtocol,protocolId);
 
         doneButton.setText("Stop");
         doneButton.setVisibility(View.VISIBLE);
@@ -381,6 +385,34 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
 
     }
 
+    @Override
+    public void onReadingError(final String msg) {
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+
+                blood_pressure_tv.setVisibility(View.VISIBLE);
+                text_bp_reading.setVisibility(View.VISIBLE);
+                text_bp_reading.setText(msg);
+                text_heart_rate_reading.setText("-");
+
+                if(rippleBackground!=null)
+                    rippleBackground.stopRippleAnimation();
+
+                isReadingDone = true;
+                text_transfer_status.setVisibility(View.GONE);
+                text_wait_tv.setVisibility(View.GONE);
+                view_wait.setVisibility(View.GONE);
+                text_upper.setVisibility(View.GONE);
+                doneButton.setText("Done");
+                doneButton.setVisibility(View.VISIBLE);
+                doneButton.setTag("Done");
+
+            }
+        });
+    }
+
 
     private void activateCountDown()
     {
@@ -415,6 +447,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     public void onBackIconClick()
     {
         FragmentUtil.removeFragment(getBaseActivity());
+        //measureBPFragmentViewModel.sendDummyReading();
     }
 
     @OnClick(R.id.btn_done)

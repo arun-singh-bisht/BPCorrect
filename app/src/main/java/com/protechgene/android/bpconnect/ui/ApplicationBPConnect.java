@@ -9,14 +9,16 @@ import com.protechgene.android.bpconnect.Utils.NotificationUtil;
 public class ApplicationBPConnect extends Application {
 
     public static int PROTOCOL_MORNING_MINIMUM_TIME = 4; // 4:00 AM
-    public static int PROTOCOL_MORNING_MAXIMUM_TIME = 24; // 12:00 pM
-    public static int PROTOCOL_EVENING_MINIMUM_TIME = 13; // 4:00 PM
+    public static int PROTOCOL_MORNING_MAXIMUM_TIME = 12; // 12:00 pM
+    public static int PROTOCOL_EVENING_MINIMUM_TIME = 16; // 4:00 PM
     public static int PROTOCOL_EVENING_MAXIMUM_TIME = 24; // 12:00 AM
 
 
     public static long PROTOCOL_READING_ACCEPTED_TIME_WINDOW = 1000*60*15 ; //15 min
     public static String PROTOCOL_READING__MORNING = "PROTOCOL_READING__MORNING";
     public static String PROTOCOL_READING__EVENING = "PROTOCOL_READING__EVENING";
+
+    public static int SNOOZ_TIME = 10; // 10 Min.
 
     public static boolean isAlarmSoundEnabled = true;
     public static boolean isTodayIncluded = true;

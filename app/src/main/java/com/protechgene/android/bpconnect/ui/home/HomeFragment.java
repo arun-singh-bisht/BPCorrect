@@ -41,8 +41,12 @@ import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
 
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.SNOOZ_TIME;
 
 public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator,CustomAlertDialog.I_CustomAlertDialog,CustomAlertDialog.I_CustomAlertDialogThreeButton {
 
@@ -89,7 +93,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         if(isAlarmFired)
         {
-            alarmFireTime = args.getString("FireTime");
+            alarmFireTime = args.getString("alarmFireTime");
+            Log.d("HomeFragment","alarmFireTime "+alarmFireTime);
             String msg = "It's time to check your blood pressure. You can also snooz it for some time.";
             CustomAlertDialog.showThreeButtonDialog(getBaseActivity(),1001,msg,"Check Now","Snooz","Cancel",this);
         }else
@@ -149,12 +154,12 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                  dialog1.setCancelable(false);
                 dialog1.setContentView(view);
 
-                dialog1.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+               // dialog1.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 Window window = dialog1.getWindow();
                 window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                   TextView tv = (TextView) dialog1.findViewById(R.id.count_down_tv);
                 final VideoView videoView = dialog1.findViewById(R.id.video_view);
-                ImageView close_btn = (ImageView) dialog1.findViewById(R.id.close_btn);
+                TextView close_btn = (TextView) dialog1.findViewById(R.id.close_btn);
                         videoView.setBackgroundColor(getResources().getColor(android.R.color.black));
                 final ProgressBar progressBar = (ProgressBar) dialog1.findViewById(R.id.dailog_progress_bar);
                 close_btn.setOnClickListener(new View.OnClickListener() {
@@ -341,7 +346,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         //AlarmReceiver.deleteAllAlarm(MainActivity.this);
         //Log.d("onNegativeClick","All Alarm removed");
         //Set alarm for next 10 min
-        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 10);
+        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, SNOOZ_TIME);
         String[] split = newTime.split(":");
         Log.d("onNegativeClick","Setting Alarm from "+alarmFireTime +" To "+newTime);
         AlarmReceiver.setAlarm(getBaseActivity(),Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);

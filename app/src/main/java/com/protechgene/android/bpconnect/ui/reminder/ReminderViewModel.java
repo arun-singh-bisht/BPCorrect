@@ -139,18 +139,21 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 long k = DateUtils.compareTimeString(selectedMorningTime, currrentTime,"HH:mm");
                 Log.d("compareTimeString","compareTimeString :"+k);
 
-                int i =0;
+                int datOffset =0;
                 if(k<=0)
-                    i = 1;
+                    datOffset = 1;
                 else
-                    i = 0;
+                    datOffset = 0;
 
                 //Remove this
-                if(ApplicationBPConnect.isTodayIncluded)
-                    i =0;
+                //if(ApplicationBPConnect.isTodayIncluded)
+                  //  datOffset =0;
 
-                String startDate = DateUtils.getDateString(i, "MMM dd,yyyy");
-                String endDate = DateUtils.getDateString(6+i, "MMM dd,yyyy");
+                //String startDate = DateUtils.getDateString(datOffset, "MMM dd,yyyy");
+                //String endDate = DateUtils.getDateString(6+datOffset, "MMM dd,yyyy");
+
+                String startDate = DateUtils.getDateString(0, "MMM dd,yyyy");
+                String endDate = DateUtils.getDateString(6+0, "MMM dd,yyyy");
 
                 final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true);
                 String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId()+"_"+System.currentTimeMillis();
@@ -159,8 +162,15 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 getNavigator().onProtocolCreated(protocolModel);
 
                 //Set Alarm
-                String[] split = selectedMorningTime.split(":");
-                AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),i);
+                if(datOffset==0)
+                {
+                    String[] split = selectedMorningTime.split(":");
+                    AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                }else if(datOffset==1)
+                {
+                    String[] split = selectedEveningTime.split(":");
+                    AlarmReceiver.setAlarm(context,Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
+                }
 
                 //Save new protocol in DB
                 AsyncTask.execute(new Runnable() {
@@ -324,14 +334,14 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                     @Override
                     public void accept(ProfileResponse profileResponse) throws Exception {
 
-                        //Throwable throwable = new Throwable("Data Syn to server");
-                        //getNavigator().handleError(throwable);
+                        Throwable throwable = new Throwable("Data Syn to server");
+                        getNavigator().handleError(throwable);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
 
-                        //getNavigator().handleError(throwable);
+                        getNavigator().handleError(throwable);
                     }
                 }));
     }

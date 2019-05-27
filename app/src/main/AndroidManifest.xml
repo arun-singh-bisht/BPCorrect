@@ -54,6 +54,7 @@
             android:name=".ui.home.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
+            android:keepScreenOn="true"
             ></activity>
 
         <!--<service android:name=".data.ble.BluetoothLeService" android:enabled="true"/>-->

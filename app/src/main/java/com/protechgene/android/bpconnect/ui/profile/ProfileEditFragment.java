@@ -10,7 +10,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bikomobile.multipart.Multipart;
 import com.bumptech.glide.Glide;
+import com.edittextpicker.aliazaz.EditTextPicker;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.myhexaville.smartimagepicker.ImagePicker;
 import com.protechgene.android.bpconnect.R;
@@ -37,13 +41,15 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProfileEditFragment extends BaseFragment implements ProfileEditFragmentNavigator, DatePickerFragment.DatePickedListener {
+public class ProfileEditFragment extends BaseFragment implements ProfileEditFragmentNavigator, DatePickerFragment.DatePickedListener{
 
     public static final String FRAGMENT_TAG = "ProfileEditFragment";
     private ProfileEditFragmentViewModel mProfileEditFragmentViewModel;
@@ -62,7 +68,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     @BindView(R.id.edit_city)
     EditText edit_city;
     @BindView(R.id.edit_zipcode)
-    EditText edit_zipcode;
+    EditTextPicker edit_zipcode;
     @BindView(R.id.edit_state)
     EditText edit_state;
     String state_code = null;
@@ -92,7 +98,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 //    EditText edit_about;
     @BindView(R.id.camera_icon)
     View camera_icon;
-
+        int keyDel;
 
     boolean isProfileComplete = true;
     ImagePicker imagePicker;
@@ -165,7 +171,47 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
                     image_url).placeholder(R.drawable.default_pic).into(circularImageView_img);
 
 
+
+
     }
+
+
+
+//    @Override
+//    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        Log.d("asdf", "beforeTextChanged: s : "+s+", "+start+", count : "+count);
+//
+//    }
+//
+//    @Override
+//    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        Log.d("asdf", "onTextChanged: s : "+s+", "+start+", count : "+count);
+//        edit_zipcode.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//
+//                if (keyCode == KeyEvent.KEYCODE_DEL)
+//                    keyDel = 1;
+//                return false;
+//            }
+//        });
+//
+//        if (keyDel == 0) {
+//            int len = edit_zipcode.getText().length();
+//            if(len == 5) {
+//                edit_zipcode.setText(edit_zipcode.getText() + "-");
+//                edit_zipcode.setSelection(edit_zipcode.getText().length());
+//            }
+//        } else {
+//            keyDel = 0;
+//        }
+//
+//    }
+//
+//    @Override
+//    public void afterTextChanged(Editable s) {
+//
+//    }
 
     @Override
     public void setDefaultAddress(StateCityOptions stateCityOptions) {
@@ -429,4 +475,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
             }
         });
     }
+
+
+
 }

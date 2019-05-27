@@ -138,7 +138,7 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                         @Override
                         public void accept(GetProtocolResponse protocolResponse) throws Exception {
 
-                            if(protocolResponse.getData().get(0).getProtocolId() == null) {
+                            if(protocolResponse.getData() == null || protocolResponse.getData().size()==0 || protocolResponse.getData().get(0).getProtocolId() == null) {
                                 //getNavigator().isProtocolExists(false,null);
                             }
                             else {

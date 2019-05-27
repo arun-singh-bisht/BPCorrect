@@ -76,5 +76,10 @@ public class PairNewDeviceViewModelBP3N extends BaseViewModel<PairNewDeviceNavig
 
     }
 
+    @Override
+    public void onError(String msg) {
+
+    }
+
 
 }

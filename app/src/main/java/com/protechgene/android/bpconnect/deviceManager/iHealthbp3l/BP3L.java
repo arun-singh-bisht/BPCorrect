@@ -38,6 +38,7 @@ public class BP3L  {
     public interface BP3L_Callbacks
     {
         void onReadingResult(String sys,String dia,String pulse);
+        void onError(String msg);
     }
 
 
@@ -113,6 +114,7 @@ public class BP3L  {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                bp3L_callbacks.onError("Error! Not found proper reading.\nPlease try again.");
 
             } else if (BpProfile.ACTION_HISTORICAL_DATA_BP.equals(action)) {
                 String str = "";

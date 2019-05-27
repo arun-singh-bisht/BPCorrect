@@ -17,7 +17,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/tools"
         android:background="@color/bp_gray"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
     <LinearLayout
@@ -101,31 +101,31 @@
                     android:paddingRight="13dp"
                     >
 
-                    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-                        android:id="@+id/text_total_readings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total Readings"
-                        android:textSize="13sp"
-                        />
+                    <!--<com.protechgene.android.bpconnect.Utils.TitilliumWebTextView-->
+                        <!--android:id="@+id/text_total_readings"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Total Readings"-->
+                        <!--android:textSize="13sp"-->
+                        <!--/>-->
 
-                    <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-                        android:id="@+id/text_total_readings_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="28"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignBottom="@+id/text_total_readings"
-                        android:textSize="14sp"
+                    <!--<com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView-->
+                        <!--android:id="@+id/text_total_readings_value"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="28"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:layout_alignBottom="@+id/text_total_readings"-->
+                        <!--android:textSize="14sp"-->
 
-                        />
+                        <!--/>-->
 
                     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                         android:id="@+id/text_reading_taken"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Readings Taken"
-                        android:layout_below="@+id/text_total_readings"
+
                         android:layout_marginTop="7dp"
                         android:textSize="13sp"
                         />

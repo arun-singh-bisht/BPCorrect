@@ -36,7 +36,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         getSupportActionBar().hide(); // hide the title bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(layoutRes());
+
 
         //Initialize Butterknife for Base and Child View Binding
         ButterKnife.bind(this);

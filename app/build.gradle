@@ -85,4 +85,7 @@ dependencies {
     //iHealth support
     implementation files('libs/iHealthLibrary_2.5.1.jar')
     implementation files('libs/d2xx.jar')
+
+// masking edit text
+    implementation 'com.github.AliAzaz:Edittext-Library:1.0.1'
 }

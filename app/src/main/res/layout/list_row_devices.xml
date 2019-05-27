@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="110dp"
                 android:layout_height="90dp"
-                android:src="@drawable/s_watch"
+                android:src="@drawable/ic_pressure"
                 android:padding="10dp"
                 />
 

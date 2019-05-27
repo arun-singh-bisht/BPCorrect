@@ -45,6 +45,7 @@ public class IHealthDeviceController implements BP3L.BP3L_Callbacks {
         void onConnectionError_BP3L(String messg);
         void onDeviceDisconnected_BP3L();
         void onReadingResult(String sys,String dia,String pulse);
+        void onError(String msg);
     }
 
     public static boolean isAuthorizedToAccessDevice(Context context)
@@ -274,6 +275,11 @@ public class IHealthDeviceController implements BP3L.BP3L_Callbacks {
     @Override
     public void onReadingResult(String sys, String dia, String pulse) {
         iHealthCallback.onReadingResult(sys,dia,pulse);
+    }
+
+    @Override
+    public void onError(String msg) {
+        iHealthCallback.onError(msg);
     }
 
     public void stopMeaseureReading()

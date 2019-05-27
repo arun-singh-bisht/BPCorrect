@@ -46,7 +46,8 @@ public class AlarmReceiver  extends BroadcastReceiver {
         intentToStopAlarmSound.putExtra("ReceivedExtraType","STOP_ALARM_SOUND");
 
         //Show Notification status bar
-        Log.d("AlarmReceiver","Show Notification");
+        Log.d("AlarmReceiver","Show Notification FireTime "+alarmTime);
+
         new NotificationUtil().buildLocalNotification(context,intentToHomeScreen,intentToStopAlarmSound,1001,"Time to check BP");
 
         //Play Sound in loop

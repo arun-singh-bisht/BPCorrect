@@ -68,7 +68,7 @@ import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.readingU
 
 public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> implements iHealthCallback {
 
-
+    private String TAG = "MeasureBPFragmentViewModel";
 
     public static final int MEASU_DATA_TYPE_UNKNOW = -1;
     public static final int MEASU_DATA_TYPE_AM = 0;
@@ -495,13 +495,17 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     }
 
     private void doStopService() {
-        if (mIsBleReceiver) {
-            mContext.unregisterReceiver(bleServiceReceiver);
-            mIsBleReceiver = false;
+        try {
+            if (mIsBleReceiver) {
+                mContext.unregisterReceiver(bleServiceReceiver);
+                mIsBleReceiver = false;
+            }
+            Intent intent1 = new Intent(mContext, BleReceivedService.class);
+            mContext.stopService(intent1);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
-
-        Intent intent1 = new Intent(mContext, BleReceivedService.class);
-        mContext.stopService(intent1);
     }
 
 
@@ -970,28 +974,73 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         return final_birth_date_timestamp;
     }
 
-
     protected void onDestroy() {
+        try {
         getNavigator().dismissIndicator();
         doStopService();
-        try {
+
             //Register or UnRegister your broadcast receiver here
             mContext.unregisterReceiver(mMeasudataUpdateReceiver);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         }
-
     }
+
+
+    public void sendDummyReading()
+    {
+        for(int i=0;i<3;i++)
+        {
+            Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
+            lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(100,130)+"");
+            lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(80,100)+"");
+            lifetrackInfobean.setPulse(MathUtil.getRandomNumber(60,90)+"");
+            saveReading(lifetrackInfobean);
+        }
+    }
+
+    private List<Lifetrack_infobean> lifetrackInfobeanList = new ArrayList<>();
+    private Handler handler = new Handler();
 
     public void saveReading(final Lifetrack_infobean lifetrackInfobean) {
         //getNavigator().showIndicator("Processing data...");
-        Log.d("saveReading", "saveReading");
-        lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()) + "");
+        //Log.d(TAG, "new Reading "+lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic()+"/"+lifetrackInfobean.getPulse() +"/"+lifetrackInfobean.getDateTimeStamp());
+        //if(lifetrackInfobean.getSystolic().equalsIgnoreCase("2047"))
+          //  return;
 
+        lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()) + "");
+        Log.d(TAG, "1 new Reading To Save: "+lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic()+"/"+lifetrackInfobean.getPulse() +"/"+lifetrackInfobean.getDateTimeStamp());
+        lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()) + "");
+        lifetrackInfobeanList.add(lifetrackInfobean);
+
+        //handler.removeCallbacks(runnable);
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(runnable,6000);
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "executing... saveReading_backgroudProcess()");
+            saveReading_backgroudProcess();
+        }
+    };
+
+    private void saveReading_backgroudProcess()
+    {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+
+
+                if(lifetrackInfobeanList.size()==0 || lifetrackInfobeanList.get(lifetrackInfobeanList.size()-1).getSystolic().equalsIgnoreCase("2047"))
+                {
+                    Log.d(TAG, "saveReading_backgroudProcess lifetrackInfobean==null");
+                    getNavigator().onReadingError("Error! Not found proper reading.\nPlease try again.");
+                    return;
+                }
+                Lifetrack_infobean lifetrackInfobean = lifetrackInfobeanList.get(lifetrackInfobeanList.size()-1);
 
                 final HealthReading healthReading = new HealthReading();
 
@@ -1003,17 +1052,21 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 if (HH < PROTOCOL_MORNING_MINIMUM_TIME || (HH >= PROTOCOL_MORNING_MAXIMUM_TIME && HH < PROTOCOL_EVENING_MINIMUM_TIME) || HH >= PROTOCOL_EVENING_MAXIMUM_TIME) {
                     //yes It is aberrant reading
                     healthReading.setIs_abberant("1");
+                    Log.d(TAG, "2 saveReading_backgroudProcess setIs_abberant(\"1\")");
                 } else {
                     // During recommanded time zone
                     healthReading.setIs_abberant("0");
+                    Log.d(TAG, "2 saveReading_backgroudProcess setIs_abberant(\"0\")");
                 }
 
                 //case 2: Check for Protocol bound reading
 
                 if (measureReadingForProtocol) {
                     healthReading.setProtocol_id(protocolId);
+                    Log.d(TAG, "3 saveReading_backgroudProcess setProtocol_id(protocolId)");
                 } else {
                     healthReading.setProtocol_id("");
+                    Log.d(TAG, "3 saveReading_backgroudProcess setProtocol_id(\"\")");
                 }
 
                 //Set Other Details
@@ -1027,18 +1080,27 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
 
                 if (isReadingTaken)
-                    return;
+                  return;
 
                 //Save This reading IN DB
-                Log.d("saveReading", "addNewHealthRecord");
-                getRespository().addNewHealthRecord(healthReading);
-                //Deliver Reading to UI
-                getNavigator().result(healthReading);
 
-                if (readingUploadToServer)
+                getRespository().addNewHealthRecord(healthReading);
+                Log.d(TAG, "4 saveReading_backgroudProcess addNewHealthRecord(healthReading)");
+
+                //Deliver Reading to UI
+                if(getNavigator()!=null) {
+                    getNavigator().result(healthReading);
+                    Log.d(TAG, "5 result(healthReading)");
+                }
+
+                if (readingUploadToServer) {
+                    Log.d(TAG, "6 saveReading_backgroudProcess uploadReadingToServer(healthReading)");
                     uploadReadingToServer(healthReading);
+                }
 
                 isReadingTaken = true;
+                lifetrackInfobeanList.clear();
+                lifetrackInfobean = null;
             }
         });
     }
@@ -1064,6 +1126,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 jsonObject.addProperty("device_mac_address", "12:34:56:78:90");
                 jsonObject.addProperty("is_abberant", healthReading.getIs_abberant());
                 jsonObject.addProperty("protocol_id", healthReading.getProtocol_id());
+                jsonObject.addProperty("protocol_no", "0");
                 jsonArray.add(jsonObject);
 
             } catch (Exception e) {
@@ -1075,7 +1138,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             return;
 
         String json = jsonArray.toString();
-        Log.d("createDummyReadings", "createDummyReadings:" + json);
+        Log.d(TAG, "7 uploadReadingToServer jsonArray: "+json);
 
         disposables.add(getRespository().addBpReadings(accessToken, jsonArray)
                 .subscribeOn(Schedulers.io())
@@ -1092,12 +1155,14 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
                         //Throwable throwable = new Throwable("Data Syn to server");
                         //getNavigator().handleError(throwable);
+                        Log.d(TAG, "8 uploadReadingToServer accept successfull");
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
 
                         //getNavigator().handleError(throwable);
+                        Log.d(TAG, "8 uploadReadingToServer accept Throwable");
                     }
                 }));
     }
@@ -1204,7 +1269,10 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         iHealthDeviceController.ConnectDevice(deviceName, deviceMac, "");
     }
 
-    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac) {
+    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac,boolean measureReadingForProtocol, String protocolId) {
+        this.measureReadingForProtocol = measureReadingForProtocol;
+        this.protocolId = protocolId;
+
         isReadingTaken=false;
         iHealthDeviceController.measeureReading(deviceName, deviceMac);
     }
@@ -1219,7 +1287,6 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         iHealthDeviceController.disconnect();
         iHealthDeviceController.onStop();
     }
-
 
     @Override
     public void onDeviceDetected_BP3L(DeviceCharacteristic deviceCharacteristic) {
@@ -1258,6 +1325,10 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         saveReading(lifetrack_infobean);
     }
 
+    @Override
+    public void onError(String msg) {
+        getNavigator().onReadingError(msg);
+    }
 
     public boolean isAuthorizeForBP3L(Context mContext)
     {

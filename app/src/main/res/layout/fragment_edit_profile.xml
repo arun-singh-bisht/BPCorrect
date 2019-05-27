@@ -213,7 +213,7 @@
             android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
             >
 
-            <com.protechgene.android.bpconnect.Utils.TitilliumWebEditText
+            <com.edittextpicker.aliazaz.EditTextPicker
                 android:id="@+id/edit_zipcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -221,8 +221,9 @@
                 android:drawableRight="@drawable/ic_action_location"
                 android:drawableTint="#968F8F"
                 android:hint="ZipCode*"
+                app:mask="#####-####"
+                android:maxLength="10"
                 android:singleLine="true"
-                android:text=""
                 android:inputType="number"
                 android:textSize="@dimen/input_text_size" />
         </android.support.design.widget.TextInputLayout>

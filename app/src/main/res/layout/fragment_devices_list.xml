@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.devices.DevicesListFragment">
+
+    <include layout="@layout/app_bar_custom"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:id="@+id/list_devies_ll"
+        android:layout_marginTop="5dp"
+        android:padding="8dp">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:id="@+id/device_a_d_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view3"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/a_and_d"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/a_and_d"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_overlay"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:id="@+id/device_ihealth_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view2"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ihealth"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="iHealth"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_overlay"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/device_omron_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view1"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/omron"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Omron"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="@color/black_overlay"/>
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:id="@+id/device_trans_prak_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view4"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/transtek"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Transtek"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_overlay"/>
+
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/instruction_constraint_layout"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/instruction_img"
+            android:background="#F04323"
+            android:src="@drawable/instruction_bp_pairing" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toTopOf="@id/instruction_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="center"
+            android:id="@+id/next_btn"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/instruction_constraint_layout_ihealth"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/instruction_img_ihealth"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/_12ssp"
+            android:layout_margin="@dimen/_30sdp"
+            android:text="You can Pair, Connect and Take Readings on iHealth Device by Going to 'Measure Blood Pressure' Screen and Selecting iHealth from the List"
+            android:src="@drawable/instruction_bp_pairing" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toTopOf="@id/instruction_img_ihealth"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="center"
+            android:id="@+id/next_btn_ihealth"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+</LinearLayout>

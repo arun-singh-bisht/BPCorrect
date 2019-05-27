@@ -30,6 +30,7 @@ public class MainActivity extends BaseActivity {
 
         boolean isAlarmFired = getIntent().getBooleanExtra("isAlarmFired", false);
         String alarmFireTime = getIntent().getStringExtra("FireTime");
+        Log.d("MainActivity","alarmFireTime "+alarmFireTime);
         Bundle args = new Bundle();
         args.putBoolean("isAlarmFired",isAlarmFired);
         args.putString("alarmFireTime",alarmFireTime);
@@ -39,8 +40,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -49,6 +48,5 @@ public class MainActivity extends BaseActivity {
             frg.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 }

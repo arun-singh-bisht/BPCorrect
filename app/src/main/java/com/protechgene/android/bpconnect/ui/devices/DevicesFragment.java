@@ -91,6 +91,17 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
     {
         //FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,new PairNewDevicesFragment(),PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
         //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+
+        //edit by sohit
+       FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,new DevicesListFragment(),DevicesListFragment.FRAGMENT_TAG,"DevicesListFragment");
+
+
+    }
+
+
+    // edit by sohit disable function and send to instruction devices list
+   /* private void OpenPairNewDevices(){
         GpsUtils gpsUtils = new GpsUtils(getBaseActivity());
         gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
             @Override
@@ -102,6 +113,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
             }
         });
     }
+
 
     private void openScanningScreen(int forModel)
     {
@@ -127,7 +139,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
                 getBaseActivity().showSnakeBar("Not authorized to access this device.");
             }
         }
-    }
+    }*/
 
     @Override
     public void handleError(Throwable throwable) {
@@ -165,7 +177,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
     }
 
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GpsUtils.GPS_REQUEST && resultCode==getBaseActivity().RESULT_OK)
@@ -197,5 +209,5 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
+    }*/
 }

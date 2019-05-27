@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -202,7 +203,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
-        if(profileDetailModel.getZipcode().length() < 5 || profileDetailModel.getZipcode().length() > 6)
+        if(profileDetailModel.getZipcode().length() != 10)
         {
             throwable = new IllegalArgumentException("Enter valid zipcode");
             getNavigator().handleError(throwable);
@@ -233,11 +234,13 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }*/
-
-        String accessToken = getRespository().getAccessToken();
+        String masked_zipcode = profileDetailModel.getZipcode().replace("-","");
+       // profileDetailModel.setZipcode(profileDetailModel.getZipcode().replace("-",""));
+      //  System.out.println("zipcode------"+profileDetailModel.getZipcode());
+       String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
 
-        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getPhoto_url(),profileDetailModel.getState(),profileDetailModel.getCity(),profileDetailModel.getZipcode())
+        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getPhoto_url(),profileDetailModel.getState(),profileDetailModel.getCity(),masked_zipcode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -263,16 +266,14 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                         // edit by sohit
                         respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
                         respository.setPrefKeyPatientCity(profileResponse.getData().get(0).getCity());
-                        respository.setPrefKeyPatientZipcode(profileResponse.getData().get(0).getZipcode());
+                        respository.setPrefKeyPatientZipcode(profileDetailModel.getZipcode());
                         respository.setPrefKeyPatientState(profileResponse.getData().get(0).getState());
                         respository.setPatientMobile(profileResponse.getData().get(0).getMobile1());
                         respository.setPatientWeight(profileResponse.getData().get(0).getWeight());
                         respository.setPatientHeight(profileResponse.getData().get(0).getHeight());
                         //respository.setPatientAbout(profileResponse.getData().get(0).getAddress2());
 
-
                         //respository.setPatientId(profileResponse.getData().get(0).getPatientId().toString());
-
                         getNavigator().onProfileUpdate();
                     }
                 }, new Consumer<Throwable>() {

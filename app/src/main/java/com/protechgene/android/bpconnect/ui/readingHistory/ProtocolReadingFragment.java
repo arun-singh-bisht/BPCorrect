@@ -51,8 +51,8 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
     public TextView text_sys_dia;
     @BindView(R.id.text_pulse)
     public TextView text_pulse;
-    @BindView(R.id.text_total_readings_value)
-    public TextView text_total_readings_value;
+//    @BindView(R.id.text_total_readings_value)
+//    public TextView text_total_readings_value;
     @BindView(R.id.text_reading_taken_value)
     public TextView text_reading_taken;
     @BindView(R.id.text_reading_missed_value)
@@ -159,7 +159,7 @@ public class ProtocolReadingFragment extends BaseFragment implements ProtocolRea
 
                 text_sys_dia.setText(avgSys+"/"+avgDia);
                 text_pulse.setText(avgPulse+"");
-                text_total_readings_value.setText(totalReadings+"");
+            //    text_total_readings_value.setText(totalReadings+"");
                 text_reading_taken.setText(taken+"  of  28");
                 text_reading_missed.setText(missed+"  of 28");
 

@@ -50,6 +50,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(view==null) {
             view = inflater.inflate(layoutRes(), container, false);
+            view.setKeepScreenOn(true);
         }
         return view;
     }
