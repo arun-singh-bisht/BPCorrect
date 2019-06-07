@@ -1,4 +1,4 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.ConnectDevice;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;

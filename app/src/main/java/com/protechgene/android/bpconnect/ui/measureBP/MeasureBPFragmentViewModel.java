@@ -21,6 +21,12 @@ import android.view.WindowManager;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.lifesense.ble.LsBleManager;
+import com.lifesense.ble.ReceiveDataCallback;
+import com.lifesense.ble.bean.BloodPressureData;
+import com.lifesense.ble.bean.LsDeviceInfo;
+import com.lifesense.ble.bean.constant.DeviceConnectState;
+import com.lifesense.ble.bean.constant.ManagerStatus;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.GpsUtils;
@@ -35,6 +41,7 @@ import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.local.models.ProfileDetailModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading.AddBpReadingResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.deviceManager.Transtek.TranstekDeviceController;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController.iHealthCallback;
@@ -66,7 +73,7 @@ import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.readingUploadToServer;
 
 
-public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> implements iHealthCallback {
+public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> implements iHealthCallback{
 
     private String TAG = "MeasureBPFragmentViewModel";
 
@@ -102,6 +109,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
     public static final String BP_DEVICE_MODEL_AND_UA_651BLE = "AND_UA_651BLE";
     public static final String BP_DEVICE_MODEL_IHEALTH_BP3L = "IHEALTH_BP3L";
+    public static final String BP_DEVICE_MODEL_TRANSTREK_1491B = "TRANSTEK_1491B";
 
     private boolean mIsBindBleReceivedServivce = false;
     private boolean mIsCheckBleetoothEnabled = false;
@@ -168,8 +176,11 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                         {
                             scanBP3LDevice();
                         }
+                    }else if(bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B))
+                    {
+                        getNavigator().onScanningStarted_iHealthBP3L(true);
+                        connectTranstekDevice("","");
                     }
-
 
                 }
             }
@@ -1316,6 +1327,8 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
     }
 
+
+
     @Override
     public void onReadingResult(String sys, String dia, String pulse) {
         Lifetrack_infobean lifetrack_infobean = new Lifetrack_infobean();
@@ -1334,4 +1347,79 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     {
         return IHealthDeviceController.isAuthorizedToAccessDevice(mContext);
     }
+
+
+    //------------------------------- Transtek Device ------------------------------------------------------------------
+
+    private void connectTranstekDevice(String currentDeviceMac,String currentDeviceName) {
+
+        currentDeviceMac = "EC:86:75:4E:0A:64";
+        currentDeviceName = "1491B";
+
+        LsDeviceInfo lsDevice = new LsDeviceInfo();
+        lsDevice.setDeviceName(currentDeviceName);
+        lsDevice.setMacAddress(currentDeviceMac);
+
+        if(LsBleManager.getInstance().checkDeviceConnectState(currentDeviceMac)== DeviceConnectState.CONNECTED_SUCCESS){
+            LsBleManager.getInstance().registerDataSyncCallback(mDataCallback);
+            //connectingProgressBar.setVisibility(View.GONE);
+            //stateTextView.setTextColor(Color.BLUE);
+            //stateTextView.setText(getResources().getString(R.string.state_connected));
+            return ;
+        }
+        if(LsBleManager.getInstance().getLsBleManagerStatus() == ManagerStatus.DATA_RECEIVE){
+            return ;
+        }
+        LsBleManager.getInstance().stopDataReceiveService();
+        //clear measure device list
+        LsBleManager.getInstance().setMeasureDevice(null);
+        //add target measurement device
+        LsBleManager.getInstance().addMeasureDevice(lsDevice);
+        //set product user info on data syncing mode
+        // DeviceSettiingProfiles.setProductUserInfoOnSyncingMode(currentDevice);
+        //start data syncing service
+        LsBleManager.getInstance().startDataReceiveService(mDataCallback);
+        //update connect state
+        updateDeviceConnectState(DeviceConnectState.CONNECTING);
+
+    }
+
+    private ReceiveDataCallback mDataCallback=new ReceiveDataCallback()
+    {
+        @Override
+        public void onDeviceConnectStateChange(DeviceConnectState connectState, String broadcastId)
+        {
+            //Device Connection Status
+            updateDeviceConnectState(connectState);
+        }
+
+        @Override
+        public void onReceiveBloodPressureData(BloodPressureData bpData)
+        {
+            Log.d("mDataCallback",bpData.toString());
+        }
+    };
+
+    private void updateDeviceConnectState(final DeviceConnectState connectState)
+    {
+        if (DeviceConnectState.CONNECTED_SUCCESS == connectState) {
+            Log.d("mDataCallback","Connected");
+
+        } else {
+            if (DeviceConnectState.DISCONNECTED == connectState) {
+                Log.d("mDataCallback","Disconnected");
+
+            } else {
+                Log.d("mDataCallback","Connecting");
+
+            }
+            if (LsBleManager.getInstance().getLsBleManagerStatus() == ManagerStatus.DATA_RECEIVE) {
+                Log.d("mDataCallback","Receiving Data");
+            } else {
+                Log.d("mDataCallback","Connecting");
+
+            }
+        }
+    }
+
 }

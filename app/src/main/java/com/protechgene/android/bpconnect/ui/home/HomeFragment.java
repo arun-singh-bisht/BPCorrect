@@ -1,7 +1,6 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -15,11 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -31,7 +27,7 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
-import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
+import com.protechgene.android.bpconnect.ui.devices.PairedDevice.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentNew;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragment;
@@ -40,8 +36,6 @@ import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;

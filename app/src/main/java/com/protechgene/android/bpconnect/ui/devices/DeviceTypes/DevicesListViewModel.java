@@ -1,4 +1,4 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.DeviceTypes;
 
 import android.content.Context;
 

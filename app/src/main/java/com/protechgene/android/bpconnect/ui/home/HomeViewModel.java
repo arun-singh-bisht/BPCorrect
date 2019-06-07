@@ -150,7 +150,7 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                                 String endDate = data.getEndDate();
                                 endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(endDate) * 1000, "MMM dd,yyyy");
 
-                                final ProtocolModel protocolModel = new ProtocolModel(0, startDate, endDate, data.getMorningAlarm(), data.getEveningAlarm(), true);
+                                final ProtocolModel protocolModel = new ProtocolModel(0, startDate, endDate, data.getMorningAlarm(), data.getEveningAlarm(), true,true,true);
                                 protocolModel.setProtocolCode(data.getProtocolId());
 
 

@@ -61,6 +61,24 @@
         <service android:name=".data.ble.BleConnectService" />
         <service android:name=".data.ble.BleReceivedService" />
         <receiver android:name=".ui.reminder.AlarmReceiver"/>
+
+        <service
+            android:name="com.lifesense.ble.message.NotificationService"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.lifesense.ble.message.NotificationAccessService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

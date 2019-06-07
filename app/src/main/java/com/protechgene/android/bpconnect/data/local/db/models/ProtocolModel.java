@@ -33,16 +33,24 @@ public class ProtocolModel {
     @ColumnInfo(name = "isActive")
     private boolean isActive;
 
+    @ColumnInfo(name = "isMorningActive")
+    private boolean isMorningActive;
+
+    @ColumnInfo(name = "iseveningActive")
+    private boolean iseveningActive;
+
     @ColumnInfo(name = "protocolCode")
     private String protocolCode;
 
-    public ProtocolModel(int protocolId, String startDay, String endDay, String morningReadingTime, String eveningReadingTime, boolean isActive) {
+    public ProtocolModel(int protocolId, String startDay, String endDay, String morningReadingTime, String eveningReadingTime, boolean isActive,boolean isMorningActive,boolean iseveningActive) {
         this.protocolId = protocolId;
         this.startDay = startDay;
         this.endDay = endDay;
         this.morningReadingTime = morningReadingTime;
         this.eveningReadingTime = eveningReadingTime;
         this.isActive = isActive;
+        this.isMorningActive = isMorningActive;
+        this.iseveningActive = iseveningActive;
     }
 
     public int getProtocolId() {
@@ -99,5 +107,21 @@ public class ProtocolModel {
 
     public void setProtocolCode(String protocolCode) {
         this.protocolCode = protocolCode;
+    }
+
+    public boolean isMorningActive() {
+        return isMorningActive;
+    }
+
+    public void setMorningActive(boolean morningActive) {
+        isMorningActive = morningActive;
+    }
+
+    public boolean isIseveningActive() {
+        return iseveningActive;
+    }
+
+    public void setIseveningActive(boolean iseveningActive) {
+        this.iseveningActive = iseveningActive;
     }
 }

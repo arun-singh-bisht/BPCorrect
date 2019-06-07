@@ -4,11 +4,12 @@ import android.app.Application;
 import android.util.Log;
 
 import com.ihealth.communication.manager.iHealthDevicesManager;
+import com.lifesense.ble.LsBleManager;
 import com.protechgene.android.bpconnect.Utils.NotificationUtil;
 
 public class ApplicationBPConnect extends Application {
 
-    public static int PROTOCOL_MORNING_MINIMUM_TIME = 4; // 4:00 AM
+    public static int PROTOCOL_MORNING_MINIMUM_TIME = 0; // 4:00 AM
     public static int PROTOCOL_MORNING_MAXIMUM_TIME = 12; // 12:00 pM
     public static int PROTOCOL_EVENING_MINIMUM_TIME = 16; // 4:00 PM
     public static int PROTOCOL_EVENING_MAXIMUM_TIME = 24; // 12:00 AM
@@ -36,5 +37,10 @@ public class ApplicationBPConnect extends Application {
          * and connect these devices through iHealthDevicesManager.
          */
         iHealthDevicesManager.getInstance().init(this,  Log.VERBOSE, Log.VERBOSE);
+
+        //init LSBluetoothManager
+        LsBleManager.getInstance().initialize(getApplicationContext());
+        //register bluetooth broadacst receiver
+        LsBleManager.getInstance().registerBluetoothBroadcastReceiver(getApplicationContext());
     }
 }

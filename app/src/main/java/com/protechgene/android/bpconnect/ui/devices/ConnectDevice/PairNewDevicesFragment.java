@@ -1,8 +1,6 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.ConnectDevice;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,13 +17,13 @@ import com.skyfishjy.library.RippleBackground;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PairNewDevicesFragment extends BaseFragment implements PairNewDeviceNavigator{
+public class PairNewDevicesFragment extends BaseFragment implements PairNewDeviceNavigator {
 
     public static final String FRAGMENT_TAG = "PairNewDevicesFragment";
     private DevicesAdapter bpReadingAdapter;
     RippleBackground rippleBackground;
     private PairDeviceViewModelInterface pairNewDeviceViewModel;
-    private DeviceCharacteristic deviceCharacteristic;
+    private DeviceCharacteristic mdeviceCharacteristic;
     private String deviceModel = "";
 
 
@@ -56,6 +54,11 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
         {
             pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelBP3N.class);
             ((PairNewDeviceViewModelBP3N)pairNewDeviceViewModel).setNavigator(this);
+
+        }else if(deviceModel.equalsIgnoreCase("Transtek_1491B"))
+        {
+            pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelTranstek.class);
+            ((PairNewDeviceViewModelTranstek)pairNewDeviceViewModel).setNavigator(this);
         }
 
         initView();
@@ -100,23 +103,35 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
 
     @Override
     public void onDeviceFound(DeviceCharacteristic deviceCharacteristic) {
-        deviceFound.setVisibility(View.VISIBLE);
-        TextView text_device_name = (TextView)getView().findViewById(R.id.text_device_name);
-        text_device_name.setText(deviceCharacteristic.getDeviceName());
-        this.deviceCharacteristic = deviceCharacteristic;
+
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                deviceFound.setVisibility(View.VISIBLE);
+                TextView text_device_name = (TextView)getView().findViewById(R.id.text_device_name);
+                text_device_name.setText(deviceCharacteristic.getDeviceName());
+                mdeviceCharacteristic = deviceCharacteristic;
+            }
+        });
+
     }
 
     @OnClick(R.id.image_found_device)
     public void onSelectDevice()
     {
-        pairNewDeviceViewModel.connectToDevice(deviceCharacteristic.getDeviceName(),deviceCharacteristic.getDeviceMac(),"");
+        pairNewDeviceViewModel.connectToDevice(mdeviceCharacteristic.getDeviceName(),mdeviceCharacteristic.getDeviceMac(),"");
     }
 
     @Override
     public void onDevicePaired() {
-        FragmentUtil.removeFragment(getContext());
-        getBaseActivity().showSnakeBar("Device Paired Successfully");
-    }
 
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FragmentUtil.removeFragment(getContext());
+                getBaseActivity().showSnakeBar("Device Paired Successfully");
+            }
+        });
+    }
 
 }

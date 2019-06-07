@@ -155,7 +155,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 String startDate = DateUtils.getDateString(0, "MMM dd,yyyy");
                 String endDate = DateUtils.getDateString(6+0, "MMM dd,yyyy");
 
-                final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true);
+                final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true,true,true);
                 String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId()+"_"+System.currentTimeMillis();
                 protocolModel.setProtocolCode(protocolCode);
 
@@ -312,6 +312,17 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
         }
     }
 
+
+    public void saveProtocol(final ProtocolModel activeProtocol)
+    {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                getRespository().deleteAllProtocol();
+                getRespository().addNewProtocol(activeProtocol);
+            }
+        });
+    }
 
     private void sendProtocolToServer(final ProtocolModel protocolModel)
     {

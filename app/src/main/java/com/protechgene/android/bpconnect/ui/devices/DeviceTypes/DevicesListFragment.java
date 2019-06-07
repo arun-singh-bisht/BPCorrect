@@ -1,4 +1,4 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.DeviceTypes;
 
 
 import android.app.AlertDialog;
@@ -19,6 +19,7 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.Utils.GpsUtils;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.devices.ConnectDevice.PairNewDevicesFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DevicesListFragment extends BaseFragment implements DevicesListNavigator{
+public class DevicesListFragment extends BaseFragment implements DevicesListNavigator {
 
     public static final String FRAGMENT_TAG = "DevicesListFragment";
 
@@ -94,27 +95,28 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
     public void device_trans_prak_ll(){
         list_devies_ll.setVisibility(View.GONE);
        // instruction_layout.setVisibility(View.VISIBLE);
-        instruction_layout_ihealth.setVisibility(View.VISIBLE);
-        instruction_text.setText("Coming Soon.......");
+        //instruction_layout_ihealth.setVisibility(View.VISIBLE);
+        //instruction_text.setText("Coming Soon.......");
       //  instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        OpenPairNewDevices(2);
     }
 
     @OnClick(R.id.next_btn)
     public void next_btn(){
-        OpenPairNewDevices();
+        OpenPairNewDevices(0);
     }
     @OnClick(R.id.next_btn_ihealth)
     public void next_btn_ihealth(){
         FragmentUtil.removeFragment(getContext());
     }
 
-    private void OpenPairNewDevices(){
+    private void OpenPairNewDevices(final int Type){
         GpsUtils gpsUtils = new GpsUtils(getBaseActivity());
         gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {
                 if(isGPSEnable) {
-                    openScanningScreen(0);
+                    openScanningScreen(Type);
                     //showDeviceMenu();
                 }
             }
@@ -145,6 +147,12 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
             } else {
                 getBaseActivity().showSnakeBar("Not authorized to access this device.");
             }
+        }else if(forModel==2)
+        {
+            //for Transtek Device
+            bundle.putString("deviceModel","Transtek_1491B");
+            pairNewDevicesFragment.setArguments(bundle);
+            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
         }
     }
 

@@ -216,11 +216,15 @@
                 />
 
             <Switch
+                android:id="@+id/switch_morning_alram"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:checked="true"
+                android:textOff="No"
+                android:textOn="Yes"
                 />
 
         </RelativeLayout>
@@ -314,11 +318,13 @@
                     />
 
                 <Switch
+                    android:id="@+id/switch_evening_alarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
+                    android:visibility="visible"
+                    android:checked="true"
                     />
 
             </RelativeLayout>

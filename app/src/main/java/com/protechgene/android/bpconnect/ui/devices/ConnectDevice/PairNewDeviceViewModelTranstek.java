@@ -1,26 +1,27 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.ConnectDevice;
 
 import android.content.Context;
 
+import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
+import com.protechgene.android.bpconnect.deviceManager.Transtek.TranstekDeviceController;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
 
-
-public class PairNewDeviceViewModelBP3N extends BaseViewModel<PairNewDeviceNavigator> implements PairDeviceViewModelInterface,IHealthDeviceController.iHealthCallback {
+public class PairNewDeviceViewModelTranstek extends BaseViewModel<PairNewDeviceNavigator> implements PairDeviceViewModelInterface,TranstekDeviceController.TranstekControllerCallback {
 
 
     private Context context;
     protected BleConnectService mBleService;
-    private IHealthDeviceController iHealthDeviceController;
+    TranstekDeviceController transtekDeviceController;
 
     String PREF_KEY_BP_DEVICE_NAME_iHealthbp3l = "PREF_KEY_BP_DEVICE_NAME_iHealthbp3l";
     String PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l = "PREF_KEY_BP_DEVICE_ADDRESS_iHealthbp3l";
 
-    public PairNewDeviceViewModelBP3N(Repository repository) {
+    public PairNewDeviceViewModelTranstek(Repository repository) {
         super(repository);
 
     }
@@ -28,46 +29,51 @@ public class PairNewDeviceViewModelBP3N extends BaseViewModel<PairNewDeviceNavig
     public void initScan(Context context)
     {
         this.context = context;
-        iHealthDeviceController = new IHealthDeviceController(context);
-        iHealthDeviceController.discoverDevice(this);
+        transtekDeviceController = new TranstekDeviceController(context);
+        transtekDeviceController.discoverDevice(this);
     }
 
 
     public void connectToDevice(String deviceName,String mac,String username)
     {
-        iHealthDeviceController.ConnectDevice(deviceName, mac, username);
+        transtekDeviceController.ConnectDevice(deviceName, mac, username);
     }
 
     public void onDestroy() {
-        iHealthDeviceController.onStop();
+        transtekDeviceController.onStop();
     }
 
     //-------------------------------- iHealthCallback methods --------------------------------------------------------
+
     @Override
-    public void onDeviceDetected_BP3L(DeviceCharacteristic deviceCharacteristic) {
+    public void onDeviceDetected_Transtek(LsDeviceInfo foundDevice) {
+        DeviceCharacteristic deviceCharacteristic = new DeviceCharacteristic();
+        deviceCharacteristic.setDeviceMac(foundDevice.getMacAddress());
+        deviceCharacteristic.setDeviceName(foundDevice.getDeviceName());
+        deviceCharacteristic.setDeviceType(0);
         getNavigator().onDeviceFound(deviceCharacteristic);
     }
 
     @Override
-    public void onScanCompleted_BP3L() {
+    public void onScanCompleted_Transtek() {
 
     }
 
     @Override
-    public void onDeviceConnected_BP3L(String deviceName, String deviceMac) {
-        getRespository().setDeviceName_iHealthbp3l(deviceName);
-        getRespository().setDeviceAddress_iHealthbp3l(deviceMac);
+    public void onDeviceConnected_Transtek(String deviceName, String deviceMac) {
+        //getRespository().setDeviceName_iHealthbp3l(deviceName);
+        //getRespository().setDeviceAddress_iHealthbp3l(deviceMac);
         getNavigator().onDevicePaired();
     }
 
     @Override
-    public void onConnectionError_BP3L(String messg) {
+    public void onConnectionError_Transtek(String messg) {
         Throwable throwable = new Throwable(messg);
         getNavigator().handleError(throwable);
     }
 
     @Override
-    public void onDeviceDisconnected_BP3L() {
+    public void onDeviceDisconnected_Transtek() {
 
     }
 

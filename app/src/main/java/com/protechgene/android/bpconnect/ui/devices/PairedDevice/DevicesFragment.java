@@ -1,29 +1,21 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.PairedDevice;
 
-import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ihealth.communication.manager.iHealthDevicesManager;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
-import com.protechgene.android.bpconnect.Utils.GpsUtils;
 import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
 import com.protechgene.android.bpconnect.ui.adapters.DevicesAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.devices.DeviceTypes.DevicesListFragment;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

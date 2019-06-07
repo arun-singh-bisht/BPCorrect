@@ -3,6 +3,8 @@ package com.protechgene.android.bpconnect.ui.reminder;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
@@ -39,6 +41,12 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
     TextView text_morning_time;
     @BindView(R.id.text_evening_time)
     TextView text_evening_time;
+    @BindView(R.id.switch_morning_alram)
+    Switch switch_morning_alram;
+    @BindView(R.id.switch_evening_alarm)
+    Switch switch_evening_alarm;
+
+
 
     @Override
     protected int layoutRes() {
@@ -145,14 +153,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
                     hideProgress();
 
                     if(status) {
-                        layout_create.setVisibility(View.GONE);
-                        layout_active_alarm.setVisibility(View.VISIBLE);
-                        //Set Details
-                        text_start_day.setText(protocolModel.getStartDay());
-                        text_end_day.setText(protocolModel.getEndDay());
-                        text_morning_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getMorningReadingTime()));
-                        text_evening_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getEveningReadingTime()));
-                        activeProtocol = protocolModel;
+                        setProtocolDetails(protocolModel);
                     }else
                     {
                         layout_create.setVisibility(View.VISIBLE);
@@ -176,6 +177,12 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
     @Override
     public void onProtocolCreated(ProtocolModel protocolModel) {
 
+        setProtocolDetails(protocolModel);
+    }
+
+    private void setProtocolDetails(ProtocolModel protocolModel)
+    {
+
         layout_create.setVisibility(View.GONE);
         layout_active_alarm.setVisibility(View.VISIBLE);
         //Set Details
@@ -183,8 +190,25 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
         text_end_day.setText(protocolModel.getEndDay());
         text_morning_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getMorningReadingTime()));
         text_evening_time.setText(DateUtils.conver24hourformatTo12hour(protocolModel.getEveningReadingTime()));
+        switch_morning_alram.setChecked(protocolModel.isMorningActive());
+        switch_evening_alarm.setChecked(protocolModel.isIseveningActive());
         activeProtocol = protocolModel;
 
+        switch_morning_alram.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                activeProtocol.setMorningActive(isChecked);
+                reminderViewModel.saveProtocol(activeProtocol);
+            }
+        });
+
+        switch_evening_alarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                activeProtocol.setIseveningActive(isChecked);
+                reminderViewModel.saveProtocol(activeProtocol);
+            }
+        });
     }
 
     @Override

@@ -27,6 +27,7 @@ import io.feeeei.circleseekbar.CircleSeekBar;
 
 import static com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentViewModel.BP_DEVICE_MODEL_AND_UA_651BLE;
 import static com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentViewModel.BP_DEVICE_MODEL_IHEALTH_BP3L;
+import static com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentViewModel.BP_DEVICE_MODEL_TRANSTREK_1491B;
 
 
 public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragmentNavigator {
@@ -132,7 +133,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         builder.setTitle("Select Device");
 
         // add a list
-        final String[] gender = {"A&D UA-651BLE", "iHealth BP3L"};
+        final String[] gender = {"A&D UA-651BLE", "iHealth BP3L","Transtrek"};
         builder.setItems(gender, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -147,6 +148,18 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 {
                     //iHealth BP3L Device
                     SELECTED_BP_MODEL = BP_DEVICE_MODEL_IHEALTH_BP3L;
+
+                    /*boolean b = measureBPFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
+                    if(b) {
+                        measureBPFragmentViewModel.scanBP3LDevice();
+                    }else
+                    {
+                        getBaseActivity().showSnakeBar("Not authorized to use this device.");
+                    }*/
+                }else if(which==2)
+                {
+                    //iHealth BP3L Device
+                    SELECTED_BP_MODEL = BP_DEVICE_MODEL_TRANSTREK_1491B;
 
                     /*boolean b = measureBPFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
                     if(b) {
@@ -272,6 +285,10 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         {
             text_upper.setVisibility(View.VISIBLE);
             text_upper.setText("Scanning for Device...");
+        }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B))
+        {
+            text_transfer_status.setVisibility(View.VISIBLE);
+            text_transfer_status.setText("Searching for data...");
         }
 
     }

@@ -85,7 +85,8 @@ dependencies {
     //iHealth support
     implementation files('libs/iHealthLibrary_2.5.1.jar')
     implementation files('libs/d2xx.jar')
-
-// masking edit text
+    // masking edit text
     implementation 'com.github.AliAzaz:Edittext-Library:1.0.1'
+    implementation files('libs/lifesense-ble-module-v1.5.2.jar')
+    implementation files('libs/mirror-1.6.1.jar')
 }

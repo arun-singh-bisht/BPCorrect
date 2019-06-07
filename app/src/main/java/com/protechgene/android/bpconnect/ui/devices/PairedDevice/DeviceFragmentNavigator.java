@@ -1,6 +1,4 @@
-package com.protechgene.android.bpconnect.ui.devices;
-
-import android.bluetooth.BluetoothDevice;
+package com.protechgene.android.bpconnect.ui.devices.PairedDevice;
 
 import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
 

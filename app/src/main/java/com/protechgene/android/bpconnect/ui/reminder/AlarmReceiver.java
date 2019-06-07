@@ -24,46 +24,59 @@ public class AlarmReceiver  extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String alarmTime = intent.getStringExtra("AlarmTime");
-        Log.d("AlarmReceiver","onReceive alarmTime "+alarmTime);
-
-        String ReceivedExtraType = intent.getStringExtra("ReceivedExtraType");
-        if(ReceivedExtraType!=null && ReceivedExtraType.equalsIgnoreCase("STOP_ALARM_SOUND"))
-        {
-            AlarmSound.getInstance(context).stopSound();
-            Log.d("AlarmReceiver","STOP_ALARM_SOUND");
-            return;
-        }
-
-        //In this sample, we want to start/launch this sample app when user clicks on notification
-        //Intent to invoke app when click on notification.
-        Intent intentToHomeScreen = new Intent(context, MainActivity.class);
-        intentToHomeScreen.putExtra("isAlarmFired",true);
-        intentToHomeScreen.putExtra("FireTime",alarmTime);
-        intentToHomeScreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        Intent intentToStopAlarmSound = new Intent(context, AlarmReceiver.class);
-        intentToStopAlarmSound.putExtra("ReceivedExtraType","STOP_ALARM_SOUND");
-
-        //Show Notification status bar
-        Log.d("AlarmReceiver","Show Notification FireTime "+alarmTime);
-
-        new NotificationUtil().buildLocalNotification(context,intentToHomeScreen,intentToStopAlarmSound,1001,"Time to check BP");
-
-        //Play Sound in loop
-        if(ApplicationBPConnect.isAlarmSoundEnabled)
-            AlarmSound.getInstance(context).playSound();
-
-        //Set Next Alarm
         final Repository repository = Repository.getInstance((Application) context.getApplicationContext());
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+
+
                 ProtocolModel protocolModel = repository.getAllProtocol().get(0);
                 String morningReadingTime = protocolModel.getMorningReadingTime();
+                boolean morningActive = protocolModel.isMorningActive();
                 String eveningReadingTime = protocolModel.getEveningReadingTime();
+                boolean iseveningActive = protocolModel.isIseveningActive();
                 String endDay = protocolModel.getEndDay();
 
+
+
+                String alarmTime = intent.getStringExtra("AlarmTime");
+                Log.d("AlarmReceiver","onReceive alarmTime "+alarmTime);
+
+
+                String ReceivedExtraType = intent.getStringExtra("ReceivedExtraType");
+                if(ReceivedExtraType!=null && ReceivedExtraType.equalsIgnoreCase("STOP_ALARM_SOUND"))
+                {
+                    AlarmSound.getInstance(context).stopSound();
+                    Log.d("AlarmReceiver","STOP_ALARM_SOUND");
+                    return;
+                }
+
+                if((alarmTime.equalsIgnoreCase(morningReadingTime) && morningActive) || (alarmTime.equalsIgnoreCase(eveningReadingTime) && iseveningActive))
+                {
+                    //In this sample, we want to start/launch this sample app when user clicks on notification
+                    //Intent to invoke app when click on notification.
+                    Intent intentToHomeScreen = new Intent(context, MainActivity.class);
+                    intentToHomeScreen.putExtra("isAlarmFired",true);
+                    intentToHomeScreen.putExtra("FireTime",alarmTime);
+                    intentToHomeScreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    Intent intentToStopAlarmSound = new Intent(context, AlarmReceiver.class);
+                    intentToStopAlarmSound.putExtra("ReceivedExtraType","STOP_ALARM_SOUND");
+
+                    //Show Notification status bar
+                    Log.d("AlarmReceiver","Show Notification FireTime "+alarmTime);
+
+                    new NotificationUtil().buildLocalNotification(context,intentToHomeScreen,intentToStopAlarmSound,1001,"Time to check BP");
+
+                    //Play Sound in loop
+                    if(ApplicationBPConnect.isAlarmSoundEnabled)
+                        AlarmSound.getInstance(context).playSound();
+                }else
+                {
+                    Log.d("AlarmReceiver","alarmTime :"+alarmTime +" is inactive");
+                }
+
+                //Set Next Alarm
                 if(alarmTime.equalsIgnoreCase(morningReadingTime))
                 {
                     //set next alarm for evening.

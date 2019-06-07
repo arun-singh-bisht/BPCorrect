@@ -1,4 +1,4 @@
-package com.protechgene.android.bpconnect.ui.devices;
+package com.protechgene.android.bpconnect.ui.devices.PairedDevice;
 
 
 import android.bluetooth.BluetoothDevice;
@@ -11,7 +11,6 @@ import com.protechgene.android.bpconnect.data.ble.BleConnectService;
 import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
-import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
