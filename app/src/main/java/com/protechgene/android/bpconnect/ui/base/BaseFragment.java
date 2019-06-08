@@ -91,7 +91,13 @@ public abstract class BaseFragment extends Fragment {
     protected void showProgress(String message) {
         if(message!=null && !message.isEmpty())
             mProgressDialog.setMessage(message);
-        mProgressDialog.show();
+      /*  getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {*/
+                mProgressDialog.show();
+       /*     }
+        });*/
+
     }
     protected void hideProgress()
     {

@@ -73,7 +73,7 @@ import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL
 import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.readingUploadToServer;
 
 
-public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> implements iHealthCallback{
+public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentNavigator> implements iHealthCallback , TranstekDeviceController.TranstekControllerCallback {
 
     private String TAG = "MeasureBPFragmentViewModel";
 
@@ -133,12 +133,14 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     private Context mContext;
 
 
+    private TranstekDeviceController transtekDeviceController;
+
     public MeasureBPFragmentViewModel(Repository repository) {
         super(repository);
     }
 
 
-    public void connectToDevice(Context context,String bpDeviceModelName) {
+    public void connectToDevice(Context context, String bpDeviceModelName) {
 
         mContext = context;
         // 1. Enable Bluetooth in background
@@ -156,8 +158,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
                 if (isGPSEnable) {
 
-                    if(bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_AND_UA_651BLE))
-                    {
+                    if (bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_AND_UA_651BLE)) {
                         deviceList = new ArrayList<BluetoothDevice>();
                         // 3. Check Device Paired Status
                         boolean isBpDevicePaired = isDevicePaired();
@@ -168,18 +169,25 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                         } else {
                             getNavigator().AND_DevicePairedStatus(false);
                         }
-                    }else if(bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_IHEALTH_BP3L))
-                    {
+                    } else if (bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_IHEALTH_BP3L)) {
                         boolean authorizeForBP3L = isAuthorizeForBP3L(mContext);
                         getNavigator().onScanningStarted_iHealthBP3L(authorizeForBP3L);
-                        if(authorizeForBP3L)
-                        {
+                        if (authorizeForBP3L) {
                             scanBP3LDevice();
                         }
-                    }else if(bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B))
-                    {
-                        getNavigator().onScanningStarted_iHealthBP3L(true);
-                        connectTranstekDevice("","");
+                    } else if (bpDeviceModelName.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B)) {
+                        // 3. Check Device Paired Status
+                        List<LsDeviceInfo> pairedDeviceInfo = TranstekDeviceController.getPairedDeviceInfo(context);
+                        if (pairedDeviceInfo != null && pairedDeviceInfo.size() > 0) {
+
+                            getNavigator().AND_DevicePairedStatus(true);
+                            isReadingTaken = false;
+                            transtekDeviceController = new TranstekDeviceController(context,MeasureBPFragmentViewModel.this);
+                            transtekDeviceController.startScannForData(pairedDeviceInfo.get(0));
+                        } else {
+                            getNavigator().AND_DevicePairedStatus(false);
+                        }
+
                     }
 
                 }
@@ -513,8 +521,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             }
             Intent intent1 = new Intent(mContext, BleReceivedService.class);
             mContext.stopService(intent1);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -987,8 +994,13 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
     protected void onDestroy() {
         try {
-        getNavigator().dismissIndicator();
-        doStopService();
+            getNavigator().dismissIndicator();
+            doStopService();
+
+            if(transtekDeviceController!=null) {
+                transtekDeviceController.stopScanningForData();
+                transtekDeviceController = null;
+            }
 
             //Register or UnRegister your broadcast receiver here
             mContext.unregisterReceiver(mMeasudataUpdateReceiver);
@@ -999,14 +1011,12 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     }
 
 
-    public void sendDummyReading()
-    {
-        for(int i=0;i<3;i++)
-        {
+    public void sendDummyReading() {
+        for (int i = 0; i < 3; i++) {
             Lifetrack_infobean lifetrackInfobean = new Lifetrack_infobean();
-            lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(100,130)+"");
-            lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(80,100)+"");
-            lifetrackInfobean.setPulse(MathUtil.getRandomNumber(60,90)+"");
+            lifetrackInfobean.setSystolic(MathUtil.getRandomNumber(100, 130) + "");
+            lifetrackInfobean.setDiastolic(MathUtil.getRandomNumber(80, 100) + "");
+            lifetrackInfobean.setPulse(MathUtil.getRandomNumber(60, 90) + "");
             saveReading(lifetrackInfobean);
         }
     }
@@ -1018,16 +1028,16 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         //getNavigator().showIndicator("Processing data...");
         //Log.d(TAG, "new Reading "+lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic()+"/"+lifetrackInfobean.getPulse() +"/"+lifetrackInfobean.getDateTimeStamp());
         //if(lifetrackInfobean.getSystolic().equalsIgnoreCase("2047"))
-          //  return;
+        //  return;
 
         lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()) + "");
-        Log.d(TAG, "1 new Reading To Save: "+lifetrackInfobean.getSystolic()+"/"+lifetrackInfobean.getDiastolic()+"/"+lifetrackInfobean.getPulse() +"/"+lifetrackInfobean.getDateTimeStamp());
+        Log.d(TAG, "1 new Reading To Save: " + lifetrackInfobean.getSystolic() + "/" + lifetrackInfobean.getDiastolic() + "/" + lifetrackInfobean.getPulse() + "/" + lifetrackInfobean.getDateTimeStamp());
         lifetrackInfobean.setDateTimeStamp((System.currentTimeMillis()) + "");
         lifetrackInfobeanList.add(lifetrackInfobean);
 
         //handler.removeCallbacks(runnable);
         handler.removeCallbacksAndMessages(null);
-        handler.postDelayed(runnable,6000);
+        handler.postDelayed(runnable, 6000);
     }
 
     Runnable runnable = new Runnable() {
@@ -1038,20 +1048,18 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         }
     };
 
-    private void saveReading_backgroudProcess()
-    {
+    private void saveReading_backgroudProcess() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
 
 
-                if(lifetrackInfobeanList.size()==0 || lifetrackInfobeanList.get(lifetrackInfobeanList.size()-1).getSystolic().equalsIgnoreCase("2047"))
-                {
+                if (lifetrackInfobeanList.size() == 0 || lifetrackInfobeanList.get(lifetrackInfobeanList.size() - 1).getSystolic().equalsIgnoreCase("2047")) {
                     Log.d(TAG, "saveReading_backgroudProcess lifetrackInfobean==null");
                     getNavigator().onReadingError("Error! Not found proper reading.\nPlease try again.");
                     return;
                 }
-                Lifetrack_infobean lifetrackInfobean = lifetrackInfobeanList.get(lifetrackInfobeanList.size()-1);
+                Lifetrack_infobean lifetrackInfobean = lifetrackInfobeanList.get(lifetrackInfobeanList.size() - 1);
 
                 final HealthReading healthReading = new HealthReading();
 
@@ -1091,7 +1099,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
 
                 if (isReadingTaken)
-                  return;
+                    return;
 
                 //Save This reading IN DB
 
@@ -1099,7 +1107,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 Log.d(TAG, "4 saveReading_backgroudProcess addNewHealthRecord(healthReading)");
 
                 //Deliver Reading to UI
-                if(getNavigator()!=null) {
+                if (getNavigator() != null) {
                     getNavigator().result(healthReading);
                     Log.d(TAG, "5 result(healthReading)");
                 }
@@ -1149,7 +1157,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
             return;
 
         String json = jsonArray.toString();
-        Log.d(TAG, "7 uploadReadingToServer jsonArray: "+json);
+        Log.d(TAG, "7 uploadReadingToServer jsonArray: " + json);
 
         disposables.add(getRespository().addBpReadings(accessToken, jsonArray)
                 .subscribeOn(Schedulers.io())
@@ -1270,7 +1278,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     //------------------------------- iHealth BP3L Device ------------------------------------------------------------------
 
     final DeviceCharacteristic BP3LDevice = new DeviceCharacteristic();
-    IHealthDeviceController iHealthDeviceController = new IHealthDeviceController(mContext,this);
+    IHealthDeviceController iHealthDeviceController = new IHealthDeviceController(mContext, this);
 
     public void scanBP3LDevice() {
         iHealthDeviceController.discoverDevice(null);
@@ -1280,21 +1288,19 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         iHealthDeviceController.ConnectDevice(deviceName, deviceMac, "");
     }
 
-    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac,boolean measureReadingForProtocol, String protocolId) {
+    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac, boolean measureReadingForProtocol, String protocolId) {
         this.measureReadingForProtocol = measureReadingForProtocol;
         this.protocolId = protocolId;
 
-        isReadingTaken=false;
+        isReadingTaken = false;
         iHealthDeviceController.measeureReading(deviceName, deviceMac);
     }
 
-    public void stopMeaseureReading()
-    {
+    public void stopMeaseureReading() {
         iHealthDeviceController.stopMeaseureReading();
     }
 
-    public void disconnectFromBP3LDevice()
-    {
+    public void disconnectFromBP3LDevice() {
         iHealthDeviceController.disconnect();
         iHealthDeviceController.onStop();
     }
@@ -1308,13 +1314,13 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
     @Override
     public void onScanCompleted_BP3L() {
-        Log.d("onScanCompleted_BP3L","onScanCompleted_BP3L");
-        getNavigator().onDeviceFound_iHealthBP3L(BP3LDevice.getDeviceName(),BP3LDevice.getDeviceMac(),BP3LDevice.getDeviceType()+"");
+        Log.d("onScanCompleted_BP3L", "onScanCompleted_BP3L");
+        getNavigator().onDeviceFound_iHealthBP3L(BP3LDevice.getDeviceName(), BP3LDevice.getDeviceMac(), BP3LDevice.getDeviceType() + "");
     }
 
     @Override
     public void onDeviceConnected_BP3L(String deviceName, String deviceMac) {
-        getNavigator().onDeviceConnected_iHealthBP3L(deviceName,deviceMac);
+        getNavigator().onDeviceConnected_iHealthBP3L(deviceName, deviceMac);
     }
 
     @Override
@@ -1326,7 +1332,6 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     public void onDeviceDisconnected_BP3L() {
 
     }
-
 
 
     @Override
@@ -1343,83 +1348,35 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         getNavigator().onReadingError(msg);
     }
 
-    public boolean isAuthorizeForBP3L(Context mContext)
-    {
+    public boolean isAuthorizeForBP3L(Context mContext) {
         return IHealthDeviceController.isAuthorizedToAccessDevice(mContext);
     }
 
 
     //------------------------------- Transtek Device ------------------------------------------------------------------
 
-    private void connectTranstekDevice(String currentDeviceMac,String currentDeviceName) {
-
-        currentDeviceMac = "EC:86:75:4E:0A:64";
-        currentDeviceName = "1491B";
-
-        LsDeviceInfo lsDevice = new LsDeviceInfo();
-        lsDevice.setDeviceName(currentDeviceName);
-        lsDevice.setMacAddress(currentDeviceMac);
-
-        if(LsBleManager.getInstance().checkDeviceConnectState(currentDeviceMac)== DeviceConnectState.CONNECTED_SUCCESS){
-            LsBleManager.getInstance().registerDataSyncCallback(mDataCallback);
-            //connectingProgressBar.setVisibility(View.GONE);
-            //stateTextView.setTextColor(Color.BLUE);
-            //stateTextView.setText(getResources().getString(R.string.state_connected));
-            return ;
-        }
-        if(LsBleManager.getInstance().getLsBleManagerStatus() == ManagerStatus.DATA_RECEIVE){
-            return ;
-        }
-        LsBleManager.getInstance().stopDataReceiveService();
-        //clear measure device list
-        LsBleManager.getInstance().setMeasureDevice(null);
-        //add target measurement device
-        LsBleManager.getInstance().addMeasureDevice(lsDevice);
-        //set product user info on data syncing mode
-        // DeviceSettiingProfiles.setProductUserInfoOnSyncingMode(currentDevice);
-        //start data syncing service
-        LsBleManager.getInstance().startDataReceiveService(mDataCallback);
-        //update connect state
-        updateDeviceConnectState(DeviceConnectState.CONNECTING);
+    @Override
+    public void onDeviceDetected_Transtek(LsDeviceInfo foundDevice) {
 
     }
 
-    private ReceiveDataCallback mDataCallback=new ReceiveDataCallback()
-    {
-        @Override
-        public void onDeviceConnectStateChange(DeviceConnectState connectState, String broadcastId)
-        {
-            //Device Connection Status
-            updateDeviceConnectState(connectState);
-        }
+    @Override
+    public void onScanCompleted_Transtek() {
 
-        @Override
-        public void onReceiveBloodPressureData(BloodPressureData bpData)
-        {
-            Log.d("mDataCallback",bpData.toString());
-        }
-    };
-
-    private void updateDeviceConnectState(final DeviceConnectState connectState)
-    {
-        if (DeviceConnectState.CONNECTED_SUCCESS == connectState) {
-            Log.d("mDataCallback","Connected");
-
-        } else {
-            if (DeviceConnectState.DISCONNECTED == connectState) {
-                Log.d("mDataCallback","Disconnected");
-
-            } else {
-                Log.d("mDataCallback","Connecting");
-
-            }
-            if (LsBleManager.getInstance().getLsBleManagerStatus() == ManagerStatus.DATA_RECEIVE) {
-                Log.d("mDataCallback","Receiving Data");
-            } else {
-                Log.d("mDataCallback","Connecting");
-
-            }
-        }
     }
 
+    @Override
+    public void onDeviceConnected_Transtek(LsDeviceInfo lsDeviceInfo) {
+
+    }
+
+    @Override
+    public void onConnectionError_Transtek(String messg) {
+
+    }
+
+    @Override
+    public void onDeviceDisconnected_Transtek() {
+
+    }
 }

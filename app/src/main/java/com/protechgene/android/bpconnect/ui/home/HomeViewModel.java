@@ -35,6 +35,12 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
         return getRespository().getUserFirstName();
     }
 
+    // update by rajat
+    public String getAddress()
+    {
+        return getRespository().getPatientAddress()+" "+getRespository().getPrefKeyPatientCity()+" "+getRespository().getPrefKeyPatientState();
+    }
+
     public String getUserLastName()
     {
         return getRespository().getUserLastName();
@@ -50,10 +56,12 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
         return getRespository().getPrefKeyProfileImg();
     }
 
+    public boolean getprotocol() {
+        return getRespository().getAllProtocol().size() > 0? true: false;
+    }
+
     public void getProfileDetails()
     {
-
-
         String patientId = getRespository().getPatientId();
         if(patientId!=null)
         {

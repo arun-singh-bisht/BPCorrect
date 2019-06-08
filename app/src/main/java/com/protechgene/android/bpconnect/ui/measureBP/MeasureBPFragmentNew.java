@@ -112,9 +112,14 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_AND_UA_651BLE))
                     {
                         measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+
                     }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_IHEALTH_BP3L))
                     {
                         onDeviceConnected_iHealthBP3L(deviceName_BP3L,deviceMac__BP3L);
+
+                    }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B))
+                    {
+                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
                     }
 
                 }else
@@ -142,7 +147,6 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 {
                    //A&A&D UA-651BLE Device
                     SELECTED_BP_MODEL = BP_DEVICE_MODEL_AND_UA_651BLE;
-
 
                 }else if(which==1)
                 {
@@ -364,6 +368,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     //------------- receive Result from BLE device -----------------------------------------
     @Override
     public void result(final HealthReading healthReading) {
+        measureBPFragmentViewModel.onDestroy();
 
         getBaseActivity().runOnUiThread(new Runnable() {
             @Override
@@ -383,7 +388,6 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 if(count_protocolReadingAlreadyTaken<2) {
                     shouldInstructionDialogShow = false;
                     activateCountDown();
-
                     doneButton.setVisibility(View.GONE);
                 }
                 else
@@ -399,7 +403,6 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 }
             }
         });
-
     }
 
     @Override

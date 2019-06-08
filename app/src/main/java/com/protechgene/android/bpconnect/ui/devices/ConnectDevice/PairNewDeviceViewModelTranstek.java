@@ -5,6 +5,7 @@ import android.content.Context;
 import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
+import com.protechgene.android.bpconnect.deviceManager.Transtek.AsyncTaskRunner;
 import com.protechgene.android.bpconnect.deviceManager.Transtek.TranstekDeviceController;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
@@ -33,10 +34,15 @@ public class PairNewDeviceViewModelTranstek extends BaseViewModel<PairNewDeviceN
         transtekDeviceController.discoverDevice(this);
     }
 
+    @Override
+    public void connectToDevice(String deviceName, String mac, String username) {
 
-    public void connectToDevice(String deviceName,String mac,String username)
-    {
-        transtekDeviceController.ConnectDevice(deviceName, mac, username);
+    }
+
+
+    @Override
+    public void connectToDevice(LsDeviceInfo lsDeviceInfo) {
+        transtekDeviceController.ConnectDevice(lsDeviceInfo);
     }
 
     public void onDestroy() {
@@ -47,11 +53,7 @@ public class PairNewDeviceViewModelTranstek extends BaseViewModel<PairNewDeviceN
 
     @Override
     public void onDeviceDetected_Transtek(LsDeviceInfo foundDevice) {
-        DeviceCharacteristic deviceCharacteristic = new DeviceCharacteristic();
-        deviceCharacteristic.setDeviceMac(foundDevice.getMacAddress());
-        deviceCharacteristic.setDeviceName(foundDevice.getDeviceName());
-        deviceCharacteristic.setDeviceType(0);
-        getNavigator().onDeviceFound(deviceCharacteristic);
+        getNavigator().onDeviceFound(foundDevice);
     }
 
     @Override
@@ -60,9 +62,9 @@ public class PairNewDeviceViewModelTranstek extends BaseViewModel<PairNewDeviceN
     }
 
     @Override
-    public void onDeviceConnected_Transtek(String deviceName, String deviceMac) {
-        //getRespository().setDeviceName_iHealthbp3l(deviceName);
-        //getRespository().setDeviceAddress_iHealthbp3l(deviceMac);
+    public void onDeviceConnected_Transtek(LsDeviceInfo lsDeviceInfo) {
+        //save connected device info in shared preference
+        AsyncTaskRunner.savePairedDeviceInfo(context,lsDeviceInfo);
         getNavigator().onDevicePaired();
     }
 

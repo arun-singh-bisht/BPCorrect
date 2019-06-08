@@ -38,6 +38,7 @@ public class ApplicationBPConnect extends Application {
          */
         iHealthDevicesManager.getInstance().init(this,  Log.VERBOSE, Log.VERBOSE);
 
+        /*For Transtek Device*/
         //init LSBluetoothManager
         LsBleManager.getInstance().initialize(getApplicationContext());
         //register bluetooth broadacst receiver

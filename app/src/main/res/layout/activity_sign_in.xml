@@ -69,7 +69,7 @@
                 android:drawablePadding="5dp"
                 android:text=""
                 android:textSize="@dimen/input_text_size"
-                android:hint="@string/hint_password" />
+                android:hint="@string/enter_password" />
         </android.support.design.widget.TextInputLayout>
 
 

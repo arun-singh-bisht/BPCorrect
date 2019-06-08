@@ -43,6 +43,8 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
     @BindView(R.id.instruction_img)
     ImageView instruction_img;
 
+
+    private int NEW_DEVICE_TYPE =0;
     public DevicesListFragment() {
         // Required empty public constructor
     }
@@ -58,13 +60,30 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
         devicesListFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(DevicesListViewModel.class);
         devicesListFragmentViewModel.setNavigator(this);
 
-        ((TextView)getView().findViewById(R.id.txt_title)).setText("Devices");
+        ((TextView)getView().findViewById(R.id.txt_title)).setText("Add New Device");
     }
 
     @OnClick(R.id.img_left)
     public void onBackIconClick()
     {
         FragmentUtil.removeFragment(getBaseActivity());
+    }
+
+    @OnClick(R.id.device_a_d_ll)
+    public void device_a_d_ll(){
+        list_devies_ll.setVisibility(View.GONE);
+        instruction_layout.setVisibility(View.VISIBLE);
+        instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        NEW_DEVICE_TYPE = 0;
+    }
+
+    @OnClick(R.id.device_ihealth_ll)
+    public void device_ihealth_ll(){
+        list_devies_ll.setVisibility(View.GONE);
+        // instruction_layout.setVisibility(View.VISIBLE);
+        instruction_layout_ihealth.setVisibility(View.VISIBLE);
+        // instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        NEW_DEVICE_TYPE = 1;
     }
 
     @OnClick(R.id.device_omron_ll)
@@ -74,37 +93,22 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
         instruction_layout_ihealth.setVisibility(View.VISIBLE);
         instruction_text.setText("Coming Soon.......");
         //  instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
-    }
-
-    @OnClick(R.id.device_ihealth_ll)
-    public void device_ihealth_ll(){
-        list_devies_ll.setVisibility(View.GONE);
-       // instruction_layout.setVisibility(View.VISIBLE);
-        instruction_layout_ihealth.setVisibility(View.VISIBLE);
-       // instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
-    }
-
-    @OnClick(R.id.device_a_d_ll)
-    public void device_a_d_ll(){
-        list_devies_ll.setVisibility(View.GONE);
-        instruction_layout.setVisibility(View.VISIBLE);
-        instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        NEW_DEVICE_TYPE = 2;
     }
 
     @OnClick(R.id.device_trans_prak_ll)
     public void device_trans_prak_ll(){
         list_devies_ll.setVisibility(View.GONE);
-       // instruction_layout.setVisibility(View.VISIBLE);
-        //instruction_layout_ihealth.setVisibility(View.VISIBLE);
-        //instruction_text.setText("Coming Soon.......");
-      //  instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
-        OpenPairNewDevices(2);
+        instruction_layout.setVisibility(View.VISIBLE);
+        instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        NEW_DEVICE_TYPE = 3;
     }
 
     @OnClick(R.id.next_btn)
     public void next_btn(){
-        OpenPairNewDevices(0);
+        OpenPairNewDevices(NEW_DEVICE_TYPE);
     }
+
     @OnClick(R.id.next_btn_ihealth)
     public void next_btn_ihealth(){
         FragmentUtil.removeFragment(getContext());
@@ -135,7 +139,8 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
             //for A&D Device
             bundle.putString("deviceModel","A&D__651BLE");
             pairNewDevicesFragment.setArguments(bundle);
-            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
+            FragmentUtil.removeFragment(getContext());
+            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,null);
         }else if(forModel==1)
         {
             //for iHealth BP3L
@@ -147,12 +152,13 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
             } else {
                 getBaseActivity().showSnakeBar("Not authorized to access this device.");
             }
-        }else if(forModel==2)
+        }else if(forModel==3)
         {
             //for Transtek Device
             bundle.putString("deviceModel","Transtek_1491B");
             pairNewDevicesFragment.setArguments(bundle);
-            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
+            //FragmentUtil.removeFragment(getContext());
+            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,null);
         }
     }
 
@@ -162,7 +168,7 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GpsUtils.GPS_REQUEST && resultCode==getBaseActivity().RESULT_OK)
         {
-            showDeviceMenu();
+            //showDeviceMenu();
             //openScanningScreen(0);
         }
 

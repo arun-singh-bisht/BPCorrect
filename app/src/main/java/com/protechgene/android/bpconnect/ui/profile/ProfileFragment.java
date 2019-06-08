@@ -161,7 +161,6 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         }
         text_age_value.setText(userDoB);
 

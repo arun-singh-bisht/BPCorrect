@@ -6,9 +6,11 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.util.Log;
 
+import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
 import com.protechgene.android.bpconnect.data.local.models.BPDeviceModel;
+import com.protechgene.android.bpconnect.deviceManager.Transtek.TranstekDeviceController;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.IHealthDeviceController;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 
@@ -80,6 +82,13 @@ public class DeviceFragmentViewModel extends BaseViewModel<DeviceFragmentNavigat
                 bpDeviceList.add(bpDeviceModel);
             }
 
+            List<LsDeviceInfo> transtekPairedDevices = TranstekDeviceController.getPairedDeviceInfo(context);
+            if(transtekPairedDevices!=null && transtekPairedDevices.size()>0)
+            {
+                LsDeviceInfo lsDeviceInfo = transtekPairedDevices.get(0);
+                BPDeviceModel bpDeviceModel = new BPDeviceModel("Transtek "+lsDeviceInfo.getDeviceName(),lsDeviceInfo.getMacAddress());
+                bpDeviceList.add(bpDeviceModel);
+            }
             getNavigator().pairedDevices(bpDeviceList);
 
         }else {

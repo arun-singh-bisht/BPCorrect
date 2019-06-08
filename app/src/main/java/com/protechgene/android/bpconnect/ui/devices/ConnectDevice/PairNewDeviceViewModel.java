@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.ADGattUUID;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
@@ -297,6 +298,11 @@ public class PairNewDeviceViewModel extends BaseViewModel<PairNewDeviceNavigator
             getRespository().setBPDeviceName(bluetoothDevice.getName());
             getRespository().setBPDeviceAddress(bluetoothDevice.getAddress());
         }
+    }
+
+    @Override
+    public void connectToDevice(LsDeviceInfo foundDevice) {
+
     }
 
 

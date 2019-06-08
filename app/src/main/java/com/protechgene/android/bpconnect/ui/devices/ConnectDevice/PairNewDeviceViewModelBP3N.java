@@ -2,6 +2,7 @@ package com.protechgene.android.bpconnect.ui.devices.ConnectDevice;
 
 import android.content.Context;
 
+import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.ble.BleConnectService;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
@@ -35,6 +36,11 @@ public class PairNewDeviceViewModelBP3N extends BaseViewModel<PairNewDeviceNavig
     public void connectToDevice(String deviceName,String mac,String username)
     {
         iHealthDeviceController.ConnectDevice(deviceName, mac, username);
+    }
+
+    @Override
+    public void connectToDevice(LsDeviceInfo foundDevice) {
+
     }
 
     public void onDestroy() {

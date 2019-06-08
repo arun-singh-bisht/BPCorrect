@@ -63,7 +63,7 @@ public class ReminderFragment extends BaseFragment implements  ReminderFragmentN
     private void initView()
     {
         TextView txt_title =  getView().findViewById(R.id.txt_title);
-        txt_title.setText("Reminder");
+        txt_title.setText("Manage your BPCorrect Reminders");
 
         reminderViewModel.checkActiveProtocol();
     }

@@ -55,7 +55,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
 
     private void initView()
     {
-        title.setText("Devices");
+        title.setText("Paired Devices");
         img_right.setVisibility(View.VISIBLE);
         text_empty_msg.setVisibility(View.GONE);
 
@@ -88,50 +88,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
         //edit by sohit
        FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,new DevicesListFragment(),DevicesListFragment.FRAGMENT_TAG,"DevicesListFragment");
 
-
     }
-
-
-    // edit by sohit disable function and send to instruction devices list
-   /* private void OpenPairNewDevices(){
-        GpsUtils gpsUtils = new GpsUtils(getBaseActivity());
-        gpsUtils.turnGPSOn(new GpsUtils.onGpsListener() {
-            @Override
-            public void gpsStatus(boolean isGPSEnable) {
-                if(isGPSEnable) {
-                    openScanningScreen(0);
-                    //showDeviceMenu();
-                }
-            }
-        });
-    }
-
-
-    private void openScanningScreen(int forModel)
-    {
-        PairNewDevicesFragment pairNewDevicesFragment = new PairNewDevicesFragment();
-        Bundle bundle = new Bundle();
-
-
-        if(forModel==0)
-        {
-            //for A&D Device
-            bundle.putString("deviceModel","A&D__651BLE");
-            pairNewDevicesFragment.setArguments(bundle);
-            FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
-        }else if(forModel==1)
-        {
-            //for iHealth BP3L
-            boolean isPass = deviceFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
-            if (isPass) {
-                bundle.putString("deviceModel","iHealth_BP3L");
-                pairNewDevicesFragment.setArguments(bundle);
-                FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,pairNewDevicesFragment,PairNewDevicesFragment.FRAGMENT_TAG,"PairNewDevicesFragmentTransition");
-            } else {
-                getBaseActivity().showSnakeBar("Not authorized to access this device.");
-            }
-        }
-    }*/
 
     @Override
     public void handleError(Throwable throwable) {
@@ -160,46 +117,9 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
     @Override
     public void pairedDevices(List<BPDeviceModel> bpDeviceList) {
 
-
-
         if (bpDeviceList.size()==0)
             text_empty_msg.setVisibility(View.VISIBLE);
         else
              bpReadingAdapter.setData(bpDeviceList);
     }
-
-
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GpsUtils.GPS_REQUEST && resultCode==getBaseActivity().RESULT_OK)
-        {
-            showDeviceMenu();
-            //openScanningScreen(0);
-        }
-
-
-        Log.d("onActivityResult",""+requestCode+" "+resultCode);
-    }
-
-
-    private void showDeviceMenu()
-    {
-        // setup the alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
-        builder.setTitle("Select Model");
-
-        // add a list
-        final String[] gender = {"A&D UA-651BLE", "iHealth BP3L"};
-        builder.setItems(gender, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openScanningScreen(which);
-            }
-        });
-
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }*/
 }

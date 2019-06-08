@@ -179,7 +179,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
-        if(profileDetailModel.getAddress1()== null || profileDetailModel.getAddress1().isEmpty())
+        /*if(profileDetailModel.getAddress1()== null || profileDetailModel.getAddress1().isEmpty())
         {
             throwable = new IllegalArgumentException("Enter your address");
             getNavigator().handleError(throwable);
@@ -202,8 +202,8 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             throwable = new IllegalArgumentException("Enter your zipcode");
             getNavigator().handleError(throwable);
             return;
-        }
-        if(profileDetailModel.getZipcode().length() != 10)
+        }*/
+        if(profileDetailModel.getZipcode().length() > 0 && profileDetailModel.getZipcode().length() != 10)
         {
             throwable = new IllegalArgumentException("Enter valid zipcode");
             getNavigator().handleError(throwable);
