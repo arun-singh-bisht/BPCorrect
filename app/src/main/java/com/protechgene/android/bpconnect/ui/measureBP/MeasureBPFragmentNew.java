@@ -82,7 +82,8 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     private boolean isTypeProtocol = false;
     private boolean isCounterRunning = false;
     private boolean shouldInstructionDialogShow = true;
-    private int count_protocolReadingAlreadyTaken =0;
+    private int count_protocolReadingAlreadyTaken = 0;
+    private int total_protocolReadingTaken = 0;
     private String protocolId;
     private String SELECTED_BP_MODEL;
     @Override
@@ -104,14 +105,14 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
             public void run() {
                 isTypeProtocol = b;
                 protocolId = protocolCode;
-                //count_protocolReadingAlreadyTaken = protocolReadingTaken;
+                total_protocolReadingTaken = protocolReadingTaken;
                 showToast(b?"Protocol Reading":"Normal Reading");
                 //measureBPFragmentViewModel.connectToDevice(getBaseActivity());
                 if(SELECTED_BP_MODEL!=null)
                 {
                     if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_AND_UA_651BLE))
                     {
-                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
 
                     }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_IHEALTH_BP3L))
                     {
@@ -119,7 +120,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
 
                     }else if(SELECTED_BP_MODEL.equalsIgnoreCase(BP_DEVICE_MODEL_TRANSTREK_1491B))
                     {
-                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                        measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
                     }
 
                 }else
@@ -173,7 +174,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                         getBaseActivity().showSnakeBar("Not authorized to use this device.");
                     }*/
                 }
-                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
 
             }
         });
@@ -192,7 +193,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
             @Override
             public void run() {
                 hideProgress();
-                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
             }
         },1500);
     }
@@ -203,7 +204,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         if(requestCode == GpsUtils.GPS_REQUEST)
         {
             if(resultCode == getBaseActivity().RESULT_OK)
-                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL);
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
             else
                 FragmentUtil.removeFragment(getBaseActivity());
         }
@@ -346,7 +347,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     {
         if(rippleBackground!=null)
             rippleBackground.startRippleAnimation();
-        measureBPFragmentViewModel.startMeasuringBPFromBP3LDevice(deviceName_BP3L,deviceMac__BP3L,isTypeProtocol,protocolId);
+        measureBPFragmentViewModel.startMeasuringBPFromBP3LDevice(deviceName_BP3L,deviceMac__BP3L,isTypeProtocol,protocolId,total_protocolReadingTaken);
 
         doneButton.setText("Stop");
         doneButton.setVisibility(View.VISIBLE);

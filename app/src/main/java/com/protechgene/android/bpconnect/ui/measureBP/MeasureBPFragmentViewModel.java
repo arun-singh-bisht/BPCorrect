@@ -131,7 +131,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     private boolean measureReadingForProtocol;
     private String protocolId;
     private Context mContext;
-
+    private int total_protocolReadingTaken;
 
     private TranstekDeviceController transtekDeviceController;
 
@@ -140,7 +140,11 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     }
 
 
-    public void connectToDevice(Context context, String bpDeviceModelName) {
+    public void connectToDevice(Context context, String bpDeviceModelName,boolean measureReadingForProtocol,String protocolId,int total_protocolReadingTaken) {
+
+        this.measureReadingForProtocol = measureReadingForProtocol;
+        this.total_protocolReadingTaken = total_protocolReadingTaken;
+        this.protocolId = protocolId;
 
         mContext = context;
         // 1. Enable Bluetooth in background
@@ -1096,6 +1100,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 healthReading.setDiastolic(lifetrackInfobean.getDiastolic());
                 healthReading.setSystolic(lifetrackInfobean.getSystolic());
                 healthReading.setReadingID(0);
+                healthReading.setProtocol_reading_no(total_protocolReadingTaken);
 
 
                 if (isReadingTaken)
@@ -1145,7 +1150,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 jsonObject.addProperty("device_mac_address", "12:34:56:78:90");
                 jsonObject.addProperty("is_abberant", healthReading.getIs_abberant());
                 jsonObject.addProperty("protocol_id", healthReading.getProtocol_id());
-                jsonObject.addProperty("protocol_no", "0");
+                jsonObject.addProperty("protocol_no", healthReading.getProtocol_reading_no()+"");
                 jsonArray.add(jsonObject);
 
             } catch (Exception e) {
@@ -1275,7 +1280,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         });
     }
 
-    //------------------------------- iHealth BP3L Device ------------------------------------------------------------------
+    //------------------------------- iHealth BP3L Device Callbacks------------------------------------------------------------------
 
     final DeviceCharacteristic BP3LDevice = new DeviceCharacteristic();
     IHealthDeviceController iHealthDeviceController = new IHealthDeviceController(mContext, this);
@@ -1288,9 +1293,10 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
         iHealthDeviceController.ConnectDevice(deviceName, deviceMac, "");
     }
 
-    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac, boolean measureReadingForProtocol, String protocolId) {
+    public void startMeasuringBPFromBP3LDevice(String deviceName, String deviceMac, boolean measureReadingForProtocol, String protocolId,int total_protocolReadingTaken) {
         this.measureReadingForProtocol = measureReadingForProtocol;
         this.protocolId = protocolId;
+        this.total_protocolReadingTaken = total_protocolReadingTaken;
 
         isReadingTaken = false;
         iHealthDeviceController.measeureReading(deviceName, deviceMac);
@@ -1353,7 +1359,7 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
     }
 
 
-    //------------------------------- Transtek Device ------------------------------------------------------------------
+    //------------------------------- Transtek Device Callbacks------------------------------------------------------------------
 
     @Override
     public void onDeviceDetected_Transtek(LsDeviceInfo foundDevice) {

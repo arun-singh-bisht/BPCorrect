@@ -9,7 +9,7 @@ import com.protechgene.android.bpconnect.Utils.NotificationUtil;
 
 public class ApplicationBPConnect extends Application {
 
-    public static int PROTOCOL_MORNING_MINIMUM_TIME = 0; // 4:00 AM
+    public static int PROTOCOL_MORNING_MINIMUM_TIME = 4; // 4:00 AM
     public static int PROTOCOL_MORNING_MAXIMUM_TIME = 12; // 12:00 pM
     public static int PROTOCOL_EVENING_MINIMUM_TIME = 16; // 4:00 PM
     public static int PROTOCOL_EVENING_MAXIMUM_TIME = 24; // 12:00 AM

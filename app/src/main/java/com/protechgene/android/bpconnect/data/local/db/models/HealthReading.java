@@ -42,6 +42,9 @@ public class HealthReading {
     @ColumnInfo(name = "reading_time")
     private long reading_time;
 
+    @ColumnInfo(name = "protocol_reading_no")
+    private long protocol_reading_no;
+
     public HealthReading() {
     }
 
@@ -119,5 +122,13 @@ public class HealthReading {
 
     public void setIs_abberant(String is_abberant) {
         this.is_abberant = is_abberant;
+    }
+
+    public long getProtocol_reading_no() {
+        return protocol_reading_no;
+    }
+
+    public void setProtocol_reading_no(long protocol_reading_no) {
+        this.protocol_reading_no = protocol_reading_no;
     }
 }
