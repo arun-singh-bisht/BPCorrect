@@ -203,7 +203,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }*/
-        if(profileDetailModel.getZipcode().length() > 0 && profileDetailModel.getZipcode().length() != 10)
+        if(profileDetailModel.getZipcode().length() > 0 && profileDetailModel.getZipcode().length() != 5)
         {
             throwable = new IllegalArgumentException("Enter valid zipcode");
             getNavigator().handleError(throwable);

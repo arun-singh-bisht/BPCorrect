@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -84,7 +85,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         super.onCreate(savedInstanceState);
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
-
+        // get prorotcol
+        getPRotocolStatus();
         Log.d("HomeFragment","initialize");
 
         boolean isAlarmFired = false;
@@ -125,6 +127,21 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
 
         }
+    }
+
+    private void getPRotocolStatus() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Insert Data
+                // System.out.println("protocol data ---"+mHomeViewModel.getprotocol());
+                if (mHomeViewModel.getprotocol())
+                    isprotocol_active = true;
+                else
+                    isprotocol_active = false;
+                // Get Data
+            }
+        });
     }
 
     @Override
@@ -287,25 +304,19 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     }
 
-    public void getvalue() {
-        getBaseActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-            isprotocol_active=  mHomeViewModel.getprotocol();
-            }
-        });
-    }
+
 
     @Override
     public void showProfileDetails() {
-       // getvalue();
+
+
         String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
         // update by rajat
         TextView username = getBaseActivity().findViewById(R.id.nav_profile_name);
         TextView address = getBaseActivity().findViewById(R.id.nav_profile_address);
         CircularImageView nav_profile_image = getBaseActivity().findViewById(R.id.nav_profile_img);
-
+        String name = username.toString();
         if(userName==null || userName.equalsIgnoreCase("null")) {
             //First Time App User
             if(videoDialog!=null)
@@ -327,15 +338,23 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             bundle.putBoolean("isProfileComplete",false);
             profileEditFragment.setArguments(bundle);
             FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,profileEditFragment,ProfileEditFragment.FRAGMENT_TAG,null);
+            return;
+        }else if(!isprotocol_active && mHomeViewModel.getFirstTimeUser() && mHomeViewModel.getUserFirstName()!=null) {
+            // user from web panel
+            if(videoDialog!=null)
+                videoDialog.dismiss();
 
-        }/*else if(isprotocol_active) {
-            HomeFragment homeFragment = new HomeFragment();
-            Bundle args = new Bundle();
-            args.putBoolean("isNewUser",true);
-            homeFragment.setArguments(args);
-           // FragmentUtil.removeFragment(getBaseActivity());
-            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
-        }*/
+            videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
+
+                @Override
+                public void onVideoEnd(int request_code) {
+
+                    //if (!protocolStatus)
+                    openRemiderFragment();
+                }
+            });
+            mHomeViewModel.setFirstTimeUser();
+        }
 
         else {
             //Already an App User

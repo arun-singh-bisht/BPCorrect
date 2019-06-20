@@ -29,6 +29,7 @@ public interface PreferencesHelperInterface {
      // edit by sohit
      String PREF_KEY_PATIENT_STATE = "PREF_KEY_PATIENT_STATE";
      String PREF_KEY_PATIENT_CITY = "PREF_KEY_PATIENT_CITY";
+     String PREF_KEY_FIRST_TIME_USER = "PREF_KEY_FIRST_TIME_USER";
      String PREF_KEY_PATIENT_ZIPCODE = "PREF_KEY_PATIENT_ZIPCODE";
      String PREF_KEY_ORG_NAME = "PREF_KEY_ORG_NAME";
      String PREF_KEY_PROVIDER_NAME = "PREF_KEY_PROVIDER_NAME";
@@ -48,6 +49,9 @@ public interface PreferencesHelperInterface {
 
      void setPrefKeyPatientCity(String city);
      String getPrefKeyPatientCity();
+
+     void setFirstTimeuser(String status);
+     String getFirstTimeuser();
 
      void setPrefKeyPatientZipcode(String zipcode);
      String getPrefKeyPatientZipcode();

@@ -55,7 +55,7 @@ public class DevicesFragment extends BaseFragment implements DeviceFragmentNavig
 
     private void initView()
     {
-        title.setText("Paired Devices");
+        title.setText("Pair with a home blood pressure monitor");
         img_right.setVisibility(View.VISIBLE);
         text_empty_msg.setVisibility(View.GONE);
 

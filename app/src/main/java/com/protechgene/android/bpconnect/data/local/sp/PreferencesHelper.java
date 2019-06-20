@@ -33,6 +33,16 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     }
 
     @Override
+    public void setFirstTimeuser(String status) {
+        mSharedPreferences.edit().putString(PREF_KEY_FIRST_TIME_USER,status).apply();
+    }
+
+    @Override
+    public String getFirstTimeuser() {
+        return mSharedPreferences.getString(PREF_KEY_FIRST_TIME_USER,"true");
+    }
+
+    @Override
     public void setPrefKeyPatientZipcode(String zipcode) {
         mSharedPreferences.edit().putString(PREF_KEY_PATIENT_ZIPCODE,zipcode).apply();
     }

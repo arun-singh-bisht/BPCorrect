@@ -52,6 +52,9 @@
             android:name=".ui.forgotPassword.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.WebViewScreen"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.home.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"

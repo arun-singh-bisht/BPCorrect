@@ -31,7 +31,7 @@
     <dimen name="get_a_pay_text_size">15dp</dimen>
     <dimen name="sign_in_button_padding">14dp</dimen>
     <dimen name="margin_between_buttons">25dp</dimen>
-    <dimen name="terms_of_use_text_size">11dp</dimen>
+    <dimen name="terms_of_use_text_size">14dp</dimen>
 
     <!--SignIn Screen-->
     <dimen name="margin_between_buttons_sign_in">17dp</dimen>

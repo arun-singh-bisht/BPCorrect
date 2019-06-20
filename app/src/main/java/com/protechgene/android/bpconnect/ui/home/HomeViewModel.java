@@ -193,6 +193,14 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
     }
 
+    void setFirstTimeUser() {
+        getRespository().setFirstTimeuser("false");
+    }
+
+    boolean getFirstTimeUser() {
+        return getRespository().getFirstTimeuser().equals("true")? true:false;
+    }
+
     public void synBPReadingData()
     {
         String accessToken = getRespository().getAccessToken();

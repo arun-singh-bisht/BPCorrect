@@ -111,13 +111,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dimen_5dp"
+        android:orientation="horizontal">
+
+
     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/terms_of_use"
+        android:id="@+id/terms_and_privacy_link"
         android:gravity="center"
         android:textSize="@dimen/terms_of_use_text_size"
         android:layout_marginBottom="10dp"
         />
-
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/privacy_policy"
+        android:id="@+id/privacy_policy_link"
+        android:gravity="center"
+        android:textSize="@dimen/terms_of_use_text_size"
+        android:layout_marginBottom="10dp"
+        />
+    </LinearLayout>
 </LinearLayout>

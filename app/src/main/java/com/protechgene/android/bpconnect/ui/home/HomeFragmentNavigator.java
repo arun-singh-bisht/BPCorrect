@@ -7,7 +7,7 @@ public interface HomeFragmentNavigator {
 
     void showProfileDetails();
 
-    void isProtocolExists(boolean statuc);
+    void isProtocolExists(boolean status);
 
     void historyDataSyncStatus(boolean status);
 }

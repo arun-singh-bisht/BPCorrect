@@ -6,6 +6,7 @@ import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.PermissionUtils;
+import com.protechgene.android.bpconnect.ui.WebViewScreen;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordActivity;
@@ -48,6 +49,17 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
         showProgress("Please wait...");
         mLoginViewModel.login(email, password);
     }
+
+    @OnClick(R.id.terms_and_privacy_link)
+    void opentermslink() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("link","http://protechgenie.in/bpcorrect/#/terms_&_condition" ));
+    }
+
+    @OnClick(R.id.privacy_policy_link)
+    void openprivacylink() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("link","http://protechgenie.in/bpcorrect/#/privacy_policy"));
+    }
+
 
     @OnClick(R.id.txt_sign_up)
     void signUp() {

@@ -320,6 +320,18 @@ public class Repository implements ApiInterface,
         return mSharedPrefsHelper.getPrefKeyPatientCity();
     }
 
+
+    @Override
+    public void setFirstTimeuser(String status) {
+        mSharedPrefsHelper.setFirstTimeuser(status);
+    }
+
+    @Override
+    public String getFirstTimeuser() {
+        return mSharedPrefsHelper.getFirstTimeuser();
+    }
+
+
     @Override
     public void setPrefKeyPatientZipcode(String zipcode) {
         mSharedPrefsHelper.setPrefKeyPatientZipcode(zipcode);
