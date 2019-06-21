@@ -134,7 +134,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             @Override
             public void run() {
                 // Insert Data
-                // System.out.println("protocol data ---"+mHomeViewModel.getprotocol());
+                 System.out.println("protocol data ---"+mHomeViewModel.getprotocol());
                 if (mHomeViewModel.getprotocol())
                     isprotocol_active = true;
                 else
@@ -349,7 +349,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 @Override
                 public void onVideoEnd(int request_code) {
 
-                    //if (!protocolStatus)
+                    if (!protocolStatus)
                     openRemiderFragment();
                 }
             });

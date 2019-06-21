@@ -3,7 +3,9 @@ package com.protechgene.android.bpconnect.ui.tutorial;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
@@ -52,10 +54,22 @@ public class TutorialFragment extends BaseFragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        bpReadingAdapter = new TutorialAdapter(new ArrayList<TutorialModel>());
+        TutorialAdapter.OnItemClickListener listener = (position) -> {
+            Toast.makeText(getContext(), "Position " + position, Toast.LENGTH_SHORT).show();
+        };
+        bpReadingAdapter = new TutorialAdapter(new ArrayList<TutorialModel>(),listener,getActivity());
         bpReadingAdapter.setData(TutorialModel.getData());
         recyclerView.setAdapter(bpReadingAdapter);
+
+
+       /* recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), bpReadingAdapter.getItemCount(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
+
+
 
 }
