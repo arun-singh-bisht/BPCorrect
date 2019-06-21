@@ -85,8 +85,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         super.onCreate(savedInstanceState);
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
-        // get prorotcol
-        getPRotocolStatus();
         Log.d("HomeFragment","initialize");
 
         boolean isAlarmFired = false;
@@ -344,14 +342,10 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             if(videoDialog!=null)
                 videoDialog.dismiss();
 
-            videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
+            videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), request_code -> {
 
-                @Override
-                public void onVideoEnd(int request_code) {
-
-                    if (!protocolStatus)
-                    openRemiderFragment();
-                }
+                if (!isprotocol_active)
+                openRemiderFragment();
             });
             mHomeViewModel.setFirstTimeUser();
         }
@@ -395,8 +389,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                     getBaseActivity().showSnakeBar("App Data Sync Failure");
             }
         });
-
-
+        //get protocol status
+        getPRotocolStatus();
     }
 
 
