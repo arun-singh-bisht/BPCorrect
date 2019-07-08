@@ -59,7 +59,6 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
     protected void initialize() {
         devicesListFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(DevicesListViewModel.class);
         devicesListFragmentViewModel.setNavigator(this);
-
         ((TextView)getView().findViewById(R.id.txt_title)).setText("Add New Device");
     }
 
@@ -100,7 +99,7 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
     public void device_trans_prak_ll(){
         list_devies_ll.setVisibility(View.GONE);
         instruction_layout.setVisibility(View.VISIBLE);
-        instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing));
+        instruction_img.setImageDrawable(getResources().getDrawable(R.drawable.instruction_bp_pairing_transtek));
         NEW_DEVICE_TYPE = 3;
     }
 
@@ -171,8 +170,6 @@ public class DevicesListFragment extends BaseFragment implements DevicesListNavi
             //showDeviceMenu();
             //openScanningScreen(0);
         }
-
-
         Log.d("onActivityResult",""+requestCode+" "+resultCode);
     }
 

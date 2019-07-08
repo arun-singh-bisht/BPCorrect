@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:clickable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.devices.DevicesListFragment">
+    tools:context=".ui.devices.DeviceTypes.DevicesListFragment">
 
     <include layout="@layout/app_bar_custom"/>
 
@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
+            android:visibility="gone"
             android:id="@+id/device_ihealth_ll">
 
 
@@ -89,6 +90,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/black_overlay"/>
 
 
@@ -96,6 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:id="@+id/device_omron_ll">
 
 
@@ -124,12 +127,8 @@
          <View
              android:layout_width="match_parent"
              android:layout_height="1dp"
+             android:visibility="gone"
              android:background="@color/black_overlay"/>
-
-
-
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -182,7 +181,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/instruction_img"
-            android:background="#F04323"
+            android:background="@android:color/transparent"
             android:src="@drawable/instruction_bp_pairing" />
 
         <Button
