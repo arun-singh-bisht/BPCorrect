@@ -1,18 +1,15 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,12 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -37,7 +31,6 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
-//import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.devices.PairedDevice.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentNew;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
@@ -46,10 +39,7 @@ import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
 import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
-//import com.protechgene.android.bpconnect.ui.test.Transtek;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -278,7 +268,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @OnClick(R.id.card_reminder)
     public void openRemiderFragment() {
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(), ReminderFragment.FRAGMENT_TAG,"ReminderNewFragmentTransition");
     }
 
     @OnClick(R.id.card_settings)

@@ -7,8 +7,6 @@
     android:clickable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar_custom"/>
-
     <LinearLayout
         android:id="@+id/layout_create"
         android:layout_width="match_parent"
@@ -73,27 +71,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="10dp"
         >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        >
 
-        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Active alarm"
-            android:textSize="14sp"
-            />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:visibility="gone"
-            />
-
-    </RelativeLayout>
 
     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
         android:layout_width="wrap_content"

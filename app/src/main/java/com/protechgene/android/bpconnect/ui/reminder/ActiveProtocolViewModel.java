@@ -2,10 +2,7 @@ package com.protechgene.android.bpconnect.ui.reminder;
 
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,8 +10,6 @@ import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
-import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
-import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import com.protechgene.android.bpconnect.ui.custom.SupportedTimePickerFragment;
@@ -27,8 +22,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.PROTOCOL_DAYS;
 
-public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> implements SupportedTimePickerFragment.TimePickedListener {
+
+public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmentNavigator> implements SupportedTimePickerFragment.TimePickedListener {
 
     private int CREATE_PROTOCOL_MORNING_TIME = 1001;
     private int CREATE_PROTOCOL_EVENING_TIME = 1002;
@@ -41,7 +38,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
     private String selectedEveningTime;
     private ProtocolModel activeProtocol;
 
-    public ReminderViewModel(Repository repository) {
+    public ActiveProtocolViewModel(Repository repository) {
         super(repository);
     }
 
@@ -153,7 +150,7 @@ public class ReminderViewModel extends BaseViewModel<ReminderFragmentNavigator> 
                 //String endDate = DateUtils.getDateString(6+datOffset, "MMM dd,yyyy");
 
                 String startDate = DateUtils.getDateString(0, "MMM dd,yyyy");
-                String endDate = DateUtils.getDateString(6+0, "MMM dd,yyyy");
+                String endDate = DateUtils.getDateString((PROTOCOL_DAYS-1)+0, "MMM dd,yyyy");
 
                 final ProtocolModel protocolModel = new ProtocolModel(0,startDate,endDate,selectedMorningTime,selectedEveningTime,true,true,true);
                 String protocolCode = startDate+"_"+endDate+"_"+getRespository().getPatientId()+"_"+System.currentTimeMillis();

@@ -11,6 +11,7 @@ import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.reminder.ActiveProtocolFragment;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 
 import butterknife.BindView;

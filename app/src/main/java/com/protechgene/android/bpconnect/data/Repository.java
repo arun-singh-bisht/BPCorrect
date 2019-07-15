@@ -47,13 +47,11 @@ public class Repository implements ApiInterface,
         this.mDatabaseHelper = databaseHelper;
     }
 
-    public static Repository getInstance(Application mApplication)
-    {
-        if(repositoryInstance==null)
-        {
+    public static Repository getInstance(Application mApplication) {
+        if (repositoryInstance == null) {
 
             RestModule restModule = new RestModule();
-            ApiInterface apiInterface = restModule.provideApiCallInterface(restModule.provideRetrofit(restModule.provideGson(),restModule.provideOkHttpClient(mApplication.getApplicationContext())));
+            ApiInterface apiInterface = restModule.provideApiCallInterface(restModule.provideRetrofit(restModule.provideGson(), restModule.provideOkHttpClient(mApplication.getApplicationContext())));
 
             AppModule appModule = new AppModule(mApplication);
             PreferencesHelper preferencesHelper = appModule.provideSharedPrefsHelper(appModule.provideSharedPrefs());
@@ -61,7 +59,7 @@ public class Repository implements ApiInterface,
             RoomModule roomModule = new RoomModule(mApplication);
             DatabaseHelper databaseHelper = roomModule.provideDatabaseHelper(roomModule.provideDatabase());
 
-            repositoryInstance = new Repository(apiInterface,preferencesHelper,databaseHelper);
+            repositoryInstance = new Repository(apiInterface, preferencesHelper, databaseHelper);
         }
         return repositoryInstance;
     }
@@ -104,8 +102,9 @@ public class Repository implements ApiInterface,
     }
 
     @Override
-    public void setCurrentUserName(String userName) { mSharedPrefsHelper.setCurrentUserName(userName); }
-
+    public void setCurrentUserName(String userName) {
+        mSharedPrefsHelper.setCurrentUserName(userName);
+    }
 
 
     @Override
@@ -129,16 +128,24 @@ public class Repository implements ApiInterface,
     }
 
     @Override
-    public String getCurrentUserProfilePicUrl() { return mSharedPrefsHelper.getCurrentUserProfilePicUrl(); }
+    public String getCurrentUserProfilePicUrl() {
+        return mSharedPrefsHelper.getCurrentUserProfilePicUrl();
+    }
 
     @Override
-    public void setCurrentUserProfilePicUrl(String profilePicUrl) { mSharedPrefsHelper.setCurrentUserProfilePicUrl(profilePicUrl); }
+    public void setCurrentUserProfilePicUrl(String profilePicUrl) {
+        mSharedPrefsHelper.setCurrentUserProfilePicUrl(profilePicUrl);
+    }
 
     @Override
-    public boolean isLoggedIn() { return mSharedPrefsHelper.isLoggedIn(); }
+    public boolean isLoggedIn() {
+        return mSharedPrefsHelper.isLoggedIn();
+    }
 
     @Override
-    public void setIsLoggedIn(boolean isLoggedIn) { mSharedPrefsHelper.setIsLoggedIn(isLoggedIn); }
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        mSharedPrefsHelper.setIsLoggedIn(isLoggedIn);
+    }
 
     @Override
     public String getPatientId() {
@@ -344,7 +351,7 @@ public class Repository implements ApiInterface,
 
     @Override
     public void setPrefKeyOrgName(String orgName) {
-         mSharedPrefsHelper.setPrefKeyOrgName(orgName);
+        mSharedPrefsHelper.setPrefKeyOrgName(orgName);
     }
 
     @Override
@@ -392,27 +399,33 @@ public class Repository implements ApiInterface,
 
     @Override
     public Observable<BpReadingsResponse> getBpReadings(String access_token, String patientUserId, String fromdate, String todate, String dayno) {
-        Observable<BpReadingsResponse> responseObservable = mApiInterface.getBpReadings(access_token, patientUserId,fromdate,todate,dayno);
+        Observable<BpReadingsResponse> responseObservable = mApiInterface.getBpReadings(access_token, patientUserId, fromdate, todate, dayno);
         return responseObservable;
     }
 
     @Override
     public Observable<AddBpReadingResponse> addBpReadings(String access_token, JsonArray json) {
-        Observable<AddBpReadingResponse> responseObservable = mApiInterface.addBpReadings(access_token,json);
+        Observable<AddBpReadingResponse> responseObservable = mApiInterface.addBpReadings(access_token, json);
         return responseObservable;
     }
 
     @Override
-    public Observable<ProfileResponse> createProtocol(String access_token, String userId,String startdate,String enddate,String protocol_id,String morning_alarm,String evening_alarm) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.createProtocol(access_token,userId,startdate,enddate,protocol_id,morning_alarm,evening_alarm);
+    public Observable<ProfileResponse> createProtocol(String access_token, String userId, String startdate, String enddate, String protocol_id, String morning_alarm, String evening_alarm) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.createProtocol(access_token, userId, startdate, enddate, protocol_id, morning_alarm, evening_alarm);
         return responseObservable;
     }
 
     @Override
     public Observable<GetProtocolResponse> getProtocolDetail(String access_token, String userId) {
-        Observable<GetProtocolResponse> responseObservable = mApiInterface.getProtocolDetail(access_token,userId);
+        Observable<GetProtocolResponse> responseObservable = mApiInterface.getProtocolDetail(access_token, userId);
         return responseObservable;
-}
+    }
+
+    @Override
+    public Observable<GetProtocolResponse> getHistoryProtocol(String access_token, String userId) {
+        Observable<GetProtocolResponse> responseObservable = mApiInterface.getHistoryProtocol(access_token, userId);
+        return responseObservable;
+    }
 
     @Override
     public Observable<StateCityOptions> getOptionCity() {
@@ -422,26 +435,26 @@ public class Repository implements ApiInterface,
 
     @Override
     public Observable<ResetPasswordResponse> changePassword(String password, String access_token, String userid) {
-        Observable<ResetPasswordResponse> responseObservable = mApiInterface.changePassword(password,access_token,userid);
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.changePassword(password, access_token, userid);
         return responseObservable;
     }
 
     @Override
     public Observable<ShareReading> getShareReading(String userid, String accessToken, String request_type, Boolean status) {
-        Observable<ShareReading> responseObservable = mApiInterface.getShareReading(userid,accessToken,request_type,status);
+        Observable<ShareReading> responseObservable = mApiInterface.getShareReading(userid, accessToken, request_type, status);
         return responseObservable;
     }
 
 
     @Override
-    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname,String lastname, String gender, String dob, String mobile1, String address1,String weight,String height,String photo_url,String state,String city,String zipcode) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname,lastname, gender, dob, mobile1, address1,weight,height,photo_url,state,city,zipcode);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String lastname, String gender, String dob, String mobile1, String address1, String weight, String height, String photo_url, String state, String city, String zipcode) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, lastname, gender, dob, mobile1, address1, weight, height, photo_url, state, city, zipcode);
         return responseObservable;
     }
 
     @Override
     public Observable<ResetPasswordResponse> resetPassword(String email) {
-        Observable<ResetPasswordResponse> responseObservable = mApiInterface.resetPassword( email);
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.resetPassword(email);
         return responseObservable;
     }
 

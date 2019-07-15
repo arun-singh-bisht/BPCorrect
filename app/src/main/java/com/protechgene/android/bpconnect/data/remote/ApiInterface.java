@@ -55,6 +55,9 @@ public interface ApiInterface {
     @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
     Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
+    @GET("ProtechSentinel/common/get/protocol/data/according/to/user")
+    Observable<GetProtocolResponse> getHistoryProtocol(@Query("access_token") String access_token, @Query("patientUserId") String userId);
+
     // edit by sohit address select state and city and password
      @GET("ProtechSentinel/common/get/state/list")
     Observable<StateCityOptions> getOptionCity();

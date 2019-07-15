@@ -20,7 +20,8 @@ import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragmentViewModel
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.readingHistory.BpReadingsViewModel;
 import com.protechgene.android.bpconnect.ui.readingHistory.ProtocolReadingsViewModel;
-import com.protechgene.android.bpconnect.ui.reminder.ReminderViewModel;
+import com.protechgene.android.bpconnect.ui.reminder.ActiveProtocolViewModel;
+import com.protechgene.android.bpconnect.ui.reminder.HistoryProtocolsViewModel;
 import com.protechgene.android.bpconnect.ui.settings.SettingFragmentViewModel;
 import com.protechgene.android.bpconnect.ui.signup.SignUpViewModel;
 import com.protechgene.android.bpconnect.ui.splash.SplashViewModel;
@@ -73,8 +74,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MeasureBPFragmentViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(SettingFragmentViewModel.class)) {
             return (T) new SettingFragmentViewModel(mRepository);
-        }else  if (modelClass.isAssignableFrom(ReminderViewModel.class)) {
-            return (T) new ReminderViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(ActiveProtocolViewModel.class)) {
+            return (T) new ActiveProtocolViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(ProtocolReadingsViewModel.class)) {
             return (T) new ProtocolReadingsViewModel(mRepository);
         }else  if (modelClass.isAssignableFrom(ChangePasswordViewModel.class)) {
@@ -85,6 +86,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new PairNewDeviceViewModelTranstek(mRepository);
         }else  if (modelClass.isAssignableFrom(DevicesListViewModel.class)) {
             return (T) new DevicesListViewModel(mRepository);
+        }else  if (modelClass.isAssignableFrom(HistoryProtocolsViewModel.class)) {
+            return (T) new HistoryProtocolsViewModel(mRepository);
         }
 
 
