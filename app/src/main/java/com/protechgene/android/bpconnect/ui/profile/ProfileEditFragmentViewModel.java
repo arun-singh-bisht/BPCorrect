@@ -22,7 +22,9 @@ import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -179,7 +181,14 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             getNavigator().handleError(throwable);
             return;
         }
-        if(profileDetailModel.getAddress1()== null || profileDetailModel.getAddress1().isEmpty())
+        if(check_date( profileDetailModel.getDob()))
+        {
+            throwable = new IllegalArgumentException("You are too young");
+            getNavigator().handleError(throwable);
+            return;
+        }
+
+        /*if(profileDetailModel.getAddress1()== null || profileDetailModel.getAddress1().isEmpty())
         {
             throwable = new IllegalArgumentException("Enter your address");
             getNavigator().handleError(throwable);
@@ -202,8 +211,8 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
             throwable = new IllegalArgumentException("Enter your zipcode");
             getNavigator().handleError(throwable);
             return;
-        }
-        if(profileDetailModel.getZipcode().length() != 10)
+        }*/
+        if(profileDetailModel.getZipcode().length() > 0 && profileDetailModel.getZipcode().length() != 5)
         {
             throwable = new IllegalArgumentException("Enter valid zipcode");
             getNavigator().handleError(throwable);
@@ -344,5 +353,27 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
+    }
+
+    public boolean check_date(String date) {
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date input_date = null;
+        try {
+            input_date = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar c =  new GregorianCalendar();
+        c.setTime(input_date);
+        int input_year = c.get(Calendar.YEAR);
+        c.setTime(new Date());
+        int current_year= c.get(Calendar.YEAR);
+        if (input_year >= current_year)
+            return true;
+        else
+            return  false;
     }
 }

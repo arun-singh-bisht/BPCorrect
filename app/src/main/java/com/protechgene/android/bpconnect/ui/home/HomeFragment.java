@@ -1,21 +1,32 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +38,7 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
+//import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.devices.PairedDevice.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentNew;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
@@ -35,20 +47,22 @@ import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
 import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
+//import com.protechgene.android.bpconnect.ui.test.Transtek;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.protechgene.android.bpconnect.ui.ApplicationBPConnect.SNOOZ_TIME;
 
 public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator,CustomAlertDialog.I_CustomAlertDialog,CustomAlertDialog.I_CustomAlertDialogThreeButton {
 
     public static final String FRAGMENT_TAG = "HomeFragment";
     private HomeViewModel mHomeViewModel;
-
+    boolean isprotocol_active = false;
     @BindView(R.id.text_profile_name)
     TextView text_profile_name;
+
 
     @BindView(R.id.text_profile_email)
     TextView text_profile_email;
@@ -70,8 +84,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
 
@@ -79,6 +91,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         boolean isAlarmFired = false;
         boolean isNewUser = false;
+
         Bundle args = getArguments();
         if(args!=null) {
             isAlarmFired = args.getBoolean("isAlarmFired");
@@ -87,8 +100,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         if(isAlarmFired)
         {
-            alarmFireTime = args.getString("alarmFireTime");
-            Log.d("HomeFragment","alarmFireTime "+alarmFireTime);
+            alarmFireTime = args.getString("FireTime");
             String msg = "It's time to check your blood pressure. You can also snooz it for some time.";
             CustomAlertDialog.showThreeButtonDialog(getBaseActivity(),1001,msg,"Check Now","Snooz","Cancel",this);
         }else
@@ -96,6 +108,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             //CustomAlertDialog.showInstructionDialog(getBaseActivity());
             if(isNewUser)
             {
+                new_user_disable_side_nav(0);
                 //mHomeViewModel.checkActiveProtocol();
                 videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
 
@@ -112,16 +125,21 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 //showProgress("Syn app data...");
                 mHomeViewModel.synHistoryData();
             }
-
-
         }
     }
 
     @Override
-    protected void initialize() {
+    protected void initialize()
+    {
+        //  getBaseActivity().getSupportActionBar().show();
         mHomeViewModel.getProfileDetails();
     }
 
+    @OnClick(R.id.image_menu)
+    public void show_drawer() {
+        DrawerLayout drawerLayout = getBaseActivity().findViewById(R.id.drawer_layout);
+        drawerLayout.openDrawer(Gravity.LEFT);
+    }
 
     @OnClick(R.id.card_measure_bp)
     public void openMeasureBPFragment() {
@@ -136,7 +154,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             }
         });
 
-
         alertDialog.setNegativeButton("Start 5-minute timer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke NO event
@@ -144,17 +161,18 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 dialog.dismiss();
 
                 Dialog dialog1 = new Dialog(getContext());
-                 View view = LayoutInflater.from(getContext()).inflate(R.layout.count_down_layout_dialog, null);
-                 dialog1.setCancelable(false);
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.count_down_layout_dialog, null);
+                dialog1.setCancelable(false);
                 dialog1.setContentView(view);
 
-               // dialog1.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                // dialog1.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 Window window = dialog1.getWindow();
                 window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                  TextView tv = (TextView) dialog1.findViewById(R.id.count_down_tv);
+                TextView tv = (TextView) dialog1.findViewById(R.id.count_down_tv);
                 final VideoView videoView = dialog1.findViewById(R.id.video_view);
                 TextView close_btn = (TextView) dialog1.findViewById(R.id.close_btn);
-                        videoView.setBackgroundColor(getResources().getColor(android.R.color.black));
+                ImageView play_button = (ImageView) dialog1.findViewById(R.id.play_image) ;
+                videoView.setBackgroundColor(getResources().getColor(android.R.color.black));
                 final ProgressBar progressBar = (ProgressBar) dialog1.findViewById(R.id.dailog_progress_bar);
                 close_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -165,6 +183,21 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 Uri uri = Uri.parse("http://67.211.223.164:8080/video/bp_video.mp4");
                 videoView.setVideoURI(uri);
                 progressBar.setVisibility(View.VISIBLE);
+
+
+                videoView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (videoView.isPlaying()){
+                            videoView.pause();
+                            play_button.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            videoView.start();
+                            play_button.setVisibility(View.GONE);
+                        }
+                    }
+                });
                 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
@@ -212,7 +245,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         // Showing Alert Message
         alertDialog.show();
-        }
+    }
 
     @OnClick(R.id.card_readings)
     public void openReadingsFragment() {
@@ -221,7 +254,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @OnClick(R.id.card_learn)
     public void openTutorialFragment() {
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
+          FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new TutorialFragment(),TutorialFragment.FRAGMENT_TAG,"TutorialFragmentTransition");
     }
 
     @OnClick(R.id.card_devices)
@@ -255,13 +288,36 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     }
 
+    public  void getvalue() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+              //  getvalue();
+                isprotocol_active=  mHomeViewModel.getprotocol();
+            }
+        });
+
+      /*  getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            isprotocol_active=  mHomeViewModel.getprotocol();
+            }
+        });*/
+    }
+
     @Override
     public void showProfileDetails() {
+       // getvalue();
         String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
+        // update by rajat
+        TextView username = getBaseActivity().findViewById(R.id.nav_profile_name);
+        TextView address = getBaseActivity().findViewById(R.id.nav_profile_address);
+        CircularImageView nav_profile_image = getBaseActivity().findViewById(R.id.nav_profile_img);
 
         if(userName==null || userName.equalsIgnoreCase("null")) {
             //First Time App User
+            new_user_disable_side_nav(8);
             if(videoDialog!=null)
                 videoDialog.dismiss();
 
@@ -270,24 +326,53 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             text_profile_name.setText(userName + "");
             text_profile_email.setText(userEmail + "");
 
+            // For nav  drawer by rajat
+            username.setText(userName + "");
+            address.setText("NA");
+
+
             //Open Profile Edit Screen
             ProfileEditFragment profileEditFragment = new ProfileEditFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean("isProfileComplete",false);
             profileEditFragment.setArguments(bundle);
-
             FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,profileEditFragment,ProfileEditFragment.FRAGMENT_TAG,null);
 
-        }else {
+        }else if(isprotocol_active) {
+
+            HomeFragment homeFragment = new HomeFragment();
+            Bundle args = new Bundle();
+            args.putBoolean("isNewUser",true);
+            homeFragment.setArguments(args);
+           // FragmentUtil.removeFragment(getBaseActivity());
+            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
+        }
+
+        else {
             //Already an App User
             userName =  mHomeViewModel.getUserFirstName() +" "+ mHomeViewModel.getUserLastName();
             text_profile_name.setText(userName + "");
             text_profile_email.setText(userEmail + "");
 
+            // For nav  drawer by rajat
+            username.setText(userName + "");
+            address.setText(mHomeViewModel.getAddress());
+
             String image_url = mHomeViewModel.getProfilePic();
             if(image_url != null)
                 Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(image_profile_pic);
+            Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(nav_profile_image);
         }
+    }
+
+    public void new_user_disable_side_nav(int value) {
+
+        int  result = value;
+        LinearLayout profile = getBaseActivity().findViewById(R.id.nav_profile_redirect);profile.setVisibility(result);
+        LinearLayout measure_blood_pressure = getBaseActivity().findViewById(R.id.nav_measure_redirect); measure_blood_pressure.setVisibility(result);
+        LinearLayout blood_pressure_readings = getBaseActivity().findViewById(R.id.nav_readings_redirect); blood_pressure_readings.setVisibility(result);
+        LinearLayout learn = getBaseActivity().findViewById(R.id.nav_learn_redirect); learn.setVisibility(result);
+        LinearLayout manage_devices = getBaseActivity().findViewById(R.id.nav_manage_devices_redirect); manage_devices.setVisibility(result);
     }
 
     @Override
@@ -302,14 +387,17 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void historyDataSyncStatus(boolean status) {
+
         getBaseActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 hideProgress();
                 if(status)
                     getBaseActivity().showSnakeBar("App Data Sync Successful");
                 else
                     getBaseActivity().showSnakeBar("App Data Sync Failure");
+                getvalue();
             }
         });
 
@@ -340,7 +428,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         //AlarmReceiver.deleteAllAlarm(MainActivity.this);
         //Log.d("onNegativeClick","All Alarm removed");
         //Set alarm for next 10 min
-        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, SNOOZ_TIME);
+        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 10);
         String[] split = newTime.split(":");
         Log.d("onNegativeClick","Setting Alarm from "+alarmFireTime +" To "+newTime);
         AlarmReceiver.setAlarm(getBaseActivity(),Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);

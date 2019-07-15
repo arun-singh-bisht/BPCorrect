@@ -44,7 +44,7 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
 
     private void initView()
     {
-        txt_title.setText("Blood Pressure Readings");
+        txt_title.setText("My Blood Pressure Readings");
         img_right.setImageResource(R.drawable.ic_action_add_simple);
 
         setupViewPager(viewPager);
@@ -66,7 +66,7 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new ProtocolReadingFragment(), "This week's readings");
+        adapter.addFragment(new ProtocolReadingFragment(), "BPCorrect Readings");
         adapter.addFragment(new BPAllReadingFragment(), "ALL");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);

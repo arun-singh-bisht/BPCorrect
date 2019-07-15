@@ -6,6 +6,7 @@ import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.PermissionUtils;
+import com.protechgene.android.bpconnect.ui.WebViewScreen;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordActivity;
@@ -49,6 +50,11 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
         mLoginViewModel.login(email, password);
     }
 
+    @OnClick(R.id.terms_and_privacy_link)
+    void openlink() {
+        startActivity( new Intent(this, WebViewScreen.class));
+    }
+
     @OnClick(R.id.txt_sign_up)
     void signUp() {
         startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
@@ -69,6 +75,7 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
     @Override
     public void handleError(Throwable throwable) {
         hideProgress();
+        System.out.println("err is "+throwable.toString());
         showSnakeBar(throwable.getMessage());
     }
 

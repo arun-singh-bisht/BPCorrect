@@ -204,6 +204,13 @@
                             android:layout_gravity="center"
                             android:visibility="gone"
                             android:id="@+id/dailog_progress_bar"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/play_button"
+                            android:visibility="gone"
+                            android:id="@+id/play_image"/>
 
                     </FrameLayout>
 

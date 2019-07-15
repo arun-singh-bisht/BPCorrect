@@ -146,7 +146,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
 
         String name = mProfileEditFragmentViewModel.getUserFirstName();
         if(name==null || name.equalsIgnoreCase("null"))
-            name = "BPCorrect User";
+            name = "";
         edit_first_name.setText(name);
         edit_last_name.setText(mProfileEditFragmentViewModel.getUserLastName());
         edit_email.setText(mProfileEditFragmentViewModel.getUserEmail());

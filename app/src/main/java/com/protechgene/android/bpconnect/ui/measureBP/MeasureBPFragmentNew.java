@@ -39,6 +39,8 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
 
     @BindView(R.id.btn_done)
     TextView doneButton;
+    @BindView(R.id.all_set)
+    TextView all_set;
     @BindView(R.id.text_bp_reading)
     TextView text_bp_reading;
     @BindView(R.id.blood_pressure_tv)
@@ -356,6 +358,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         measureBPFragmentViewModel.stopMeaseureReading();
 
         doneButton.setText("Done");
+
         doneButton.setVisibility(View.VISIBLE);
         doneButton.setTag("Done");
     }
@@ -383,7 +386,6 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 if(count_protocolReadingAlreadyTaken<2) {
                     shouldInstructionDialogShow = false;
                     activateCountDown();
-
                     doneButton.setVisibility(View.GONE);
                 }
                 else
@@ -394,12 +396,12 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     view_wait.setVisibility(View.GONE);
                     text_upper.setVisibility(View.GONE);
                     doneButton.setText("Done");
+                    all_set.setVisibility(View.VISIBLE);
                     doneButton.setVisibility(View.VISIBLE);
                     doneButton.setTag("Done");
                 }
             }
         });
-
     }
 
     @Override
@@ -418,6 +420,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     rippleBackground.stopRippleAnimation();
 
                 isReadingDone = true;
+                all_set.setVisibility(View.VISIBLE);
                 text_transfer_status.setVisibility(View.GONE);
                 text_wait_tv.setVisibility(View.GONE);
                 view_wait.setVisibility(View.GONE);

@@ -217,6 +217,16 @@
             android:textColor="#ffffff"
             android:textSize="@dimen/get_a_pay_text_size"
             android:visibility="gone" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_20dp"
+            android:layout_marginEnd="@dimen/dimen_20dp"
+            android:text="You're all set. You should receive a reminder when it's time to check your blood pressure again!"
+            android:layout_below="@+id/btn_done"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:visibility="gone"
+            android:id="@+id/all_set"/>
 
         <!--Data Transfer status text-->
         <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView

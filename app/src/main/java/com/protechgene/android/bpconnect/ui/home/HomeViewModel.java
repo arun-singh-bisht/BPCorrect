@@ -35,6 +35,12 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
         return getRespository().getUserFirstName();
     }
 
+    // update by rajat
+    public String getAddress()
+    {
+        return getRespository().getPatientAddress()+" "+getRespository().getPrefKeyPatientCity()+" "+getRespository().getPrefKeyPatientState();
+    }
+
     public String getUserLastName()
     {
         return getRespository().getUserLastName();
@@ -50,10 +56,12 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
         return getRespository().getPrefKeyProfileImg();
     }
 
+    public boolean getprotocol() {
+        return getRespository().getAllProtocol().size() > 0? true: false;
+    }
+
     public void getProfileDetails()
     {
-
-
         String patientId = getRespository().getPatientId();
         if(patientId!=null)
         {
@@ -94,6 +102,13 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                         respository.setPrefKeyProfileImg(profileResponse.getData().get(0).getPhoto_url());
                         respository.setPrefKeyOrgName(profileResponse.getData().get(0).getOrg_name());
                         respository.setPrefKeyProviderName(profileResponse.getData().get(0).getProvider());
+                        // edit by rajat
+                        respository.setPrefKeyPatientState(profileResponse.getData().get(0).getState());
+                        respository.setPrefKeyPatientCity(profileResponse.getData().get(0).getCity());
+                        respository.setPrefKeyPatientZipcode(profileResponse.getData().get(0).getZipcode());
+                        respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
+
+
 
                         getNavigator().showProfileDetails();
                     }

@@ -7,4 +7,6 @@ public interface SignUpNavigator {
 
     void openLoginScreen();
 
+    void set_password_instruction();
+
 }

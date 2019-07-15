@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PROFILE"
+        android:text=""
         android:id="@+id/nav_profile_title"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
@@ -56,7 +56,7 @@
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-                android:id="@+id/text_profile_name"
+                android:id="@+id/nav_profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Andera Pinter"
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/nav_address_tv"
+                android:id="@+id/nav_profile_address"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/_12ssp"
                 android:text="San Francisco, CA"/>
@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/nav_profile_redirect"
             android:layout_marginTop="8dp">
 
             <ImageView
@@ -132,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:id="@+id/nav_measure_redirect"
             android:orientation="horizontal">
 
             <ImageView
@@ -172,6 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:id="@+id/nav_readings_redirect"
             android:orientation="horizontal">
 
             <ImageView
@@ -215,6 +218,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:id="@+id/nav_learn_redirect"
             android:orientation="horizontal">
 
             <ImageView
@@ -258,6 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:id="@+id/nav_manage_devices_redirect"
             android:orientation="horizontal">
 
             <ImageView
@@ -296,6 +301,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/nav_logout"
         android:layout_below="@id/nav_options_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"

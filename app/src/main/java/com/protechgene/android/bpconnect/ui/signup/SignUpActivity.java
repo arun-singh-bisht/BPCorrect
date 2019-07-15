@@ -4,10 +4,16 @@ package com.protechgene.android.bpconnect.ui.signup;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.ui.WebViewScreen;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
@@ -25,6 +31,11 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
     EditText edit_password;
     @BindView(R.id.edit_password_confirm)
     EditText edit_password_confirm;
+
+    @BindView(R.id.terms_and_condition)
+    CheckBox terms_and_condition;
+    @BindView(R.id.password_instruction)
+    TextView password_instruction;
 
     private SignUpViewModel mSignUpViewModel;
 
@@ -44,7 +55,12 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
         finish();
     }
 
+    @OnClick(R.id.terms_and_privacy_link)
+    void openlink() {
+        startActivity( new Intent(this, WebViewScreen.class));
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @OnClick(R.id.btn_signup)
     public void signUp() {
         String email = edit_email.getText().toString();
@@ -52,8 +68,18 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
         String passwordConfirm = edit_password_confirm.getText().toString();
 
         showProgress("Please wait...");
+        if (!terms_and_condition.isChecked()) {
+            terms_and_condition.setTextColor(getColor(R.color.bp_red));
+            hideProgress();
+        return;
+        } else {
+            terms_and_condition.setTextColor(getColor(R.color.black_overlay));
+        }
+
         mSignUpViewModel.registerUser(email, password,passwordConfirm);
     }
+
+
 
     @Override
     public void openLoginScreen() {
@@ -72,6 +98,11 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
 
             }
         });
+    }
+
+    @Override
+    public void set_password_instruction() {
+        password_instruction.setVisibility(View.VISIBLE);
     }
 
     @Override

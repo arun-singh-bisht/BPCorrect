@@ -30,6 +30,7 @@ public class SignUpViewModel extends BaseViewModel<SignUpNavigator> {
     {
 
         Throwable throwable = null;
+
         if (TextUtils.isEmpty(email) || !GeneralUtil.isValidEmail(email)) {
             throwable = new IllegalArgumentException("Invalid Email Address");
             getNavigator().handleError(throwable);
@@ -45,7 +46,7 @@ public class SignUpViewModel extends BaseViewModel<SignUpNavigator> {
             getNavigator().handleError(throwable);
             return;
         }if(!isValidPassword(password))
-        {
+        {   getNavigator().set_password_instruction();
             throwable = new IllegalArgumentException("Use at least 1 symbols %,1,A,a");
             getNavigator().handleError(throwable);
             return;
@@ -93,7 +94,7 @@ public class SignUpViewModel extends BaseViewModel<SignUpNavigator> {
     public static boolean isValidPassword(final String password) {
         Pattern pattern;
         Matcher matcher;
-        final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+        final String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!&~_=+';:.,/|]).{8,40})";
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
 

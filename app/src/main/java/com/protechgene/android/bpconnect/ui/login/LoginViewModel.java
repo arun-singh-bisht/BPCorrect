@@ -45,12 +45,17 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
 
                         //Save user
                         Repository respository = getRespository();
-                        respository.setCurrentUserEmail(email);
-                        respository.setAccessToken(oauthResponse.getValue());
-                        respository.setCurrentUserId(oauthResponse.getAdditionalInformation().getId()+"");
-                        respository.setIsLoggedIn(true);
+                        if (oauthResponse.getAdditionalInformation().getRole().toString().equals("ROLE_PATIENT")) {
 
-                        getNavigator().openMainActivity();
+                            respository.setCurrentUserEmail(email);
+                            respository.setAccessToken(oauthResponse.getValue());
+                            respository.setCurrentUserId(oauthResponse.getAdditionalInformation().getId() + "");
+                            respository.setIsLoggedIn(true);
+                            getNavigator().openMainActivity();
+                        }else {
+                            Throwable throwable = new IllegalAccessException("You are not Allowed to login");
+                            getNavigator().handleError(throwable);
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override

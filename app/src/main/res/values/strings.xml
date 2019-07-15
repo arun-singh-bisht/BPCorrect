@@ -15,12 +15,13 @@
     <string name="start_free_trial">START YOUR FREE TRAIL</string>
     <string name="already_have">Already have POSfone number?</string>
     <string name="sign_in">SIGN IN</string>
-    <string name="terms_of_use">Terms of Use - Privacy - FAQ</string>
+    <string name="terms_of_use"> Terms of Use - Privacy - FAQ</string>
 
     <!--Sign In Screen-->
     <string name="activate_link_text">An activation link has been delivered to your registered email.Activate your account before login.</string>
     <string name="hint_name">Username</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">Create Password</string>
+    <string name="enter_password">Password</string>
     <string name="hint_password_confirm">Confirm Password</string>
     <string name="forgot_pwd">Forgot Password?</string>
     <string name="login">LOGIN</string>
@@ -32,6 +33,7 @@
 
     <!--Sign Up screen-->
     <string name="first_name">First Name*</string>
+    <string name="create_account">Create an account</string>
     <string name="last_name">Last Name</string>
     <string name="company_name">Company Name</string>
     <string name="company_address">Company Address</string>
@@ -61,7 +63,7 @@
         <li>Cuff sizing instructions</li>\n\n
     </string>
 
-    <string name="step1">Make sure it been 30 minutes since you\'ve exercised, smoked, or had any caffeine or alcohol.</string>
+    <string name="step1">Make sure it has been 30 minutes since you\'ve exercised, smoked, or had any caffeine or alcohol.</string>
     <string name="step2">Empty your bladder.</string>
     <string name="step3">Rest in a chair with your back supported.</string>
     <string name="step4">Place the bottom of the cuff just above the bend of your bare elbow.</string>
@@ -74,5 +76,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="a_and_d">A&amp;D Medical</string>
+    <string name="accept_terms">I have read the terms and conditions.</string>
+    <string name="password_instruction">Password must contain at least one Uppercase letter and one Lowercase letter, at least one number, one special character                      and be longer than eight charaters.</string>
 
 </resources>
