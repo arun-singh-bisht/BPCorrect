@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:id="@+id/list_devies_ll"
+        android:layout_marginTop="5dp"
+        android:padding="8dp">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:id="@+id/device_a_d_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view3"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/a_and_d"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/a_and_d"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_overlay"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:id="@+id/device_ihealth_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view2"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ihealth"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="iHealth"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/black_overlay"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/device_omron_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view1"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/omron"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Omron"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/black_overlay"/>
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:id="@+id/device_trans_prak_ll">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:id="@+id/image_view4"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/transtek"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Transtek"
+                android:textSize="@dimen/_12ssp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:layout_weight="0.3"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black_overlay"/>
+
+
+    </LinearLayout>
+</LinearLayout>

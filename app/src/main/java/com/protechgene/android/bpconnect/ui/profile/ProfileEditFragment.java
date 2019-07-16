@@ -113,13 +113,11 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
     protected void initialize() {
         mProfileEditFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(ProfileEditFragmentViewModel.class);
         mProfileEditFragmentViewModel.setNavigator(this);
-
         initView();
     }
 
     private void initView()
     {
-
         Bundle args = getArguments();
         if(args!=null)
            isProfileComplete = args.getBoolean("isProfileComplete");

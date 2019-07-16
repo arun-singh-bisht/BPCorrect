@@ -22,7 +22,8 @@ import java.util.Calendar;
 public class AlarmReceiver  extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent)
+    {
 
         final Repository repository = Repository.getInstance((Application) context.getApplicationContext());
         AsyncTask.execute(new Runnable() {

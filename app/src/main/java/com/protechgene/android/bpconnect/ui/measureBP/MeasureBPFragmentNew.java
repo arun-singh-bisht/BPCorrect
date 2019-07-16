@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
@@ -67,6 +69,9 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
 
     @BindView(R.id.text_ihealth_device_name)
     TextView text_ihealth_device_name;
+
+    @BindView(R.id.text_measurement_completed_message)
+    TextView text_measurement_completed_message;
 
     @BindView(R.id.seekbar)
     CircleSeekBar seekbar;
@@ -139,50 +144,45 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
         builder.setTitle("Select Device");
 
         // add a list
-        final String[] gender = {"A&D UA-651BLE", "iHealth BP3L","Transtrek"};
-        builder.setItems(gender, new DialogInterface.OnClickListener() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.devices_list_dialog_new, null);
+       // final String[] gender = {"A&D UA-651BLE", "iHealth BP3L","Transtrek"};
+        builder.setView(alertLayout);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        alertLayout.findViewById(R.id.device_a_d_ll).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //openScanningScreen(which);
-                if(which==0)
-                {
-                   //A&A&D UA-651BLE Device
-                    SELECTED_BP_MODEL = BP_DEVICE_MODEL_AND_UA_651BLE;
-
-                }else if(which==1)
-                {
-                    //iHealth BP3L Device
-                    SELECTED_BP_MODEL = BP_DEVICE_MODEL_IHEALTH_BP3L;
-
-                    /*boolean b = measureBPFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
-                    if(b) {
-                        measureBPFragmentViewModel.scanBP3LDevice();
-                    }else
-                    {
-                        getBaseActivity().showSnakeBar("Not authorized to use this device.");
-                    }*/
-                }else if(which==2)
-                {
-                    //iHealth BP3L Device
-                    SELECTED_BP_MODEL = BP_DEVICE_MODEL_TRANSTREK_1491B;
-
-                    /*boolean b = measureBPFragmentViewModel.isAuthorizeForBP3L(getBaseActivity());
-                    if(b) {
-                        measureBPFragmentViewModel.scanBP3LDevice();
-                    }else
-                    {
-                        getBaseActivity().showSnakeBar("Not authorized to use this device.");
-                    }*/
-                }
+            public void onClick(View v) {
+                SELECTED_BP_MODEL = BP_DEVICE_MODEL_AND_UA_651BLE;
                 measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
-
+                dialog.dismiss();
             }
         });
 
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-         dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        alertLayout.findViewById(R.id.device_ihealth_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SELECTED_BP_MODEL = BP_DEVICE_MODEL_IHEALTH_BP3L;
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
+                dialog.dismiss();
+            }
+        });
+        alertLayout.findViewById(R.id.device_omron_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        alertLayout.findViewById(R.id.device_trans_prak_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SELECTED_BP_MODEL = BP_DEVICE_MODEL_TRANSTREK_1491B;
+                measureBPFragmentViewModel.connectToDevice(getBaseActivity(),SELECTED_BP_MODEL,isTypeProtocol,protocolId,total_protocolReadingTaken);
+                dialog.dismiss();
+            }
+        });
     }
 
 
@@ -401,6 +401,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     doneButton.setText("Done");
                     doneButton.setVisibility(View.VISIBLE);
                     doneButton.setTag("Done");
+                    text_measurement_completed_message.setVisibility(View.VISIBLE);
                 }
             }
         });

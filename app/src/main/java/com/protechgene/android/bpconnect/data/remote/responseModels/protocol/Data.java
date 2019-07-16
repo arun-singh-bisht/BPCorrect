@@ -26,8 +26,8 @@ public class Data {
     private String status;
     @SerializedName("device_name")
     private String device_name;
-    @SerializedName("value")
-    private List<Datasource> datasource;
+    @SerializedName("_key_value")
+    private Datasource datasource;
 
 
     public String getEndDate() {
@@ -110,11 +110,11 @@ public class Data {
         this.device_name = device_name;
     }
 
-    public List<Datasource> getDatasource() {
+    public Datasource getDatasource() {
         return datasource;
     }
 
-    public void setDatasource(List<Datasource> datasource) {
+    public void setDatasource(Datasource datasource) {
         this.datasource = datasource;
     }
 }

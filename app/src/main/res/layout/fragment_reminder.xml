@@ -131,7 +131,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:gravity="center_vertical"
-        android:background="#ECDF52"
+
         >
 
         <RelativeLayout
@@ -142,7 +142,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/sun"
-                android:tint="#ffffff"
+                android:tint="#A5A1A1"
                 />
 
             <Button
@@ -165,7 +165,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Morning"
-            android:textColor="#ffffff"
             android:textSize="16sp"
 
             />
@@ -181,7 +180,6 @@
                 android:layout_height="wrap_content"
                 android:text="8:30"
                 android:textSize="45sp"
-                android:textColor="#ffffff"
                 android:layout_centerVertical="true"
                 />
             <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
@@ -190,7 +188,6 @@
                 android:text="AM"
                 android:textSize="25sp"
                 android:layout_centerInParent="true"
-                android:textColor="#ffffff"
                 />
 
             <Switch
@@ -203,6 +200,7 @@
                 android:checked="true"
                 android:textOff="No"
                 android:textOn="Yes"
+                android:theme="@style/MySwitch"
                 />
 
         </RelativeLayout>
@@ -216,7 +214,6 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:gravity="center_vertical"
-        android:background="#7DB5D1"
         >
 
         <android.support.constraint.ConstraintLayout
@@ -236,7 +233,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:src="@drawable/moon"
-                    android:tint="#ffffff"
+                    android:tint="#A5A1A1"
                     android:padding="8dp"
                     />
 
@@ -263,7 +260,6 @@
                 android:id="@+id/reminder_evening"
                 app:layout_constraintTop_toBottomOf="@id/reminder_1_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:textColor="#ffffff"
                 android:textSize="16sp"
                 />
 
@@ -283,7 +279,6 @@
                     android:layout_height="wrap_content"
                     android:text="6:00"
                     android:textSize="45sp"
-                    android:textColor="#ffffff"
                     android:layout_centerVertical="true"
                     />
                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
@@ -291,7 +286,6 @@
                     android:layout_height="wrap_content"
                     android:text="PM"
                     android:textSize="25sp"
-                    android:textColor="#ffffff"
                     android:layout_centerInParent="true"
                     />
 
@@ -303,6 +297,7 @@
                     android:layout_centerVertical="true"
                     android:visibility="visible"
                     android:checked="true"
+                    android:theme="@style/MySwitch"
                     />
 
             </RelativeLayout>

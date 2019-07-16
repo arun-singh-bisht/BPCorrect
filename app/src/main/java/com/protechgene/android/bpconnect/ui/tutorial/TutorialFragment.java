@@ -28,6 +28,10 @@ public class TutorialFragment extends BaseFragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.text_instruction_msg)
+    TextView text_instruction_msg;
+
+
 
     private TutorialAdapter bpReadingAdapter;
 
@@ -50,6 +54,7 @@ public class TutorialFragment extends BaseFragment {
     private void initView()
     {
         txt_title.setText("Learn");
+        text_instruction_msg.setVisibility(View.GONE);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);

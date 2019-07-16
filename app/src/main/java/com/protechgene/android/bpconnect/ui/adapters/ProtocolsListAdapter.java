@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
 
 import java.util.List;
@@ -36,10 +37,13 @@ public class ProtocolsListAdapter extends RecyclerView.Adapter<ProtocolsListAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Data data = dataList.get(position);
 
-        holder.text_protocol_start_date.setText(data.getStartDate());
-        holder.text_protocol_end_date.setText(data.getEndDate());
-        holder.text_protocol_morning_time.setText(data.getDatasource().get(0).getSBP());
-        //holder.text_protocol_evening_time.setText(data.getDatasource().getDBP());
+        String startDate = DateUtils.convertMillisecToDateTime(Long.parseLong(data.getStartDate())*1000, "MMM dd,yyyy");
+        String endDate = DateUtils.convertMillisecToDateTime(Long.parseLong(data.getEndDate())*1000, "MMM dd,yyyy");
+        holder.text_protocol_start_date.setText(startDate +" - "+ endDate);
+        holder.text_protocol_end_date.setVisibility(View.GONE);
+        holder.text_protocol_morning_time.setText(data.getDatasource().getSBP() +" mmHg");
+        holder.text_protocol_evening_time.setText(data.getDatasource().getDBP() +" mmHg");
+        holder.text_pulse_value.setText(data.getDatasource().getPULSE() +" bpm");
     }
 
     @Override
@@ -58,7 +62,7 @@ public class ProtocolsListAdapter extends RecyclerView.Adapter<ProtocolsListAdap
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView text_protocol_start_date,text_protocol_end_date,text_protocol_morning_time,text_protocol_evening_time;
+        public TextView text_protocol_start_date,text_protocol_end_date,text_protocol_morning_time,text_protocol_evening_time,text_pulse_value;
 
         public MyViewHolder(View view) {
             super(view);
@@ -66,6 +70,7 @@ public class ProtocolsListAdapter extends RecyclerView.Adapter<ProtocolsListAdap
             text_protocol_end_date = view.findViewById(R.id.text_protocol_end_date);
             text_protocol_morning_time = view.findViewById(R.id.text_protocol_morning_time);
             text_protocol_evening_time =  view.findViewById(R.id.text_protocol_evening_time);
+            text_pulse_value = view.findViewById(R.id.text_pulse_value);
         }
     }
 

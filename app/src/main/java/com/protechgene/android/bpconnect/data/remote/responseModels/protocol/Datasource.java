@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Datasource {
 
-    @SerializedName("0")
+    @SerializedName("SBP")
     private String SBP;
-    @SerializedName("1")
+    @SerializedName("DBP")
     private Integer DBP;
-    @SerializedName("2")
+    @SerializedName("PULSE")
     private String PULSE;
 
     public String getSBP() {

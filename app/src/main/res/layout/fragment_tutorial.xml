@@ -19,6 +19,7 @@
             android:background="@color/bp_gray"
             android:layout_width="match_parent"
             android:visibility="visible"
+            android:layout_above="@+id/text_instruction_msg"
             android:layout_height="match_parent"/>
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -29,6 +30,20 @@
             android:visibility="gone"
             android:gravity="center"
             android:text="No paired device found."
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+            android:id="@+id/text_instruction_msg"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:gravity="center"
+            android:textColor="#807D7D"
+            android:layout_margin="5dp"
+            android:background="#fff"
+            android:padding="7dp"
+            android:text="Please click on the + on the top right corner to pair with a new blood pressure monitor."
             />
 
     </RelativeLayout>

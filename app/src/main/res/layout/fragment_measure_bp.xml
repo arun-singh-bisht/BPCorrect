@@ -206,7 +206,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_center"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_between_buttons_sign_in"
+            android:layout_marginTop="80dp"
             android:background="@drawable/round_bg_textview"
             android:gravity="center"
             android:paddingLeft="25dp"
@@ -230,6 +230,21 @@
             android:text="Searching for data..."
             android:textSize="16sp"
             android:visibility="gone" />
+
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:id="@+id/text_measurement_completed_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:layout_below="@+id/view_center"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="You're all set. You should receive a reminder when it's time to check your blood pressure again!"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
 
     </RelativeLayout>
 

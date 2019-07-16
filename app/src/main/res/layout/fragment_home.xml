@@ -81,7 +81,7 @@
                         android:id="@+id/text_profile_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mark Henery"
+                        android:text=""
                         android:textColor="#ffffff"
                         android:textSize="@dimen/_20ssp"
                         android:textStyle="bold" />
@@ -106,7 +106,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#ffffff"
-                            android:text="Mark.henery@gmail.com"
+                            android:text=""
                             android:textSize="@dimen/_10ssp" />
 
                     </LinearLayout>
