@@ -23,7 +23,7 @@ public class ChangePasswordViewModel extends BaseViewModel<ChangePasswordNavigat
         super(repository);
     }
 
-    public void changePassword(String password,String confirm_password){
+    public void changePassword(String password,String confirm_password , String code){
 
         Throwable throwable =null;
         if(password.equals("") || password.isEmpty())
@@ -59,6 +59,14 @@ public class ChangePasswordViewModel extends BaseViewModel<ChangePasswordNavigat
               String userid = getRespository().getCurrentUserId();
               String accessToken = getRespository().getAccessToken();
 
+         if (code == null)
+             changepassword(password,accessToken,userid);
+             else
+                 resetpassword(password, code);
+
+    }
+
+    public void changepassword(String password, String accessToken, String userid) {
         disposables.add(getRespository().changePassword(password,accessToken,userid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,6 +93,34 @@ public class ChangePasswordViewModel extends BaseViewModel<ChangePasswordNavigat
                     }
                 }));
     }
+    public void resetpassword(String password, String code) {
+        disposables.add(getRespository().resetPassword(password,code)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<ResetPasswordResponse>() {
+                    @Override
+                    public void accept(ResetPasswordResponse resetPasswordResponse) throws Exception {
+
+                        String message = resetPasswordResponse.getData().get(0).getMessage();
+                        Log.d("sohit",message);
+                        getNavigator().navigateToLogin(message);
+                        logout();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //Uncomment below code for actual error handling.
+                        getNavigator().handleError(throwable);
+                    }
+                }));
+    }
+
 
 
     public static boolean isValidPassword(final String password) {

@@ -316,7 +316,8 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
                         cameraBitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(),uriImage);
 
                     if(cameraBitmap != null){
-
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        cameraBitmap.compress(Bitmap.CompressFormat.PNG,50,out);
                         byte[] data = getFileDataFromDrawable(cameraBitmap);
                         Multipart multipart = new Multipart(context);
 

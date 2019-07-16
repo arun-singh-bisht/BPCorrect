@@ -2,19 +2,31 @@ package com.protechgene.android.bpconnect.ui.login;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.PermissionUtils;
+import com.protechgene.android.bpconnect.ui.ResetPassword;
 import com.protechgene.android.bpconnect.ui.WebViewScreen;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.forgotPassword.ForgotPasswordActivity;
 import com.protechgene.android.bpconnect.ui.home.MainActivity;
 import com.protechgene.android.bpconnect.ui.signup.SignUpActivity;
+import com.protechgene.android.bpconnect.ui.splash.SplashActivity;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 public class LoginActivity extends BaseActivity implements LoginNavigator {
@@ -29,15 +41,32 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
     @Override
     protected int layoutRes() {
         return R.layout.activity_sign_in;
+
     }
 
     @Override
     protected void initialize() {
         //Do something here
+
         mLoginViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(LoginViewModel.class);
         mLoginViewModel.setNavigator(this);
-
         new PermissionUtils().requestForPermission(this);
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        if(data!=null) {
+            String code = data.toString();
+            String activationCode = code.substring(code.lastIndexOf('/') + 1);
+            if (code.contains("activate_account")) {
+                showProgress("Please wait...");
+                mLoginViewModel.activate_account(activationCode);
+            } else if (code.contains("setpassword")){
+                openMainActivity_resetPassword(activationCode);
+                finish();
+            } else {
+                startActivity(new Intent(this, SplashActivity.class));
+                finish();
+            }
+        }
     }
 
     @Override
@@ -73,10 +102,23 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
     }
 
     @Override
+    public void openMainActivity_resetPassword(String code) {
+        hideProgress();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("ispasswordreset", true).putExtra("code", code));
+        finish();
+    }
+
+    @Override
     public void handleError(Throwable throwable) {
         hideProgress();
         System.out.println("err is "+throwable.toString());
         showSnakeBar(throwable.getMessage());
+    }
+
+    @Override
+    public void accountActivated(String message) {
+        hideProgress();
+        showSnakeBar(message);
     }
 
 

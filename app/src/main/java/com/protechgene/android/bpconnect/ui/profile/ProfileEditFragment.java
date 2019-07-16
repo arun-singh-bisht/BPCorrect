@@ -169,10 +169,6 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         if(image_url != null)
             Glide.with(getContext()).load("http://67.211.223.164:8080"+
                     image_url).placeholder(R.drawable.default_pic).into(circularImageView_img);
-
-
-
-
     }
 
 
