@@ -94,7 +94,7 @@
         </service>
 
         <activity android:name=".ui.WebViewScreen" />
-        <activity android:name=".ui.ResetPassword"></activity>
+
     </application>
 
 </manifest>

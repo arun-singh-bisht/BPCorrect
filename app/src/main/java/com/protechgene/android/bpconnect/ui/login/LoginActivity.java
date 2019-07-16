@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.PermissionUtils;
-import com.protechgene.android.bpconnect.ui.ResetPassword;
 import com.protechgene.android.bpconnect.ui.WebViewScreen;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
