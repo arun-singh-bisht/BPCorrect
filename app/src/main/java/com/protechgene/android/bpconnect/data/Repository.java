@@ -16,6 +16,7 @@ import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ChangePasswordModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.appRedirect.ActivateAccount;
 import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
@@ -386,6 +387,12 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public Observable<ActivateAccount> activate(String code) {
+        Observable<ActivateAccount> activate = mApiInterface.activate(code);
+        return activate;
+    }
+
+    @Override
     public Observable<ResetPasswordResponse> signUp(String email, String password) {
         Observable<ResetPasswordResponse> responseObservable = mApiInterface.signUp(email, password);
         return responseObservable;
@@ -436,6 +443,12 @@ public class Repository implements ApiInterface,
     @Override
     public Observable<ResetPasswordResponse> changePassword(String password, String access_token, String userid) {
         Observable<ResetPasswordResponse> responseObservable = mApiInterface.changePassword(password, access_token, userid);
+        return responseObservable;
+    }
+
+    @Override
+    public Observable<ResetPasswordResponse> resetPassword(String password, String code) {
+        Observable<ResetPasswordResponse> responseObservable = mApiInterface.resetPassword(password,code);
         return responseObservable;
     }
 
