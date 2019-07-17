@@ -55,6 +55,7 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
         finish();
     }
 
+
     @OnClick(R.id.terms_and_privacy_link)
     void openlink() {
         startActivity( new Intent(this, WebViewScreen.class));

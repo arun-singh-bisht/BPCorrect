@@ -125,6 +125,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 //showProgress("Syn app data...");
                 mHomeViewModel.synHistoryData();
             }
+
+
         }
     }
 

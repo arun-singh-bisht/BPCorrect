@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lifesense.ble.bean.LsDeviceInfo;
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.deviceManager.iHealthbp3l.DeviceCharacteristic;
@@ -24,6 +25,7 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
     RippleBackground rippleBackground;
     private PairDeviceViewModelInterface pairNewDeviceViewModel;
     private DeviceCharacteristic mdeviceCharacteristic;
+    private LsDeviceInfo lsDeviceInfo;
     private String deviceModel = "";
 
 
@@ -47,38 +49,33 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
         Bundle arguments = getArguments();
         deviceModel = arguments.getString("deviceModel");
 
-        if(deviceModel.equalsIgnoreCase("A&D__651BLE"))
-        {
+        if (deviceModel.equalsIgnoreCase("A&D__651BLE")) {
             pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModel.class);
-            ((PairNewDeviceViewModel)pairNewDeviceViewModel).setNavigator(this);
+            ((PairNewDeviceViewModel) pairNewDeviceViewModel).setNavigator(this);
             //pairNewDeviceViewModel.initScan(getBaseActivity());
-        }else if(deviceModel.equalsIgnoreCase("iHealth_BP3L"))
-        {
+        } else if (deviceModel.equalsIgnoreCase("iHealth_BP3L")) {
             pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelBP3N.class);
-            ((PairNewDeviceViewModelBP3N)pairNewDeviceViewModel).setNavigator(this);
+            ((PairNewDeviceViewModelBP3N) pairNewDeviceViewModel).setNavigator(this);
 
-        }else if(deviceModel.equalsIgnoreCase("Transtek_1491B"))
-        {
+        } else if (deviceModel.equalsIgnoreCase("Transtek_1491B")) {
             pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelTranstek.class);
-            ((PairNewDeviceViewModelTranstek)pairNewDeviceViewModel).setNavigator(this);
+            ((PairNewDeviceViewModelTranstek) pairNewDeviceViewModel).setNavigator(this);
         }
 
         initView();
     }
 
     @OnClick(R.id.img_left)
-    public void onBackIconClick()
-    {
+    public void onBackIconClick() {
         FragmentUtil.removeFragment(getBaseActivity());
     }
 
-    private void initView()
-    {
-        TextView txt_title =  getView().findViewById(R.id.txt_title);
+    private void initView() {
+        TextView txt_title = getView().findViewById(R.id.txt_title);
         txt_title.setText("Pair New Device");
 
-        rippleBackground=(RippleBackground)getView().findViewById(R.id.content);
-        ImageView imageView=(ImageView)getView().findViewById(R.id.centerImage);
+        rippleBackground = (RippleBackground) getView().findViewById(R.id.content);
+        ImageView imageView = (ImageView) getView().findViewById(R.id.centerImage);
         rippleBackground.startRippleAnimation();
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,19 +107,40 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
             @Override
             public void run() {
                 deviceFound.setVisibility(View.VISIBLE);
-                TextView text_device_name = (TextView)getView().findViewById(R.id.text_device_name);
+                TextView text_device_name = (TextView) getView().findViewById(R.id.text_device_name);
                 text_device_name.setText(deviceCharacteristic.getDeviceName());
                 mdeviceCharacteristic = deviceCharacteristic;
+            }
+        });
+
+    }
+
+    @Override
+    public void onDeviceFound(LsDeviceInfo foundDevice) {
+        getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                deviceFound.setVisibility(View.VISIBLE);
+                TextView text_device_name = (TextView) getView().findViewById(R.id.text_device_name);
+                text_device_name.setText(foundDevice.getDeviceName());
+                lsDeviceInfo = foundDevice;
             }
         });
     }
 
     @OnClick(R.id.image_found_device)
-    public void onSelectDevice()
-    {
-        deviceFound.setClickable(false);
+    public void onSelectDevice() {
+	deviceFound.setClickable(false);
         device_name.setText("Connecting...");
-        pairNewDeviceViewModel.connectToDevice(mdeviceCharacteristic.getDeviceName(),mdeviceCharacteristic.getDeviceMac(),"");
+        if(deviceModel.equalsIgnoreCase("A&D__651BLE"))
+        {
+            pairNewDeviceViewModel.connectToDevice(mdeviceCharacteristic.getDeviceName(), mdeviceCharacteristic.getDeviceMac(), "");
+        }else if (deviceModel.equalsIgnoreCase("iHealth_BP3L")) {
+            pairNewDeviceViewModel.connectToDevice(mdeviceCharacteristic.getDeviceName(), mdeviceCharacteristic.getDeviceMac(), "");
+
+        } else if (deviceModel.equalsIgnoreCase("Transtek_1491B")) {
+            pairNewDeviceViewModel.connectToDevice(lsDeviceInfo);
+        }
     }
 
     @Override

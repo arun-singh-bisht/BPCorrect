@@ -39,12 +39,9 @@
         <item name="android:timePickerMode">spinner</item>
     </style>
 
-
-
-    <style name="SwitchTheme" parent="Theme.AppCompat.DayNight">
-        <item name="android:colorControlActivated">#148E13</item>
-        <item name="android:colorForegroundInverse">#FF0000</item>
-
+    <style name="MySwitch" parent="@style/Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColorPrimaryDisableOnly">#AFACAC</item>
+        <item name="android:colorControlActivated">#4885ed</item>
 
     </style>
 </resources>

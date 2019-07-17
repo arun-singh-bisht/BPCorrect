@@ -262,6 +262,9 @@ public class MainActivity extends BaseActivity  implements  CustomAlertDialog.I_
         FragmentUtil.loadFragment(this,R.id.container_fragment,homeFragment,HomeFragment.FRAGMENT_TAG,null);
     }
 
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

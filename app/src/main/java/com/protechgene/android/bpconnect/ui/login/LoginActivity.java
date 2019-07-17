@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
 
         mLoginViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getApplication())).get(LoginViewModel.class);
         mLoginViewModel.setNavigator(this);
+
         new PermissionUtils().requestForPermission(this);
         Intent intent = getIntent();
         Uri data = intent.getData();
