@@ -17,6 +17,9 @@ import com.protechgene.android.bpconnect.R;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class WebViewScreen extends Activity {
 
     String TAG = "WebViewScreen";
@@ -28,14 +31,14 @@ public class WebViewScreen extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        url = getIntent().getStringExtra("link");
+
         web = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         WebSettings ws = web.getSettings();
         web.setWebViewClient(new myWebClient());
         ws.setJavaScriptEnabled(true);
         ws.setAllowFileAccess(true);
-        web.loadUrl(url);
+        web.loadUrl("http://protechgenie.in/bpcorrect/#/terms_&_condition");
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR) {
             try {

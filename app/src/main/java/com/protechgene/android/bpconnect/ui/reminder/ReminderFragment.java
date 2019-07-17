@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.protechgene.android.bpconnect.R;
+import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;

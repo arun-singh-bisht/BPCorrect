@@ -1,15 +1,18 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,9 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +38,7 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
+//import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.devices.PairedDevice.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.measureBP.MeasureBPFragmentNew;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
@@ -39,7 +47,10 @@ import com.protechgene.android.bpconnect.ui.readingHistory.BPReadingFragment;
 import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 import com.protechgene.android.bpconnect.ui.settings.SettingsFragment;
+//import com.protechgene.android.bpconnect.ui.test.Transtek;
 import com.protechgene.android.bpconnect.ui.tutorial.TutorialFragment;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,6 +86,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         super.onCreate(savedInstanceState);
         mHomeViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(HomeViewModel.class);
         mHomeViewModel.setNavigator(this);
+
         Log.d("HomeFragment","initialize");
 
         boolean isAlarmFired = false;
@@ -96,6 +108,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             //CustomAlertDialog.showInstructionDialog(getBaseActivity());
             if(isNewUser)
             {
+                new_user_disable_side_nav(0);
                 //mHomeViewModel.checkActiveProtocol();
                 videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), new CustomAlertDialog.VideoDialogCallback() {
 
@@ -115,21 +128,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
 
         }
-    }
-
-    private void getPRotocolStatus() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Insert Data
-                 System.out.println("protocol data ---"+mHomeViewModel.getprotocol());
-                if (mHomeViewModel.getprotocol())
-                    isprotocol_active = true;
-                else
-                    isprotocol_active = false;
-                // Get Data
-            }
-        });
     }
 
     @Override
@@ -268,7 +266,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @OnClick(R.id.card_reminder)
     public void openRemiderFragment() {
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(), ReminderFragment.FRAGMENT_TAG,"ReminderNewFragmentTransition");
+        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,new ReminderFragment(),ReminderFragment.FRAGMENT_TAG,"ReminderFragmentTransition");
     }
 
     @OnClick(R.id.card_settings)
@@ -292,21 +290,36 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     }
 
+    public  void getvalue() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+              //  getvalue();
+                isprotocol_active=  mHomeViewModel.getprotocol();
+            }
+        });
 
+      /*  getBaseActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            isprotocol_active=  mHomeViewModel.getprotocol();
+            }
+        });*/
+    }
 
     @Override
     public void showProfileDetails() {
-
-
+       // getvalue();
         String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
         // update by rajat
         TextView username = getBaseActivity().findViewById(R.id.nav_profile_name);
         TextView address = getBaseActivity().findViewById(R.id.nav_profile_address);
         CircularImageView nav_profile_image = getBaseActivity().findViewById(R.id.nav_profile_img);
-        String name = username.toString();
+
         if(userName==null || userName.equalsIgnoreCase("null")) {
             //First Time App User
+            new_user_disable_side_nav(8);
             if(videoDialog!=null)
                 videoDialog.dismiss();
 
@@ -326,18 +339,15 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             bundle.putBoolean("isProfileComplete",false);
             profileEditFragment.setArguments(bundle);
             FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,profileEditFragment,ProfileEditFragment.FRAGMENT_TAG,null);
-            return;
-        }else if(!isprotocol_active && mHomeViewModel.getFirstTimeUser() && mHomeViewModel.getUserFirstName()!=null) {
-            // user from web panel
-            if(videoDialog!=null)
-                videoDialog.dismiss();
 
-            videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), request_code -> {
+        }else if(isprotocol_active) {
 
-                if (!isprotocol_active)
-                openRemiderFragment();
-            });
-            mHomeViewModel.setFirstTimeUser();
+            HomeFragment homeFragment = new HomeFragment();
+            Bundle args = new Bundle();
+            args.putBoolean("isNewUser",true);
+            homeFragment.setArguments(args);
+           // FragmentUtil.removeFragment(getBaseActivity());
+            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
         }
 
         else {
@@ -357,6 +367,16 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         }
     }
 
+    public void new_user_disable_side_nav(int value) {
+
+        int  result = value;
+        LinearLayout profile = getBaseActivity().findViewById(R.id.nav_profile_redirect);profile.setVisibility(result);
+        LinearLayout measure_blood_pressure = getBaseActivity().findViewById(R.id.nav_measure_redirect); measure_blood_pressure.setVisibility(result);
+        LinearLayout blood_pressure_readings = getBaseActivity().findViewById(R.id.nav_readings_redirect); blood_pressure_readings.setVisibility(result);
+        LinearLayout learn = getBaseActivity().findViewById(R.id.nav_learn_redirect); learn.setVisibility(result);
+        LinearLayout manage_devices = getBaseActivity().findViewById(R.id.nav_manage_devices_redirect); manage_devices.setVisibility(result);
+    }
+
     @Override
     public void handleError(Throwable throwable) {
 
@@ -369,18 +389,21 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void historyDataSyncStatus(boolean status) {
+
         getBaseActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 hideProgress();
                 if(status)
                     getBaseActivity().showSnakeBar("App Data Sync Successful");
                 else
                     getBaseActivity().showSnakeBar("App Data Sync Failure");
+                getvalue();
             }
         });
-        //get protocol status
-        getPRotocolStatus();
+
+
     }
 
 

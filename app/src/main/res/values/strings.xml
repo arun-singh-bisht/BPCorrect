@@ -15,8 +15,7 @@
     <string name="start_free_trial">START YOUR FREE TRAIL</string>
     <string name="already_have">Already have POSfone number?</string>
     <string name="sign_in">SIGN IN</string>
-    <string name="terms_of_use"> Terms of Use   -  </string>
-    <string name="privacy_policy">  -  Privacy </string>
+    <string name="terms_of_use"> Terms of Use - Privacy - FAQ</string>
 
     <!--Sign In Screen-->
     <string name="activate_link_text">An activation link has been delivered to your registered email.Activate your account before login.</string>

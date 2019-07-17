@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3.5"
+        android:layout_weight="4"
         android:background="@color/bp_gray">
 
         <ImageView
@@ -34,13 +34,12 @@
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        >
+        android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
+            android:padding="@dimen/dimen_50dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/create_account"
             android:gravity="center|center_horizontal"
             />
@@ -147,33 +146,14 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dimen_5dp"
-        android:orientation="horizontal">
-
-
-        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/terms_of_use"
-            android:id="@+id/terms_and_privacy_link"
-            android:gravity="center"
-            android:textSize="@dimen/terms_of_use_text_size"
-            android:layout_marginBottom="10dp"
-            />
-        <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_policy"
-            android:id="@+id/privacy_policy_link"
-            android:gravity="center"
-            android:textSize="@dimen/terms_of_use_text_size"
-            android:layout_marginBottom="10dp"
-            />
-    </LinearLayout>
+        android:id="@+id/terms_and_privacy_link"
+        android:text="@string/terms_of_use"
+        android:gravity="center"
+        android:textSize="@dimen/terms_of_use_text_size"
+        android:layout_marginBottom="10dp"
+        />
 
 </LinearLayout>

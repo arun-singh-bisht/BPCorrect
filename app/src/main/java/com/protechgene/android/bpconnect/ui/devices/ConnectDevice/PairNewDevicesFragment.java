@@ -35,6 +35,8 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
     View content;
     @BindView(R.id.layout_pair)
     View layout_pair;
+    @BindView(R.id.text_device_name)
+    TextView device_name;
 
     @Override
     protected int layoutRes() {
@@ -128,6 +130,8 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
 
     @OnClick(R.id.image_found_device)
     public void onSelectDevice() {
+	deviceFound.setClickable(false);
+        device_name.setText("Connecting...");
         if(deviceModel.equalsIgnoreCase("A&D__651BLE"))
         {
             pairNewDeviceViewModel.connectToDevice(mdeviceCharacteristic.getDeviceName(), mdeviceCharacteristic.getDeviceMac(), "");
