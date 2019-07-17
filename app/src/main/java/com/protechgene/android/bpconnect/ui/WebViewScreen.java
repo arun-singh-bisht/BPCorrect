@@ -3,6 +3,7 @@ package com.protechgene.android.bpconnect.ui;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,7 +26,6 @@ public class WebViewScreen extends Activity {
     String TAG = "WebViewScreen";
     WebView web;
     ProgressBar progressBar;
-    String url;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
