@@ -189,6 +189,16 @@ public class PreferencesHelper implements PreferencesHelperInterface {
     }
 
     @Override
+    public String getHealthOrgName() {
+        return mSharedPreferences.getString(PREF_KEY_HEALTH_ORG_NAME, null);
+    }
+
+    @Override
+    public void setHealthOrgName(String name) {
+        mSharedPreferences.edit().putString(PREF_KEY_HEALTH_ORG_NAME, name).apply();
+    }
+
+    @Override
     public String getPatientMobile() {
         return mSharedPreferences.getString(PREF_KEY_PATIENT_MOBILE, null);
     }

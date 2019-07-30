@@ -75,6 +75,7 @@ public class ActiveProtocolFragment extends BaseFragment implements ActiveProtoc
     @OnClick(R.id.save_btn)
     public void onsaveClick()
     {
+       // AlarmReceiver.setAlarm(getBaseActivity(),19,8,0);
         FragmentUtil.removeFragment(getBaseActivity());
     }
 

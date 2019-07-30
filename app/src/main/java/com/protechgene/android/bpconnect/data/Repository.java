@@ -177,6 +177,15 @@ public class Repository implements ApiInterface,
     public void setPatientAddress(String address) {
         mSharedPrefsHelper.setPatientAddress(address);
     }
+    @Override
+    public String getHealthOrgName() {
+        return mSharedPrefsHelper.getHealthOrgName();
+    }
+
+    @Override
+    public void setHealthOrgName(String name) {
+        mSharedPrefsHelper.setHealthOrgName(name);
+    }
 
     @Override
     public String getPatientMobile() {

@@ -17,7 +17,8 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.skyfishjy.library.RippleBackground
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/content"
             android:layout_width="match_parent"
@@ -28,10 +29,13 @@
             app:rb_radius="37dp"
             app:rb_rippleAmount="5"
             app:rb_scale="6">
-
-
         </com.skyfishjy.library.RippleBackground>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for blood pressure reading..."
+            android:layout_below="@+id/content"/>
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:id="@+id/text_wait_tv"
@@ -113,6 +117,7 @@
                  />
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/view_center"
             android:layout_width="200dp"
@@ -141,7 +146,18 @@
                 android:src="@drawable/heart_icon" />
 
         </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_120dp"
+            android:id="@+id/waiting_instru"
+            android:layout_below="@+id/view_center"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:text="Waiting for blood pressure reading..."
+            />
 
         <!--Wait for one min. view-->
         <RelativeLayout

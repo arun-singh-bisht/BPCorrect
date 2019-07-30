@@ -46,7 +46,7 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private void initView()
     {
-        txt_title.setText("Manage youe BPCorrect reminders");
+        txt_title.setText("Manage your BPCorrect Reminders");
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -70,21 +70,15 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
     public void onPageSelected(int position) {
         Log.d("onPageSelected","position: "+position);
-//        if(position==0)
-//            img_right.setVisibility(View.VISIBLE);
-//        else if(position==1)
-//            img_right.setVisibility(View.GONE);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 
     public void setRightIcon(int res_id)

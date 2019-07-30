@@ -52,6 +52,11 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
     TextView text_gender_value;
     @BindView(R.id.text_about)
     TextView text_about;
+    @BindView(R.id.provider)
+    TextView text_provider;
+    @BindView(R.id.organisation)
+    TextView text_organisation;
+
 
     @BindView(R.id.profile_pic_cir_img)
     CircularImageView profile_pic;
@@ -163,6 +168,24 @@ public class ProfileFragment extends BaseFragment implements ProfileFragmentNavi
             }
         }
         text_age_value.setText(userDoB);
+
+        // edited by rajat
+        //Set Gender
+        String provider = mProfileFragmentViewModel.getProvider();
+        if(provider==null || provider.isEmpty() || provider.equalsIgnoreCase("null"))
+            provider = "-";
+        else
+            provider = "Provider : "+provider;
+        text_provider.setText(provider);
+        //Set Gender
+        String practice = mProfileFragmentViewModel.getHealthorg();
+        if(practice==null || practice.isEmpty() || practice.equalsIgnoreCase("null"))
+            practice = "-";
+        else
+            practice = "Practice : "+practice;
+        text_organisation.setText(practice);
+
+
 
         String image_url = mProfileFragmentViewModel.getProfilePic();
         if(image_url != null)

@@ -21,14 +21,16 @@
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:text="Let's get started!"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="It's important to check your blood pressure\n twice a day in the morning and evening\n for one week"
+            android:textSize="20sp"
+            android:padding="@dimen/dimen_10dp"
+            android:text="BPCorrect will remind you to check your blood pressure twice a day in the morning and evening for 7 days to help you determine your true blood pressure."
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
@@ -196,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:theme="@style/SwitchTheme"
+
                 android:visibility="visible"
                 android:checked="true"
                 android:textOff="No"
@@ -295,7 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:theme="@style/SwitchTheme"
+
                     android:layout_centerVertical="true"
                     android:visibility="visible"
                     android:checked="true"

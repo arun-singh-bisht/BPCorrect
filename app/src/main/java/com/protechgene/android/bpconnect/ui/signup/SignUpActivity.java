@@ -56,10 +56,17 @@ public class SignUpActivity extends BaseActivity implements SignUpNavigator  {
     }
 
 
-    @OnClick(R.id.terms_and_privacy_link)
-    void openlink() {
-        startActivity( new Intent(this, WebViewScreen.class));
+    @OnClick(R.id.terms_of_use)
+    void openlink_terms() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("url","http://protechgenie.in/bpcorrect/#/terms_&_condition"));
     }
+
+
+    @OnClick(R.id.privacy_link)
+    void openlink_privacy() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("url","http://protechgenie.in/bpcorrect/#/privacy_policy"));
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @OnClick(R.id.btn_signup)

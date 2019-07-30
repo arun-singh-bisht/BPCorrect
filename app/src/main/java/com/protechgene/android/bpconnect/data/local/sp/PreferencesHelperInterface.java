@@ -33,7 +33,7 @@ public interface PreferencesHelperInterface {
      String PREF_KEY_PATIENT_ZIPCODE = "PREF_KEY_PATIENT_ZIPCODE";
      String PREF_KEY_ORG_NAME = "PREF_KEY_ORG_NAME";
      String PREF_KEY_PROVIDER_NAME = "PREF_KEY_PROVIDER_NAME";
-
+     String PREF_KEY_HEALTH_ORG_NAME = "PREF_KEY_HEALTH_ORG_NAME";
      String PREF_KEY_BP_DEVICE_NAME = "PREF_KEY_BP_DEVICE_NAME";
      String PREF_KEY_BP_DEVICE_ADDRESS = "PREF_KEY_BP_DEVICE_ADDRESS";
      String PREF_KEY_BP_DEVICE_UUID = "PREF_KEY_BP_DEVICE_UUID";
@@ -156,6 +156,9 @@ public interface PreferencesHelperInterface {
      void setPrefKeyProfileImg(String url);
 
      String getPrefKeyProfileImg();
+
+     void setHealthOrgName(String name);
+     String getHealthOrgName();
 
      String getDeviceName_iHealthbp3l();
      void setDeviceName_iHealthbp3l(String name) ;

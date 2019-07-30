@@ -31,14 +31,14 @@ public class WebViewScreen extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-
+        String url = getIntent().getStringExtra("url");
         web = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         WebSettings ws = web.getSettings();
         web.setWebViewClient(new myWebClient());
         ws.setJavaScriptEnabled(true);
         ws.setAllowFileAccess(true);
-        web.loadUrl("http://protechgenie.in/bpcorrect/#/terms_&_condition");
+        web.loadUrl(url);
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR) {
             try {

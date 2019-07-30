@@ -115,8 +115,9 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                     @Override
                     public void onVideoEnd(int request_code) {
 
-                        //if (!protocolStatus)
+                       // if (!protocolStatus)
                         openRemiderFragment();
+                        isProtocolExists(true);
                     }
                 });
             }else
@@ -125,7 +126,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 //showProgress("Syn app data...");
                 mHomeViewModel.synHistoryData();
             }
-
 
         }
     }
@@ -309,7 +309,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void showProfileDetails() {
-       // getvalue();
+
         String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
         // update by rajat
@@ -340,15 +340,20 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             profileEditFragment.setArguments(bundle);
             FragmentUtil.loadFragment(getActivity(),R.id.container_fragment,profileEditFragment,ProfileEditFragment.FRAGMENT_TAG,null);
 
-        }else if(isprotocol_active) {
+        }else if(!isprotocol_active && mHomeViewModel.getFirstTimeUser() && mHomeViewModel.getUserFirstName()!=null) {
+            // user from web panel
+            if(videoDialog!=null)
+                videoDialog.dismiss();
 
-            HomeFragment homeFragment = new HomeFragment();
-            Bundle args = new Bundle();
-            args.putBoolean("isNewUser",true);
-            homeFragment.setArguments(args);
-           // FragmentUtil.removeFragment(getBaseActivity());
-            FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,homeFragment, HomeFragment.FRAGMENT_TAG,null);
+            videoDialog = CustomAlertDialog.dialogPlayVideoNew(getBaseActivity(), request_code -> {
+
+                if (!isprotocol_active)
+                    openRemiderFragment();
+            });
+            mHomeViewModel.setFirstTimeUser();
+            reset_data();
         }
+
 
         else {
             //Already an App User
@@ -365,6 +370,28 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(image_profile_pic);
             Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(nav_profile_image);
         }
+    }
+
+    private void reset_data() {
+        TextView username = getBaseActivity().findViewById(R.id.nav_profile_name);
+        TextView address = getBaseActivity().findViewById(R.id.nav_profile_address);
+        CircularImageView nav_profile_image = getBaseActivity().findViewById(R.id.nav_profile_img);
+        String userName = mHomeViewModel.getUserFirstName();
+        String userEmail = mHomeViewModel.getUserEmail();
+
+        //Already an App User
+        userName =  mHomeViewModel.getUserFirstName() +" "+ mHomeViewModel.getUserLastName();
+        text_profile_name.setText(userName + "");
+        text_profile_email.setText(userEmail + "");
+
+        // For nav  drawer by rajat
+        username.setText(userName + "");
+        address.setText(mHomeViewModel.getAddress());
+
+        String image_url = mHomeViewModel.getProfilePic();
+        if(image_url != null)
+            Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(image_profile_pic);
+        Glide.with(getContext()).load("http://67.211.223.164:8080"+image_url).placeholder(R.drawable.default_pic).into(nav_profile_image);
     }
 
     public void new_user_disable_side_nav(int value) {
@@ -389,21 +416,17 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void historyDataSyncStatus(boolean status) {
-
+        getvalue();
         getBaseActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 hideProgress();
                 if(status)
                     getBaseActivity().showSnakeBar("App Data Sync Successful");
                 else
                     getBaseActivity().showSnakeBar("App Data Sync Failure");
-                getvalue();
             }
         });
-
-
     }
 
 
@@ -434,7 +457,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         String[] split = newTime.split(":");
         Log.d("onNegativeClick","Setting Alarm from "+alarmFireTime +" To "+newTime);
         AlarmReceiver.setAlarm(getBaseActivity(),Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
-
     }
 
     @Override

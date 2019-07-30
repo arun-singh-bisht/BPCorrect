@@ -79,9 +79,15 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
         mLoginViewModel.login(email, password);
     }
 
-    @OnClick(R.id.terms_and_privacy_link)
-    void openlink() {
-        startActivity( new Intent(this, WebViewScreen.class));
+    @OnClick(R.id.terms_of_use)
+    void openlink_terms() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("url","http://protechgenie.in/bpcorrect/#/terms_&_condition"));
+    }
+
+
+    @OnClick(R.id.privacy_link)
+    void openlink_privacy() {
+        startActivity( new Intent(this, WebViewScreen.class).putExtra("url","http://protechgenie.in/bpcorrect/#/privacy_policy"));
     }
 
     @OnClick(R.id.txt_sign_up)
@@ -111,8 +117,16 @@ public class LoginActivity extends BaseActivity implements LoginNavigator {
     @Override
     public void handleError(Throwable throwable) {
         hideProgress();
-        System.out.println("err is "+throwable.toString());
-        showSnakeBar(throwable.getMessage());
+        showSnakeBar(get_error_message( throwable.getMessage().substring(4,8).trim()));
+    }
+  /** get customized error message **/
+    public String get_error_message(String code ){
+        if (code.equals("400"))
+            return "Bad Credentials";
+        else if(code.equals("401"))
+                return "Account is not Active";
+        else
+            return "Try some other time!";
     }
 
     @Override

@@ -247,6 +247,34 @@
             android:layout_marginTop="18dp"
             android:maxLines="3"
             />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/organisation"
+            android:text= "--"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/hospital_icon"
+            android:drawablePadding="15dp"
+            android:gravity="top"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            android:maxLines="3"
+            />
+
+        <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/provider"
+            android:text= "--"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/stethoscope"
+            android:drawablePadding="15dp"
+            android:gravity="top"
+            android:drawableTint="#968F8F"
+            android:layout_marginTop="18dp"
+            android:maxLines="3"
+            />
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
             android:id="@+id/text_about"
             android:layout_width="wrap_content"
@@ -261,8 +289,6 @@
             android:maxLines="4"
             android:ellipsize="end"
             />
-
-
     </LinearLayout>
 
 

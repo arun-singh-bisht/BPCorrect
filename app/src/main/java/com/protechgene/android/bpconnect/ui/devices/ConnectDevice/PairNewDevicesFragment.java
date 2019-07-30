@@ -61,7 +61,6 @@ public class PairNewDevicesFragment extends BaseFragment implements PairNewDevic
             pairNewDeviceViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(PairNewDeviceViewModelTranstek.class);
             ((PairNewDeviceViewModelTranstek) pairNewDeviceViewModel).setNavigator(this);
         }
-
         initView();
     }
 

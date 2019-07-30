@@ -84,6 +84,8 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     @BindView(R.id.content)
     RippleBackground rippleBackground;
 
+    @BindView(R.id.waiting_instru)
+    TextView waiting_instru;
 
     private boolean isReadingDone = false;
     private boolean isTypeProtocol = false;
@@ -349,6 +351,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     {
         if(rippleBackground!=null)
             rippleBackground.startRippleAnimation();
+        waiting_instru.setVisibility(View.VISIBLE);
         measureBPFragmentViewModel.startMeasuringBPFromBP3LDevice(deviceName_BP3L,deviceMac__BP3L,isTypeProtocol,protocolId,total_protocolReadingTaken);
 
         doneButton.setText("Stop");
@@ -378,7 +381,9 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
             @Override
             public void run() {
                 hideProgress();
-
+                text_wait_tv.setVisibility(View.INVISIBLE);
+                text_upper.setVisibility(View.INVISIBLE);
+                waiting_instru.setVisibility(View.GONE);
                 blood_pressure_tv.setVisibility(View.VISIBLE);
                 text_bp_reading.setVisibility(View.VISIBLE);
                 text_bp_reading.setText(healthReading.getSystolic()+"/"+healthReading.getDiastolic());
@@ -402,7 +407,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     view_wait.setVisibility(View.GONE);
                     text_upper.setVisibility(View.GONE);
                     doneButton.setText("Done");
-                    all_set.setVisibility(View.VISIBLE);
+                    all_set.setVisibility(View.GONE);
                     doneButton.setVisibility(View.VISIBLE);
                     doneButton.setTag("Done");
                     text_measurement_completed_message.setVisibility(View.VISIBLE);
@@ -417,7 +422,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
             @Override
             public void run() {
                 hideProgress();
-
+                waiting_instru.setVisibility(View.GONE);
                 blood_pressure_tv.setVisibility(View.VISIBLE);
                 text_bp_reading.setVisibility(View.VISIBLE);
                 text_bp_reading.setText(msg);
@@ -427,7 +432,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                     rippleBackground.stopRippleAnimation();
 
                 isReadingDone = true;
-                all_set.setVisibility(View.VISIBLE);
+                all_set.setVisibility(View.GONE);
                 text_transfer_status.setVisibility(View.GONE);
                 text_wait_tv.setVisibility(View.GONE);
                 view_wait.setVisibility(View.GONE);
@@ -459,6 +464,9 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 isCounterRunning = false;
                 clearReadingData();
 
+                text_wait_tv.setVisibility(View.VISIBLE);
+                text_upper.setVisibility(View.VISIBLE);
+                waiting_instru.setVisibility(View.VISIBLE);
                 view_wait.setVisibility(View.GONE);
                 //startScannaing();
                 measureBPFragmentViewModel.isReadingForProtocol();
