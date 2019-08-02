@@ -100,7 +100,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
         if(isAlarmFired)
         {
-            alarmFireTime = args.getString("FireTime");
+            alarmFireTime = args.getString("alarmFireTime");
             String msg = "It's time to check your blood pressure. You can also snooz it for some time.";
             CustomAlertDialog.showThreeButtonDialog(getBaseActivity(),1001,msg,"Check Now","Snooz","Cancel",this);
         }else

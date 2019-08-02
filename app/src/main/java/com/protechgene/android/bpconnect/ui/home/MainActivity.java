@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity  implements  CustomAlertDialog.I_
         HomeFragment homeFragment = new HomeFragment();
         boolean ispasswordreset= getIntent().getBooleanExtra("ispasswordreset", false);
         boolean isAlarmFired = getIntent().getBooleanExtra("isAlarmFired", false);
-        String alarmFireTime = getIntent().getStringExtra("FireTime");
+        String alarmFireTime = getIntent().getStringExtra("alarmFireTime");
         String code = getIntent().getStringExtra("code");
         Bundle args = new Bundle();
         args.putBoolean("isAlarmFired",isAlarmFired);

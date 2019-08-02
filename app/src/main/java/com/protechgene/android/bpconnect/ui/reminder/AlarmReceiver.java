@@ -58,7 +58,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
                     //Intent to invoke app when click on notification.
                     Intent intentToHomeScreen = new Intent(context, MainActivity.class);
                     intentToHomeScreen.putExtra("isAlarmFired",true);
-                    intentToHomeScreen.putExtra("FireTime",alarmTime);
+                    intentToHomeScreen.putExtra("alarmFireTime",alarmTime);
                     intentToHomeScreen.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                     Intent intentToStopAlarmSound = new Intent(context, AlarmReceiver.class);
