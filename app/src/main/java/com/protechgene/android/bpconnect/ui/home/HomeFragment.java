@@ -103,8 +103,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         if(isAlarmFired)
         {
             alarmFireTime = args.getString("alarmFireTime");
-            String msg = "It's time to check your blood pressure. You can also snooz it for some time.";
-            CustomAlertDialog.showThreeButtonDialog(getBaseActivity(),1001,msg,"Check Now","Snooz","Cancel",this);
+            String msg = "It's time to check your blood pressure. You can also snooze it for some time.";
+            CustomAlertDialog.showThreeButtonDialog(getBaseActivity(),1001,msg,"Check Now","Snooze","Cancel",this);
         }else
         {
             //CustomAlertDialog.showInstructionDialog(getBaseActivity());
@@ -474,7 +474,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         //AlarmReceiver.deleteAllAlarm(MainActivity.this);
         //Log.d("onNegativeClick","All Alarm removed");
         //Set alarm for next 10 min
-        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 10);
+        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 2);
         String[] split = newTime.split(":");
         Log.d("onNegativeClick","Setting Alarm from "+alarmFireTime +" To "+newTime);
         //AlarmReceiver.setAlarm(getBaseActivity(),Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);

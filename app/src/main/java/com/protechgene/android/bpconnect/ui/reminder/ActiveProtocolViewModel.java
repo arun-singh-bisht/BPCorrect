@@ -308,7 +308,8 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                                 Log.e("same_day",Integer.parseInt(split[0])+" :"+ Integer.parseInt(split[1])+" offset  "+0);
                             }
                         });
-                    } /*else if(t2 > 0) {
+                   }
+                    /*else if(t2 > 0) {
                         AsyncTask.execute(new Runnable() {
                             @Override
                             public void run() {

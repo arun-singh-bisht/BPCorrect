@@ -51,11 +51,10 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private void initView()
     {
-        TextView txt_title =  getView().findViewById(R.id.txt_title);
         txt_title.setText("Manage your BPCorrect Reminders");
 
-         setupViewPager(viewPager);
-      //  tabLayout.setupWithViewPager(viewPager);
+        setupViewPager(viewPager);
+        //  tabLayout.setupWithViewPager(viewPager);
         img_right.setVisibility(View.GONE);
     }
 
@@ -65,16 +64,11 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
         FragmentUtil.removeFragment(getBaseActivity());
     }
 
-    @OnClick(R.id.fab_add)
-    public void onAddClick()
-    {
-        reminderViewModel.createProtocol(getBaseActivity());
-    }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new ActiveProtocolFragment(), "Active Protocol");
-        adapter.addFragment(new HistoryProtocolsFragment(), "History Protocols");
+        //  adapter.addFragment(new HistoryProtocolsFragment(), "History Protocols");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
     }
@@ -97,11 +91,4 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
         img_right.setImageResource(res_id);
         img_right.setTag(res_id);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        reminderViewModel.onDestroy();
-    }
-
 }

@@ -146,12 +146,10 @@ public class DateUtils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.HOUR_OF_DAY, add_hour);
         calendar.add(Calendar.MINUTE, add_min);
-
         return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
     }
 }

@@ -17,7 +17,9 @@ import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.home.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AlarmReceiver  extends BroadcastReceiver {
 
@@ -133,7 +135,12 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
     public static void setSnoozAlarm(Context context,String alarmFireTime)
     {
-        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 10);
+        Calendar rightNow = Calendar.getInstance();
+        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
+        int currentMinuteIn24Format = rightNow.get(Calendar.MINUTE);
+        String s= currentHourIn24Format+":"+currentMinuteIn24Format;
+
+        String newTime = DateUtils.addTime(s, "HH:mm", 0, 5);
         String[] split = newTime.split(":");
         int hour_of_day = Integer.parseInt(split[0]);
         int min = Integer.parseInt(split[1]);
