@@ -1,5 +1,6 @@
 package com.protechgene.android.bpconnect.ui.reminder;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -12,8 +13,10 @@ import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
+import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.readingHistory.BPAllReadingFragment;
 import com.protechgene.android.bpconnect.ui.reminder.ActiveProtocolFragment;
+import com.protechgene.android.bpconnect.ui.settings.SettingFragmentViewModel;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -21,6 +24,7 @@ import butterknife.OnClick;
 public class ReminderFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
     public static final String FRAGMENT_TAG = "ReminderFragment";
+    private  ActiveProtocolFragment activeProtocolFragment;
 
     @BindView(R.id.tabs)
     public TabLayout tabLayout;
@@ -41,6 +45,7 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Override
     protected void initialize() {
+        //activeProtocolFragment = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(ActiveProtocolFragment.class);
         initView();
     }
 
@@ -48,8 +53,8 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
     {
         txt_title.setText("Manage your BPCorrect Reminders");
 
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+         setupViewPager(viewPager);
+      //  tabLayout.setupWithViewPager(viewPager);
         img_right.setVisibility(View.GONE);
     }
 
@@ -63,7 +68,7 @@ public class ReminderFragment extends BaseFragment implements ViewPager.OnPageCh
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new ActiveProtocolFragment(), "Active Protocol");
-        adapter.addFragment(new HistoryProtocolsFragment(), "History Protocols");
+      //  adapter.addFragment(new HistoryProtocolsFragment(), "History Protocols");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
     }

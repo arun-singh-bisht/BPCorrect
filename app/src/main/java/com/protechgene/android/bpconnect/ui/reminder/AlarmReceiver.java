@@ -41,7 +41,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
 
                 String alarmTime = intent.getStringExtra("AlarmTime");
-                Log.d("AlarmReceiver","onReceive alarmTime "+alarmTime);
+                Log.e("AlarmReceiver","onReceive alarmTime "+alarmTime);
 
 
                 String ReceivedExtraType = intent.getStringExtra("ReceivedExtraType");
@@ -65,7 +65,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
                     intentToStopAlarmSound.putExtra("ReceivedExtraType","STOP_ALARM_SOUND");
 
                     //Show Notification status bar
-                    Log.d("AlarmReceiver","Show Notification FireTime "+alarmTime);
+                    Log.e("AlarmReceiver","Show Notification FireTime "+alarmTime);
 
                     new NotificationUtil().buildLocalNotification(context,intentToHomeScreen,intentToStopAlarmSound,1001,"Time to check BP");
 
@@ -110,6 +110,7 @@ public class AlarmReceiver  extends BroadcastReceiver {
 
     public static void setAlarm(Context context,int hour_of_day,int min,int dayOffsetFromToday)
     {
+        Log.e("contextfor",context.getPackageName());
         //Create pending intent & register it to your alarm notifier class
         Intent intent0 = new Intent(context, AlarmReceiver.class);
         intent0.putExtra("AlarmTime",hour_of_day+":"+min);
