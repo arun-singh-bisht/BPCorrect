@@ -221,7 +221,7 @@
                 android:drawableRight="@drawable/ic_action_location"
                 android:drawableTint="#968F8F"
                 android:hint="ZipCode"
-                app:mask="#####"
+
                 android:maxLength="5"
                 android:singleLine="true"
                 android:inputType="number"

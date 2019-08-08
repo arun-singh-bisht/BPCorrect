@@ -2,6 +2,8 @@ package com.protechgene.android.bpconnect.data.remote.responseModels.protocol;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Data {
 
     @SerializedName("end_date")
@@ -22,6 +24,10 @@ public class Data {
     private String startDate;
     @SerializedName("status")
     private String status;
+    @SerializedName("device_name")
+    private String device_name;
+    @SerializedName("_key_value")
+    private Datasource datasource;
 
 
     public String getEndDate() {
@@ -94,5 +100,21 @@ public class Data {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDevice_name() {
+        return device_name;
+    }
+
+    public void setDevice_name(String device_name) {
+        this.device_name = device_name;
+    }
+
+    public Datasource getDatasource() {
+        return datasource;
+    }
+
+    public void setDatasource(Datasource datasource) {
+        this.datasource = datasource;
     }
 }

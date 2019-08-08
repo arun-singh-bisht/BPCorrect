@@ -7,33 +7,22 @@
     android:layout_height="wrap_content"
     card_view:cardElevation="1dp"
     card_view:cardCornerRadius="4dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="5dp"
-    android:layout_marginRight="13dp"
-    android:layout_marginLeft="13dp"
+    android:layout_margin="10dp"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:padding="10dp"
         >
 
-        <!--<ImageView
-            android:layout_width="130dp"
-            android:layout_height="90dp"
-            android:src="@drawable/video_icon"
-            android:padding="10dp"
-            />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
             >
 
             <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
@@ -41,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Video Title"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 />
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
                 android:layout_width="wrap_content"
@@ -49,25 +38,26 @@
                 android:id="@+id/learn_description"
                 android:text="Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
                 android:gravity="left"
-                android:textSize="12sp"
-                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 />
 
+
             <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:gravity="left"
-                android:textSize="12sp"
-                android:layout_marginTop="5dp"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/read_more"
-                android:layout_marginEnd="@dimen/dimen_10dp"
                 android:text="Read More"
                 android:background="@drawable/round_btton"
+                android:layout_marginTop="15dp"
+                android:textSize="12sp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 />
 
         </LinearLayout>

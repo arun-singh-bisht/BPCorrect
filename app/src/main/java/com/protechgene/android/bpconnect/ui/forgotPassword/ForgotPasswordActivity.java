@@ -1,12 +1,18 @@
 package com.protechgene.android.bpconnect.ui.forgotPassword;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Handler;
 import android.widget.EditText;
 
 import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
+import com.protechgene.android.bpconnect.ui.login.LoginActivity;
+import com.protechgene.android.bpconnect.ui.signup.SignUpActivity;
 
 
 import butterknife.BindView;
@@ -47,12 +53,25 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPasswo
 
     @Override
     public void redirectToLoginPage() {
+        Activity activity = this;
         hideProgress();
-        showSnakeBar("Reset password link sent to registered email address");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+        CustomAlertDialog.showDialogSingleButton(activity, "A Password Reset mail has been sent to your registered email. Please Reset the Password to login.", new CustomAlertDialog.I_CustomAlertDialog() {
+            @Override
+            public void onPositiveClick(Dialog dialog, int request_code) {
                 finish();
+            }
+
+            @Override
+            public void onNegativeClick(Dialog dialog, int request_code) {
+
+            }
+        });
+
+      //  showSnakeBar("Reset password link sent to registered email address");
+              //  finish();
             }
         },3*1000);
 

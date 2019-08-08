@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3.5"
+        android:layout_weight="4"
         android:background="@color/bp_gray">
 
         <ImageView
@@ -25,26 +25,23 @@
             />
 
         <ImageView
-            android:layout_width="160dp"
-            android:layout_height="130dp"
+            android:id="@+id/image_logo"
+            android:layout_width="135dp"
+            android:layout_height="115dp"
             android:src="@mipmap/logo"
             android:layout_margin="30dp"
             android:layout_centerInParent="true" />
 
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        >
         <TextView
             android:layout_width="wrap_content"
+            android:layout_below="@+id/image_logo"
+            android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:text="@string/create_account"
+            android:layout_marginTop="10dp"
             android:gravity="center|center_horizontal"
             />
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -147,32 +144,30 @@
 
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dimen_5dp"
-        android:orientation="horizontal">
-
-
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/terms_of_use"
             android:layout_height="wrap_content"
-            android:text="@string/terms_of_use"
-            android:id="@+id/terms_and_privacy_link"
+            android:text="Terms of Use -"
             android:gravity="center"
             android:textSize="@dimen/terms_of_use_text_size"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             />
+
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/privacy_link"
             android:layout_height="wrap_content"
-            android:text="@string/privacy_policy"
-            android:id="@+id/privacy_policy_link"
+            android:text="- Privacy Policy"
             android:gravity="center"
             android:textSize="@dimen/terms_of_use_text_size"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             />
     </LinearLayout>
 

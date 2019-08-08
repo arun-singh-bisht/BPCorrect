@@ -77,6 +77,8 @@ public class ProfileFragmentViewModel extends BaseViewModel<ProfileFragmentNavig
     public String getUserCity(){return getRespository().getPrefKeyPatientCity(); }
 
     public String getUserZipcode(){return getRespository().getPrefKeyPatientZipcode(); }
+    public String getProvider(){return getRespository().getPrefKeyProviderName(); }
+    public String getHealthorg(){return getRespository().getPrefKeyOrgName(); }
 
 
 }

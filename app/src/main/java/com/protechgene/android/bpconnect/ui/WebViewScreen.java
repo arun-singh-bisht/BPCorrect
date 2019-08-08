@@ -3,6 +3,7 @@ package com.protechgene.android.bpconnect.ui;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,18 +18,20 @@ import com.protechgene.android.bpconnect.R;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class WebViewScreen extends Activity {
 
     String TAG = "WebViewScreen";
     WebView web;
     ProgressBar progressBar;
-    String url;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        url = getIntent().getStringExtra("link");
+        String url = getIntent().getStringExtra("url");
         web = (WebView) findViewById(R.id.webView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         WebSettings ws = web.getSettings();

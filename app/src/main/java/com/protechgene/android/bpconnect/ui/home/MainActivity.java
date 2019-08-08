@@ -36,6 +36,7 @@ import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.DatabaseHelper;
 import com.protechgene.android.bpconnect.data.local.sp.PreferencesHelper;
 import com.protechgene.android.bpconnect.ui.base.BaseActivity;
+import com.protechgene.android.bpconnect.ui.changepassword.ChangePasswordFragment;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 //import com.protechgene.android.bpconnect.ui.devices.DevicesFragment;
 import com.protechgene.android.bpconnect.ui.devices.PairedDevice.DevicesFragment;
@@ -237,8 +238,10 @@ public class MainActivity extends BaseActivity  implements  CustomAlertDialog.I_
 
 
         HomeFragment homeFragment = new HomeFragment();
+        boolean ispasswordreset= getIntent().getBooleanExtra("ispasswordreset", false);
         boolean isAlarmFired = getIntent().getBooleanExtra("isAlarmFired", false);
-        String alarmFireTime = getIntent().getStringExtra("FireTime");
+        String alarmFireTime = getIntent().getStringExtra("alarmFireTime");
+        String code = getIntent().getStringExtra("code");
         Bundle args = new Bundle();
         args.putBoolean("isAlarmFired",isAlarmFired);
         args.putString("alarmFireTime",alarmFireTime);
@@ -249,7 +252,13 @@ public class MainActivity extends BaseActivity  implements  CustomAlertDialog.I_
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.master_fragment_container);
         // ---------------
-
+        if (ispasswordreset){
+            ChangePasswordFragment changePasswordFragment = new ChangePasswordFragment();
+            args.putString("code",code);
+            changePasswordFragment.setArguments(args);
+            FragmentUtil.loadFragment(this,R.id.container_fragment,changePasswordFragment,changePasswordFragment.FRAGMENT_TAG,null);
+         return;
+        }
         FragmentUtil.loadFragment(this,R.id.container_fragment,homeFragment,HomeFragment.FRAGMENT_TAG,null);
     }
 

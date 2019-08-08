@@ -38,4 +38,10 @@
     <style name="TimePickerStyle" parent="@android:style/Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">spinner</item>
     </style>
+
+    <style name="MySwitch" parent="@style/Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textColorPrimaryDisableOnly">#AFACAC</item>
+        <item name="android:colorControlActivated">#4885ed</item>
+
+    </style>
 </resources>

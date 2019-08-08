@@ -8,5 +8,7 @@ public interface LoginNavigator {
     void login();
 
     void openMainActivity();
+    void accountActivated(String message);
+    void openMainActivity_resetPassword(String code);
 
 }

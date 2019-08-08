@@ -6,11 +6,12 @@ import java.util.List;
 
 public class GetProtocolResponse {
 
-    private String message;
+    @SerializedName("message")
+    public String message;
     @SerializedName("data")
-    private List<Data> data = null;
+    public List<Data> data = null;
     @SerializedName("valid")
-    private Boolean valid;
+    public Boolean valid;
 
     public String getMessage() {
         return message;

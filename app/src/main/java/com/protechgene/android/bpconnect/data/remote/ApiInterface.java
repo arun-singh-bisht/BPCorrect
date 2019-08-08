@@ -6,6 +6,7 @@ import com.protechgene.android.bpconnect.data.remote.responseModels.AddBPReading
 import com.protechgene.android.bpconnect.data.remote.responseModels.BpReadings.BpReadingsResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ChangePasswordModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.ResetPassword.ResetPasswordResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.appRedirect.ActivateAccount;
 import com.protechgene.android.bpconnect.data.remote.responseModels.cityandstate.StateCityOptions;
 import com.protechgene.android.bpconnect.data.remote.responseModels.oauth.OauthResponse;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
@@ -26,6 +27,9 @@ public interface ApiInterface {
 
     @GET("ProtechSentinel/oauth/token")
     Observable<OauthResponse> oauth(@Query("grant_type") String grant_type, @Query("client_id") String client_id, @Query("username") String username, @Query("password") String password);
+
+    @POST("ProtechSentinel/basic/activate/account")
+    Observable<ActivateAccount> activate(@Query("code") String code);
 
     @POST("ProtechSentinel/basic/forgot/password")
     Observable<ResetPasswordResponse> resetPassword(@Query("email") String email);
@@ -55,6 +59,9 @@ public interface ApiInterface {
     @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
     Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
+    @GET("ProtechSentinel/common/get/protocol/data/according/to/user")
+    Observable<GetProtocolResponse> getHistoryProtocol(@Query("access_token") String access_token, @Query("patientUserId") String userId);
+
     // edit by sohit address select state and city and password
      @GET("ProtechSentinel/common/get/state/list")
     Observable<StateCityOptions> getOptionCity();
@@ -62,7 +69,9 @@ public interface ApiInterface {
      @POST("ProtechSentinel/common/change/password")
      Observable<ResetPasswordResponse> changePassword(@Query("password") String password,@Query("access_token")String access_token,@Query("userId") String userid);
 
-     @POST("ProtechSentinel/common/share/reading")
-     Observable<ShareReading> getShareReading(@Query("patient_id") String userid,@Query("access_token")String accessToken,@Query("request_type") String request_type,@Query("status") Boolean status);
+    @POST("ProtechSentinel/basic/reset/password")
+    Observable<ResetPasswordResponse> resetPassword(@Query("password") String password,@Query("code")String code);
 
+    @POST("ProtechSentinel/common/share/reading")
+     Observable<ShareReading> getShareReading(@Query("patient_id") String userid,@Query("access_token")String accessToken,@Query("request_type") String request_type,@Query("status") Boolean status);
 }

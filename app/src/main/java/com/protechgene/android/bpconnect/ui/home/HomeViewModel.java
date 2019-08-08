@@ -102,6 +102,12 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                         respository.setPrefKeyProfileImg(profileResponse.getData().get(0).getPhoto_url());
                         respository.setPrefKeyOrgName(profileResponse.getData().get(0).getOrg_name());
                         respository.setPrefKeyProviderName(profileResponse.getData().get(0).getProvider());
+                        // edit by rajat
+                        respository.setPrefKeyPatientState(profileResponse.getData().get(0).getState());
+                        respository.setPrefKeyPatientCity(profileResponse.getData().get(0).getCity());
+                        respository.setPrefKeyPatientZipcode(profileResponse.getData().get(0).getZipcode());
+                        respository.setPatientAddress(profileResponse.getData().get(0).getAddress1());
+                       // respository.setHealthOrgName(profileResponse.getData().get(0).getOrg_name());
 
                         getNavigator().showProfileDetails();
                     }

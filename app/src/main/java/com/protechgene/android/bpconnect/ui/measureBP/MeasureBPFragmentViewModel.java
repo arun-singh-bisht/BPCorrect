@@ -1074,11 +1074,11 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
                 //int HH = Integer.parseInt(hh);
                 if (HH < PROTOCOL_MORNING_MINIMUM_TIME || (HH >= PROTOCOL_MORNING_MAXIMUM_TIME && HH < PROTOCOL_EVENING_MINIMUM_TIME) || HH >= PROTOCOL_EVENING_MAXIMUM_TIME) {
                     //yes It is aberrant reading
-                    healthReading.setIs_abberant("1");
+                    //healthReading.setIs_abberant("1");
                     Log.d(TAG, "2 saveReading_backgroudProcess setIs_abberant(\"1\")");
                 } else {
                     // During recommanded time zone
-                    healthReading.setIs_abberant("0");
+                    //healthReading.setIs_abberant("0");
                     Log.d(TAG, "2 saveReading_backgroudProcess setIs_abberant(\"0\")");
                 }
 
@@ -1086,9 +1086,11 @@ public class MeasureBPFragmentViewModel extends BaseViewModel<MeasureBPFragmentN
 
                 if (measureReadingForProtocol) {
                     healthReading.setProtocol_id(protocolId);
+                    healthReading.setIs_abberant("0");
                     Log.d(TAG, "3 saveReading_backgroudProcess setProtocol_id(protocolId)");
                 } else {
                     healthReading.setProtocol_id("");
+                    healthReading.setIs_abberant("1");
                     Log.d(TAG, "3 saveReading_backgroudProcess setProtocol_id(\"\")");
                 }
 

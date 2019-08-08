@@ -80,7 +80,9 @@ public class SettingsFragment extends BaseFragment implements  SettingFragmentNa
              switcher_provider.setEnabled(false);
              text_not_provider.setVisibility(View.VISIBLE);
          }else{
-             text_not_provider.setVisibility(View.GONE);
+             text_not_provider.setVisibility(View.VISIBLE);
+             text_not_provider.setTextColor(getResources().getColor(R.color.color_light_green));
+             text_not_provider.setText("Your are part of "+org);
              switcher_provider.setOnCheckedChangeListener(this);
              settingFragmentViewModel.fetchSwitcher("get",true);
          }

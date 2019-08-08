@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="1dp"
+        card_view:cardCornerRadius="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginLeft="13dp"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+        <RelativeLayout
+            android:id="@+id/layout_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            >
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_protocol_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="March 29, 2019"
+                android:layout_centerVertical="true"
+                android:textSize="12sp"
+                android:layout_marginLeft="10dp"
+                />
+
+
+
+
+
+            <View
+                android:id="@+id/color_plate"
+                android:layout_width="200dp"
+                android:layout_height="27dp"
+                android:background="@drawable/sample_new"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
+
+
+
+            <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                android:id="@+id/text_protocol_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extra BP Reading"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:textStyle="bold"
+               android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                />
+
+        </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="#BEBDBD"
+                />
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="3"
+             android:orientation="horizontal"
+             android:paddingTop="15dp"
+             android:paddingRight="10dp"
+             android:paddingLeft="10dp"
+             android:paddingBottom="15dp"
+             android:background="#ffffff"
+             >
+
+             <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical"
+                 android:gravity="center"
+                 >
+             <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                 android:id="@+id/text_protocol_morning_time"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="0 mmHg"
+                 android:textSize="15sp"
+                 />
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="SYS"
+                     android:gravity="left"
+                     android:textSize="12sp"
+                     />
+
+             </LinearLayout>
+             <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical"
+                 android:gravity="center"
+                 >
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                     android:id="@+id/text_protocol_evening_time"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="0 mmHg"
+                     android:textSize="15sp"
+                     />
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="DIA"
+                     android:gravity="left"
+                     android:textSize="12sp"
+                     />
+
+             </LinearLayout>
+             <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical"
+                 android:gravity="center"
+                 >
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebBoldTextView
+                     android:id="@+id/text_pulse_value"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="0 bpm"
+                     android:textSize="15sp"
+                     />
+                 <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="PULSE"
+                     android:gravity="left"
+                     android:textSize="12sp"
+                     />
+
+             </LinearLayout>
+
+
+
+         </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

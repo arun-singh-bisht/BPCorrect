@@ -15,12 +15,11 @@
         android:background="@color/bp_gray">
 
         <ImageView
-            android:layout_width="160dp"
-            android:layout_height="130dp"
+            android:layout_width="135dp"
+            android:layout_height="115dp"
             android:src="@mipmap/logo"
             android:layout_margin="30dp"
             android:layout_centerInParent="true" />
-
     </RelativeLayout>
 
     <LinearLayout
@@ -110,32 +109,30 @@
             />
 
     </LinearLayout>
-
-    <LinearLayout
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    >
+    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
         android:layout_width="wrap_content"
+        android:id="@+id/terms_of_use"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dimen_5dp"
-        android:orientation="horizontal">
-
-
-    <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/terms_of_use"
-        android:id="@+id/terms_and_privacy_link"
+        android:text="Terms of Use -"
         android:gravity="center"
         android:textSize="@dimen/terms_of_use_text_size"
         android:layout_marginBottom="10dp"
         />
+
     <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:id="@+id/privacy_link"
         android:layout_height="wrap_content"
-        android:text="@string/privacy_policy"
-        android:id="@+id/privacy_policy_link"
+        android:text="- Privacy Policy"
         android:gravity="center"
         android:textSize="@dimen/terms_of_use_text_size"
         android:layout_marginBottom="10dp"
         />
-    </LinearLayout>
+</LinearLayout>
 </LinearLayout>

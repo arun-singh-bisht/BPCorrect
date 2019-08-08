@@ -5,7 +5,7 @@ import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 
 import java.util.List;
 
-public interface ReminderFragmentNavigator {
+public interface ActiveProtocolFragmentNavigator {
 
 
     void handleError(Throwable throwable);

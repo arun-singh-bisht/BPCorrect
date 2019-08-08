@@ -1,8 +1,11 @@
 package com.protechgene.android.bpconnect.ui.changepassword;
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +19,7 @@ import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
+import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
 import com.protechgene.android.bpconnect.ui.login.LoginActivity;
 import com.protechgene.android.bpconnect.ui.profile.ProfileEditFragment;
 import com.protechgene.android.bpconnect.ui.profile.ProfileFragmentNavigator;
@@ -38,7 +42,7 @@ public class ChangePasswordFragment extends BaseFragment implements ChangePasswo
     EditText edit_password_confirm;
     @BindView(R.id.edit_password)
     EditText edit_password;
-
+    String code = null;
 
 
     @Override
@@ -51,7 +55,11 @@ public class ChangePasswordFragment extends BaseFragment implements ChangePasswo
 
         mProfileFragmentViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance(getBaseActivity().getApplication())).get(ChangePasswordViewModel.class);
         mProfileFragmentViewModel.setNavigator(this);
-
+        Bundle args = getArguments();
+        if(args!=null) {
+            code = args.getString("code");
+            Log.e("code is",code);
+        }
         initView();
     }
 
@@ -73,9 +81,8 @@ public class ChangePasswordFragment extends BaseFragment implements ChangePasswo
     public void onChangePassword(){
         String password = edit_password.getText().toString().trim();
         String confirm_password = edit_password_confirm.getText().toString().trim();
-
-
-            mProfileFragmentViewModel.changePassword(password,confirm_password);
+        showProgress("Please wait...");
+            mProfileFragmentViewModel.changePassword(password,confirm_password,code);
         Log.d("sohit", "onChangePassword: success ");
     }
 
@@ -88,13 +95,35 @@ public class ChangePasswordFragment extends BaseFragment implements ChangePasswo
     @Override
     public void navigateToLogin(String msg) {
         Log.d("sohit", "navigateToProfile: ");
-        getBaseActivity().showSnakeBar(msg);
+        // getBaseActivity().showSnakeBar(msg);
+        hideProgress();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CustomAlertDialog.showDialogSingleButton(getActivity(), msg, new CustomAlertDialog.I_CustomAlertDialog() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, int request_code) {
+                        Intent i = new Intent(getBaseActivity(), LoginActivity.class);
+                        getBaseActivity().finish();
+                        startActivity(i);
+                    }
 
-        Intent i = new Intent(getBaseActivity(), LoginActivity.class);
+                    @Override
+                    public void onNegativeClick(Dialog dialog, int request_code) {
+
+                    }
+                });
+
+                //  showSnakeBar("Reset password link sent to registered email address");
+                //  finish();
+            }
+        },3*1000);
+       /* Intent i = new Intent(getBaseActivity(), LoginActivity.class);
         getBaseActivity().finish();
-         startActivity(i);
-
+         startActivity(i);*/
     }
+
+
 
    /* @Override
     public void showProfileDetails() {
