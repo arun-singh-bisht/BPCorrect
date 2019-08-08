@@ -1,6 +1,7 @@
 package com.protechgene.android.bpconnect.ui.measureBP;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
+import com.protechgene.android.bpconnect.ui.login.LoginActivity;
+import com.protechgene.android.bpconnect.ui.signup.SignUpActivity;
 import com.skyfishjy.library.RippleBackground;
 
 import butterknife.BindView;
@@ -401,6 +404,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 }
                 else
                 {
+                    show_reading_alert(healthReading);
                     isReadingDone = true;
                     text_transfer_status.setVisibility(View.GONE);
                     text_wait_tv.setVisibility(View.GONE);
@@ -414,6 +418,23 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 }
             }
         });
+    }
+
+    public void show_reading_alert(HealthReading healthReading) {
+        if (Integer.parseInt( healthReading.getSystolic()) > 179 || Integer.parseInt(healthReading.getDiastolic()) > 119) {
+            CustomAlertDialog.showDialogSingleButton(getBaseActivity(), "Your blood pressure is higher than 180/120 mm Hg. If you are experiencing chest pain, shortness of breath, back pain, numbness/weakness, change in vision, difficulty speaking, do not wait to see if your pressure comes down on its own. Call 9-1-1.\n" +"\n"+
+                    "If you don't have any of the above symptoms, wait five minutes and recheck your blood pressure. If your readings are still unusually high, contact your doctor immediately. You could be experiencing a hypertensive crisis.", new CustomAlertDialog.I_CustomAlertDialog() {
+                @Override
+                public void onPositiveClick(Dialog dialog, int request_code) {
+                }
+
+                @Override
+                public void onNegativeClick(Dialog dialog, int request_code) {
+
+                }
+            });
+        }
+
     }
 
     @Override

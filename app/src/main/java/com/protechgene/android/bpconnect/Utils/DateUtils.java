@@ -106,10 +106,13 @@ public class DateUtils {
             Date d1 = sdf.parse(time1);
             Date d2 = sdf.parse(time2);
             long elapsed = d1.getTime() - d2.getTime();
+            // current time is lesser than previous time
             if (elapsed < 0)
                 return -1;
+            // current time = previous time
             else if (elapsed == 0)
                 return 0;
+            // current time is greater than previous time
             else if (elapsed > 0)
                 return elapsed;
         } catch (ParseException e) {

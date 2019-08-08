@@ -2,14 +2,20 @@ package com.protechgene.android.bpconnect.ui.reminder;
 
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.data.local.db.models.ProtocolModel;
 import com.protechgene.android.bpconnect.data.remote.responseModels.profile.ProfileResponse;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
+import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.ApplicationBPConnect;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
 import com.protechgene.android.bpconnect.ui.custom.SupportedTimePickerFragment;
@@ -139,6 +145,9 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                     datOffset = 0;
                 }
 
+                //Remove this
+                //if(ApplicationBPConnect.isTodayIncluded)
+                  //  datOffset =0;
 
                 String startDate = DateUtils.getDateString(datOffset, "MMM dd,yyyy");
                 String endDate = DateUtils.getDateString((PROTOCOL_DAYS - 1) + datOffset, "MMM dd,yyyy");
@@ -235,7 +244,19 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                             }
                         });
 
-                    }
+                    }/* else if(k > 0){
+
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlarmReceiver.deleteAllAlarm(context);
+                                String[] split = selectedMorningTime.split(":");
+                                AlarmReceiver.setAlarm(context, Integer.parseInt(split[0]), Integer.parseInt(split[1]), 1);
+                              //  Toast.makeText(context, "Alarm set for Next Morning", Toast.LENGTH_SHORT).show();
+                                Log.e("next_day_morning",Integer.parseInt(split[0])+" :"+ Integer.parseInt(split[1])+" offset  "+1);
+                            }
+                        });
+                    }*/
                 }
             } else {
                 //Show invalid Time Message
@@ -266,6 +287,7 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                 long k = DateUtils.compareTimeString(todayDate, protocolStartDate, "MMM dd,yyyy");
                 if (k < 0) {
                     //protocol will start from next day
+                    Log.e("next_day","entered");
                     //Do Nothing...
                 } else {
                     //protocol has already started
@@ -283,12 +305,25 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                                 AlarmReceiver.deleteAllAlarm(context);
                                 String[] split = selectedEveningTime.split(":");
                                 AlarmReceiver.setAlarm(context, Integer.parseInt(split[0]), Integer.parseInt(split[1]), 0);
+                                Log.e("same_day",Integer.parseInt(split[0])+" :"+ Integer.parseInt(split[1])+" offset  "+0);
                             }
                         });
-                    }
+                    } /*else if(t2 > 0) {
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlarmReceiver.deleteAllAlarm(context);
+                                String[] split = selectedEveningTime.split(":");
+                                AlarmReceiver.setAlarm(context, Integer.parseInt(split[0]), Integer.parseInt(split[1]), 1);
+                               // Toast.makeText(context, "Alarm set for Next Evening", Toast.LENGTH_SHORT).show();
+                                Log.e("next_day_evening",Integer.parseInt(split[0])+" :"+ Integer.parseInt(split[1])+" offset  "+0);
+                            }
+                        });
+                    }*/
                 }
 
             } else {
+
                 //Show invalid Time Message
                 getNavigator().invalidTimeSelection("Evening Alarm should be between 4:00 PM to 12:00 AM");
             }

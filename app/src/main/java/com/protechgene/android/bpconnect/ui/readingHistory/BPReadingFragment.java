@@ -12,6 +12,7 @@ import com.protechgene.android.bpconnect.Utils.FragmentUtil;
 import com.protechgene.android.bpconnect.ui.adapters.ViewPagerAdapter;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.reminder.ActiveProtocolFragment;
+import com.protechgene.android.bpconnect.ui.reminder.HistoryProtocolsFragment;
 import com.protechgene.android.bpconnect.ui.reminder.ReminderFragment;
 
 import butterknife.BindView;
@@ -68,7 +69,8 @@ public class BPReadingFragment extends BaseFragment implements ViewPager.OnPageC
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new ProtocolReadingFragment(), "BPCorrect Readings");
-        adapter.addFragment(new BPAllReadingFragment(), "ALL");
+        adapter.addFragment(new BPAllReadingFragment(), "ALL Readings");
+        adapter.addFragment(new HistoryProtocolsFragment(),"Protocol History");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
     }

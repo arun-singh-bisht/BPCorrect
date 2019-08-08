@@ -188,6 +188,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
+            android:layout_marginTop="@dimen/dimen_400dp"
             app:layout_constraintVertical_bias="0.9"
             app:layout_constraintTop_toTopOf="@id/instruction_img"
             app:layout_constraintBottom_toBottomOf="parent"

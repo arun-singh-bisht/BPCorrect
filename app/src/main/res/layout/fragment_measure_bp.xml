@@ -29,6 +29,8 @@
             app:rb_radius="37dp"
             app:rb_rippleAmount="5"
             app:rb_scale="6">
+
+
         </com.skyfishjy.library.RippleBackground>
 
         <TextView
@@ -46,7 +48,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/reminder_info_tv"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
             android:visibility="visible" />
 
         <com.protechgene.android.bpconnect.Utils.TitilliumWebTextView
@@ -238,6 +240,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_20dp"
             android:layout_marginEnd="@dimen/dimen_20dp"
+            android:textSize="@dimen/_16ssp"
             android:text="You're all set. You should receive a reminder when it's time to check your blood pressure again!"
             android:layout_below="@+id/btn_done"
             android:layout_marginTop="@dimen/dimen_20dp"

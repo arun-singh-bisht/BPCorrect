@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +36,7 @@ import com.protechgene.android.bpconnect.R;
 import com.protechgene.android.bpconnect.Utils.AlarmSound;
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.Utils.FragmentUtil;
+import com.protechgene.android.bpconnect.data.Repository;
 import com.protechgene.android.bpconnect.ui.base.BaseFragment;
 import com.protechgene.android.bpconnect.ui.base.ViewModelFactory;
 import com.protechgene.android.bpconnect.ui.custom.CustomAlertDialog;
@@ -127,7 +129,23 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                 mHomeViewModel.synHistoryData();
             }
 
+
         }
+    }
+
+    private void getPRotocolStatus() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Insert Data
+                 System.out.println("protocol data ---"+mHomeViewModel.getprotocol());
+                if (mHomeViewModel.getprotocol())
+                    isprotocol_active = true;
+                else
+                    isprotocol_active = false;
+                // Get Data
+            }
+        });
     }
 
     @Override
@@ -310,6 +328,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     @Override
     public void showProfileDetails() {
 
+
         String userName = mHomeViewModel.getUserFirstName();
         String userEmail = mHomeViewModel.getUserEmail();
         // update by rajat
@@ -427,6 +446,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
                     getBaseActivity().showSnakeBar("App Data Sync Failure");
             }
         });
+        //get protocol status
+        getPRotocolStatus();
     }
 
 
@@ -465,5 +486,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     public void onNeuralClick(int request_code) {
         //Cancel
         AlarmSound.getInstance(getBaseActivity()).stopSound();
+
     }
 }

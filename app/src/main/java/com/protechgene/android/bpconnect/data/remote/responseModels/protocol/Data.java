@@ -28,7 +28,37 @@ public class Data {
     private String device_name;
     @SerializedName("_key_value")
     private Datasource datasource;
+    @SerializedName("sys")
+    private float systolic;
+    @SerializedName("dias")
+    private float diastolic;
+    @SerializedName("pulse")
+    private float pulse;
 
+    public float getPulse() {
+        return pulse;
+    }
+
+    public void setPulse(float pulse) {
+        this.pulse = pulse;
+    }
+
+
+    public float getSystolic() {
+        return systolic;
+    }
+
+    public void setSystolic(float systolic) {
+        this.systolic = systolic;
+    }
+
+    public float getDiastolic() {
+        return diastolic;
+    }
+
+    public void setDiastolic(float diastolic) {
+        this.diastolic = diastolic;
+    }
 
     public String getEndDate() {
         return endDate;

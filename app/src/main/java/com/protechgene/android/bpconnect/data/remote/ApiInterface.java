@@ -59,8 +59,8 @@ public interface ApiInterface {
     @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
     Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
-    @GET("ProtechSentinel/common/get/protocol/data/according/to/user")
-    Observable<GetProtocolResponse> getHistoryProtocol(@Query("access_token") String access_token, @Query("patientUserId") String userId);
+    @GET("ProtechSentinel/common/get/previous/protocol/by/patient")
+    Observable<GetProtocolResponse> getHistoryProtocol(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
     // edit by sohit address select state and city and password
      @GET("ProtechSentinel/common/get/state/list")
@@ -74,4 +74,5 @@ public interface ApiInterface {
 
     @POST("ProtechSentinel/common/share/reading")
      Observable<ShareReading> getShareReading(@Query("patient_id") String userid,@Query("access_token")String accessToken,@Query("request_type") String request_type,@Query("status") Boolean status);
+
 }
