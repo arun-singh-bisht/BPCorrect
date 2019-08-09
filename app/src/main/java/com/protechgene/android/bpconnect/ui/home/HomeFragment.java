@@ -368,6 +368,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
                 if (!isprotocol_active)
                     openRemiderFragment();
+                else
+                    mHomeViewModel.set_first_login_alarm(getContext());
             });
             mHomeViewModel.setFirstTimeUser();
             reset_data();
@@ -447,7 +449,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             }
         });
         //get protocol status
-        getPRotocolStatus();
+    //    getPRotocolStatus();
     }
 
 
@@ -467,7 +469,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
     @Override
     public void onNegativeClick(int request_code) {
-        //Snooz
+        //Snooze
         AlarmSound.getInstance(getBaseActivity()).stopSound();
         Log.d("onNegativeClick","Alarm Sound Stopped");
         //Remove all saved alarm

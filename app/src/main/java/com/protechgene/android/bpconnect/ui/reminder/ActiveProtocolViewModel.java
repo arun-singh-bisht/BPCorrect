@@ -244,7 +244,8 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
                             }
                         });
 
-                    }/* else if(k > 0){
+                   }
+                    /* else if(k > 0){
 
                         AsyncTask.execute(new Runnable() {
                             @Override

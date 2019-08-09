@@ -1,7 +1,10 @@
 package com.protechgene.android.bpconnect.ui.home;
 
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.protechgene.android.bpconnect.Utils.DateUtils;
 import com.protechgene.android.bpconnect.data.Repository;
@@ -14,8 +17,10 @@ import com.protechgene.android.bpconnect.data.remote.responseModels.profile.Prof
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.Data;
 import com.protechgene.android.bpconnect.data.remote.responseModels.protocol.GetProtocolResponse;
 import com.protechgene.android.bpconnect.ui.base.BaseViewModel;
+import com.protechgene.android.bpconnect.ui.reminder.AlarmReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,10 +30,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
-
+    public String morning_alarm = null;
+    public String evening_alarm = null;
     public HomeViewModel(Repository repository) {
         super(repository);
     }
+
 
     public String getUserFirstName()
     {
@@ -166,6 +173,8 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
 
                                 final ProtocolModel protocolModel = new ProtocolModel(0, startDate, endDate, data.getMorningAlarm(), data.getEveningAlarm(), true,true,true);
                                 protocolModel.setProtocolCode(data.getProtocolId());
+                                morning_alarm = data.getMorningAlarm();
+                                evening_alarm = data.getEveningAlarm();
 
 
                                 AsyncTask.execute(new Runnable() {
@@ -197,6 +206,43 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
             getNavigator().historyDataSyncStatus(true);
         }
 
+    }
+
+    void set_first_login_alarm(Context context) {
+        if (morning_alarm != null && evening_alarm != null && !morning_alarm.isEmpty() && !evening_alarm.isEmpty() ) {
+            int current_hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            int current_minute = Calendar.getInstance().get(Calendar.MINUTE);
+            String[] split_morning = morning_alarm.split(":");
+            int morning_hour = Integer.parseInt(split_morning[0]);
+            int morning_min = Integer.parseInt(split_morning[1]);
+            String[] split_evening = evening_alarm.split(":");
+            int evening_hour = Integer.parseInt(split_evening[0]);
+            int evening_min = Integer.parseInt(split_evening[1]);
+           // Log.e("Alarm","current time_"+current_hour+" current_minute "+current_minute+" evening_hour "+evening_hour+" evening_min "+evening_min+" morning_hour "+morning_hour+" morning_min "+morning_min);
+            if (current_hour < morning_hour || current_hour ==  morning_hour) {
+                // set morning alarm
+                set_Alarm(current_hour,current_minute,morning_hour,morning_min,context);
+                Log.d("Alarm", "set morning alarm ");
+                return;
+            } else if (current_hour < evening_hour || current_hour == evening_hour) {
+                // set evening alarm
+               set_Alarm(current_hour,current_minute,evening_hour,evening_min,context);
+                Log.d("Alarm", "set evening alarm");
+                return;
+            } else {
+                // set next day morning alarm.
+                AlarmReceiver.setAlarm(context, morning_hour, morning_min, 1);
+                Log.d("Alarm", "set next day morning alarm");
+            }
+        }
+    }
+    // method to set alarm
+    public void set_Alarm(int current_hour,int current_minute,int compare_hour, int compare_min, Context context) {
+        if (current_minute > compare_min && current_hour == compare_hour)
+           // AlarmReceiver.setAlarm(context, current_hour, compare_min, 0);
+        Log.d("Alarm","Do nothing as alarm time has passed for - " +compare_hour+":"+compare_min);
+        else
+            AlarmReceiver.setAlarm(context, compare_hour, compare_min, 0);
     }
 
     void setFirstTimeUser() {
