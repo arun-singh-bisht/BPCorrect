@@ -36,6 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/waiting"
             android:text="Waiting for blood pressure reading..."
             android:layout_below="@+id/content"/>
 
@@ -273,7 +274,26 @@
             android:text="You're all set. You should receive a reminder when it's time to check your blood pressure again!"
             android:textSize="16sp"
             android:visibility="gone" />
+        <android.support.design.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:id="@+id/disclaimer"
+            android:layout_marginStart="@dimen/dimen_20dp"
+            android:layout_marginEnd="@dimen/dimen_20dp"
+            android:paddingBottom="@dimen/dimen_20dp"
 
+            android:layout_height="@dimen/dimen_40dp"
+            android:layout_alignParentBottom="true"
+            app:cardCornerRadius="4dp"
+            android:background="@color/color_search_bg"
+            android:layout_marginBottom="@dimen/dimen_60dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Do not close the app while readings are being taken."
+                android:textColor="@color/error_red"
+                android:layout_gravity="center"/>
+        </android.support.design.card.MaterialCardView>
 
     </RelativeLayout>
 

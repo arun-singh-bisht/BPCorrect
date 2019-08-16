@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -86,6 +87,9 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
     View view_reading;
     @BindView(R.id.content)
     RippleBackground rippleBackground;
+
+    @BindView(R.id.disclaimer)
+    CardView disclaimer;
 
     @BindView(R.id.waiting_instru)
     TextView waiting_instru;
@@ -384,6 +388,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
             @Override
             public void run() {
                 hideProgress();
+                disclaimer.setVisibility(View.INVISIBLE);
                 text_wait_tv.setVisibility(View.INVISIBLE);
                 text_upper.setVisibility(View.INVISIBLE);
                 waiting_instru.setVisibility(View.GONE);
@@ -489,6 +494,7 @@ public class MeasureBPFragmentNew extends BaseFragment implements MeasureBPFragm
                 text_upper.setVisibility(View.VISIBLE);
                 waiting_instru.setVisibility(View.VISIBLE);
                 view_wait.setVisibility(View.GONE);
+                disclaimer.setVisibility(View.VISIBLE);
                 //startScannaing();
                 measureBPFragmentViewModel.isReadingForProtocol();
             }

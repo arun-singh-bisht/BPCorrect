@@ -241,8 +241,10 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
         if (current_minute > compare_min && current_hour == compare_hour)
            // AlarmReceiver.setAlarm(context, current_hour, compare_min, 0);
         Log.d("Alarm","Do nothing as alarm time has passed for - " +compare_hour+":"+compare_min);
-        else
+        else {
             AlarmReceiver.setAlarm(context, compare_hour, compare_min, 0);
+            Log.d("Alarm", "set today alarm");
+        }
     }
 
     void setFirstTimeUser() {
