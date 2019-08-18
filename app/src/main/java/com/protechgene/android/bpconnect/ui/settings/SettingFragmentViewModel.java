@@ -57,7 +57,7 @@ public class SettingFragmentViewModel extends BaseViewModel<SettingFragmentNavig
                          if(request_type.equals("get")){
                                 int status = profileResponse.getData().get(0).getStatus();
                                  Boolean isChecked;
-                                 if(status==0){
+                                 if(status == 0){
                                      isChecked = true;
                                  }else {
                                      isChecked = false;
