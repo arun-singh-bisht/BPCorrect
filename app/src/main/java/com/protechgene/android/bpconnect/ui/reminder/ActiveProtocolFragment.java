@@ -75,11 +75,10 @@ public class ActiveProtocolFragment extends BaseFragment implements ActiveProtoc
     @OnClick(R.id.save_btn)
     public void onsaveClick()
     {
-       // AlarmReceiver.setAlarm(getBaseActivity(),19,8,0);
+
         FragmentUtil.removeFragment(getBaseActivity());
+        //CustomAlertDialog.showDialog(getActivity(),DIALOG_REQUEST_CODE_DELETE ,"Do you want to delete current reminder?","YES","CANCEL",R.layout.custom_dialo,this);
     }
-
-
 
 
     @OnClick(R.id.image_edit_morning_alarm)
@@ -106,9 +105,7 @@ public class ActiveProtocolFragment extends BaseFragment implements ActiveProtoc
         {
             //Delete current Protocol
             activeProtocolViewModel.deleteProtocol(getBaseActivity(),activeProtocol);
-            layout_create.setVisibility(View.VISIBLE);
-            layout_active_alarm.setVisibility(View.GONE);
-            getBaseActivity().showSnakeBar("Protocol deleted successfully");
+
 
         }else if(request_code == DIALOG_REQUEST_CODE_EDIT_ALARM_MORNING)
         {
@@ -170,6 +167,18 @@ public class ActiveProtocolFragment extends BaseFragment implements ActiveProtoc
     public void onProtocolCreated(ProtocolModel protocolModel) {
 
         setProtocolDetails(protocolModel);
+    }
+
+    @Override
+    public void onProtocolDeleted() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layout_create.setVisibility(View.VISIBLE);
+                layout_active_alarm.setVisibility(View.GONE);
+                getBaseActivity().showSnakeBar("Protocol deleted successfully");
+            }
+        });
     }
 
     private void setProtocolDetails(ProtocolModel protocolModel)

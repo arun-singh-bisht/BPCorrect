@@ -137,7 +137,7 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
     }
 
 
-    public void synHistoryData()
+    public void synHistoryData(final Context context)
     {
 
         if(!getRespository().isHistoryDataSync())
@@ -176,6 +176,7 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
                                 morning_alarm = data.getMorningAlarm();
                                 evening_alarm = data.getEveningAlarm();
 
+                                set_first_login_alarm(context);
 
                                 AsyncTask.execute(new Runnable() {
                                     @Override
@@ -209,43 +210,44 @@ public class HomeViewModel extends BaseViewModel<HomeFragmentNavigator> {
     }
 
     void set_first_login_alarm(Context context) {
+        Log.d("set_first_login_alarm",morning_alarm+" "+evening_alarm);
         if (morning_alarm != null && evening_alarm != null && !morning_alarm.isEmpty() && !evening_alarm.isEmpty() ) {
-            int current_hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-            int current_minute = Calendar.getInstance().get(Calendar.MINUTE);
-            String[] split_morning = morning_alarm.split(":");
-            int morning_hour = Integer.parseInt(split_morning[0]);
-            int morning_min = Integer.parseInt(split_morning[1]);
-            String[] split_evening = evening_alarm.split(":");
-            int evening_hour = Integer.parseInt(split_evening[0]);
-            int evening_min = Integer.parseInt(split_evening[1]);
-           // Log.e("Alarm","current time_"+current_hour+" current_minute "+current_minute+" evening_hour "+evening_hour+" evening_min "+evening_min+" morning_hour "+morning_hour+" morning_min "+morning_min);
-            if (current_hour < morning_hour || current_hour ==  morning_hour) {
-                // set morning alarm
-                set_Alarm(current_hour,current_minute,morning_hour,morning_min,context);
-                Log.d("Alarm", "set morning alarm ");
-                return;
-            } else if (current_hour < evening_hour || current_hour == evening_hour) {
-                // set evening alarm
-               set_Alarm(current_hour,current_minute,evening_hour,evening_min,context);
-                Log.d("Alarm", "set evening alarm");
-                return;
-            } else {
-                // set next day morning alarm.
-                AlarmReceiver.setAlarm(context, morning_hour, morning_min, 1);
-                Log.d("Alarm", "set next day morning alarm");
+            String currrentTime = DateUtils.getDateString(0, "HH:mm");
+            long k = DateUtils.compareTimeString(morning_alarm, currrentTime, "HH:mm");
+            long m = DateUtils.compareTimeString(evening_alarm, currrentTime, "HH:mm");
+            int datOffset = 0;
+
+            if (m <= 0) {
+                //Today Evening Time has passed.Alarm should be set from next day(morning)
+                datOffset = 1;
+            } else if (m > 0 && k <= 0) {
+                //Today morning alarm time has passed but evening alarm is still to go. Alarm should be set from today(evening)
+                datOffset = 0;
+            } else if (k > 0) {
+                //Today morning alarm is still to go. Alarm should be set from today(morning)
+                datOffset = 0;
             }
+            //Set Alarm
+            String[] split = null;
+            if (datOffset == 0) {
+
+                if (k > 0) {
+                    //Set Today Morning Alarm
+                    split = morning_alarm.split(":");
+                } else {
+                    //Set Today Evening Alarm
+                    split = evening_alarm.split(":");
+                }
+
+            } else if (datOffset == 1) {
+                //Set Next Day Morning Alarm
+                split = morning_alarm.split(":");
+
+            }
+            AlarmReceiver.setAlarm(context, Integer.parseInt(split[0]), Integer.parseInt(split[1]), datOffset);
         }
     }
-    // method to set alarm
-    public void set_Alarm(int current_hour,int current_minute,int compare_hour, int compare_min, Context context) {
-        if (current_minute > compare_min && current_hour == compare_hour)
-           // AlarmReceiver.setAlarm(context, current_hour, compare_min, 0);
-        Log.d("Alarm","Do nothing as alarm time has passed for - " +compare_hour+":"+compare_min);
-        else {
-            AlarmReceiver.setAlarm(context, compare_hour, compare_min, 0);
-            Log.d("Alarm", "set today alarm");
-        }
-    }
+
 
     void setFirstTimeUser() {
         getRespository().setFirstTimeuser("false");

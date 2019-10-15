@@ -126,9 +126,8 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
             {
                 //Syn History Reading Data
                 //showProgress("Syn app data...");
-                mHomeViewModel.synHistoryData();
+                mHomeViewModel.synHistoryData(getActivity());
             }
-
 
         }
     }
@@ -368,8 +367,6 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
 
                 if (!isprotocol_active)
                     openRemiderFragment();
-                else
-                    mHomeViewModel.set_first_login_alarm(getContext());
             });
             mHomeViewModel.setFirstTimeUser();
             reset_data();
@@ -459,12 +456,7 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
     public void onPositiveClick(int request_code) {
         //Take Now
         AlarmSound.getInstance(getBaseActivity()).stopSound();
-
-        MeasureBPFragmentNew MeasureBPFragmentNew = new MeasureBPFragmentNew();
-        Bundle args = new Bundle();
-        args.putBoolean("isTypeProtocol",true);
-        MeasureBPFragmentNew.setArguments(args);
-        FragmentUtil.loadFragment(getBaseActivity(),R.id.container_fragment,MeasureBPFragmentNew,MeasureBPFragmentNew.FRAGMENT_TAG,"MeasureBPFragmentTransition");
+        openMeasureBPFragment();
     }
 
     @Override
@@ -476,9 +468,9 @@ public class HomeFragment extends BaseFragment implements  HomeFragmentNavigator
         //AlarmReceiver.deleteAllAlarm(MainActivity.this);
         //Log.d("onNegativeClick","All Alarm removed");
         //Set alarm for next 10 min
-        String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 2);
-        String[] split = newTime.split(":");
-        Log.d("onNegativeClick","Setting Alarm from "+alarmFireTime +" To "+newTime);
+        //String newTime = DateUtils.addTime(alarmFireTime, "HH:mm", 0, 2);
+        //String[] split = newTime.split(":");
+        Log.d("onSnoozClick","Current Alarm Time "+alarmFireTime );
         //AlarmReceiver.setAlarm(getBaseActivity(),Integer.parseInt(split[0]),Integer.parseInt(split[1]),0);
         AlarmReceiver.setSnoozAlarm(getBaseActivity(),alarmFireTime);
 

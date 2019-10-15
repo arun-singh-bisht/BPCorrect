@@ -249,7 +249,7 @@ public class ProfileEditFragmentViewModel extends BaseViewModel<ProfileEditFragm
        String accessToken = getRespository().getAccessToken();
         String currentUserId = getRespository().getCurrentUserId();
 
-        disposables.add(getRespository().updateProfile(accessToken, currentUserId, profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getPhoto_url(),profileDetailModel.getState(),profileDetailModel.getCity(),masked_zipcode)
+        disposables.add(getRespository().updateProfile(accessToken, currentUserId,profileDetailModel.getEmailId(), profileDetailModel.getFirstname(),profileDetailModel.getLastname(), profileDetailModel.getGender(), profileDetailModel.getDob(), profileDetailModel.getMobile1(), profileDetailModel.getAddress1(),profileDetailModel.getWeight(),profileDetailModel.getHeight(),profileDetailModel.getPhoto_url(),profileDetailModel.getState(),profileDetailModel.getCity(),masked_zipcode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {

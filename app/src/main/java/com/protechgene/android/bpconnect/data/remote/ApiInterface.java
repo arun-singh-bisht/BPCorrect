@@ -25,54 +25,57 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
 
-    @GET("ProtechSentinel/oauth/token")
+    @GET("oauth/token")
     Observable<OauthResponse> oauth(@Query("grant_type") String grant_type, @Query("client_id") String client_id, @Query("username") String username, @Query("password") String password);
 
-    @POST("ProtechSentinel/basic/activate/account")
+    @POST("basic/activate/account")
     Observable<ActivateAccount> activate(@Query("code") String code);
 
-    @POST("ProtechSentinel/basic/forgot/password")
+    @POST("basic/forgot/password")
     Observable<ResetPasswordResponse> resetPassword(@Query("email") String email);
 
-    @POST("ProtechSentinel/common/register/patient")
+    @POST("common/register/patient")
     Observable<ResetPasswordResponse> signUp(@Query("email") String email, @Query("password") String password);
 
-    @GET("ProtechSentinel/common/get/patient/information")
+    @GET("common/get/patient/information")
     Observable<ProfileResponse> profileDetails(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId);
 
-    @POST("ProtechSentinel/common/update/patient")
-    Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId, @Query("firstname") String firstname,@Query("lastname") String lastname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1,@Query("weight") String weight,@Query("height") String height,@Query("photo_url") String photo,@Query("state") String state,@Query("city") String city,@Query("zipcode") String zipcode);
+    @POST("common/update/patient")
+    Observable<ProfileResponse> updateProfile(@Query("access_token") String access_token, @Query("userId") String userId,@Query("email") String email, @Query("firstname") String firstname,@Query("lastname") String lastname,@Query("gender") String gender,@Query("dob") String dob,@Query("mobile1") String mobile1,@Query("address1") String address1,@Query("weight") String weight,@Query("height") String height,@Query("photo_url") String photo,@Query("state") String state,@Query("city") String city,@Query("zipcode") String zipcode);
 
-    @GET("ProtechSentinel/common/get/chart/data/according/to/user")
+    @GET("common/get/chart/data/according/to/user")
     Observable<BpReadingsResponse> getBpReadings(@Query("access_token") String access_token, @Query("patientUserId") String patientUserId, @Query("fromdate") String fromdate, @Query("todate") String todate, @Query("dayno") String dayno);
 
     @Headers({
             "Accept: application/json",
             "Content-Type: application/json"
     })
-    @POST("ProtechSentinel/common/add/patient/reading")
+    @POST("common/add/patient/reading")
     Observable<AddBpReadingResponse> addBpReadings(@Query("access_token") String access_token,@Body JsonArray body);
 
-    @POST("ProtechSentinel/common/create/ehc/protocol")
+    @POST("common/create/ehc/protocol")
     Observable<ProfileResponse> createProtocol(@Query("access_token") String access_token, @Query("patient_id") String userId,@Query("startdate") String startdate,@Query("enddate") String enddate,@Query("protocol_id") String protocol_id,@Query("morning_alarm") String morning_alarm,@Query("evening_alarm") String evening_alarm);
 
-    @GET("ProtechSentinel/common/get/ehc/protocol/by/patient")
+    @POST("common/delete/protocol")
+    Observable<ProfileResponse> deleteProtocol(@Query("access_token") String access_token,@Query("protocol_id") String protocol_id);
+
+    @GET("common/get/ehc/protocol/by/patient")
     Observable<GetProtocolResponse> getProtocolDetail(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
-    @GET("ProtechSentinel/common/get/previous/protocol/by/patient")
+    @GET("common/get/previous/protocol/by/patient")
     Observable<GetProtocolResponse> getHistoryProtocol(@Query("access_token") String access_token, @Query("patient_id") String userId);
 
     // edit by sohit address select state and city and password
-     @GET("ProtechSentinel/common/get/state/list")
+     @GET("common/get/state/list")
     Observable<StateCityOptions> getOptionCity();
 
-     @POST("ProtechSentinel/common/change/password")
+     @POST("common/change/password")
      Observable<ResetPasswordResponse> changePassword(@Query("password") String password,@Query("access_token")String access_token,@Query("userId") String userid);
 
-    @POST("ProtechSentinel/basic/reset/password")
+    @POST("basic/reset/password")
     Observable<ResetPasswordResponse> resetPassword(@Query("password") String password,@Query("code")String code);
 
-    @POST("ProtechSentinel/common/share/reading")
+    @POST("common/share/reading")
      Observable<ShareReading> getShareReading(@Query("patient_id") String userid,@Query("access_token")String accessToken,@Query("request_type") String request_type,@Query("status") Boolean status);
 
 }

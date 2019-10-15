@@ -67,8 +67,6 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
 
     public void createProtocol(Context context) {
         this.context = context;
-        /*TimePickerFragment picker = new TimePickerFragment(this,1001,"Morning Reminder Time",6,0);
-        picker.show(((Activity)context).getFragmentManager(), "timePicker");*/
 
         SupportedTimePickerFragment picker = new SupportedTimePickerFragment(this, CREATE_PROTOCOL_MORNING_TIME, "Morning Reminder Time", 6, 0);
         picker.show(((Activity) context).getFragmentManager(), "timePicker");
@@ -104,7 +102,7 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
             }
         });
         //Delete Protocol from server
-        sendProtocolToServer(protocolModel);
+        deleteProtocol(protocolModel);
     }
 
     @Override
@@ -365,6 +363,34 @@ public class ActiveProtocolViewModel extends BaseViewModel<ActiveProtocolFragmen
 
                         Throwable throwable = new Throwable("Data Syn to server");
                         getNavigator().handleError(throwable);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                        getNavigator().handleError(throwable);
+                    }
+                }));
+    }
+
+    private void deleteProtocol(final ProtocolModel protocolModel) {
+        String accessToken = getRespository().getAccessToken();
+
+        disposables.add(getRespository().deleteProtocol(accessToken,protocolModel.getProtocolCode())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+
+                    }
+                })
+                .subscribe(new Consumer<ProfileResponse>() {
+                    @Override
+                    public void accept(ProfileResponse profileResponse) throws Exception {
+
+                        Throwable throwable = new Throwable("Data Syn to server");
+                        getNavigator().onProtocolDeleted();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

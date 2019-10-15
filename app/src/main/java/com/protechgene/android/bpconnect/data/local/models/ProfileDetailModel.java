@@ -2,6 +2,7 @@ package com.protechgene.android.bpconnect.data.local.models;
 
 public class ProfileDetailModel {
 
+    private String emailId;
     private String firstname;
     private String lastname;
     private String gender;
@@ -17,6 +18,14 @@ public class ProfileDetailModel {
     private String state;
     private String city;
     private String zipcode;
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
     public String getCity() {
         return city;

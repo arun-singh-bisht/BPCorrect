@@ -17,4 +17,6 @@ public interface ActiveProtocolFragmentNavigator {
     void invalidTimeSelection(String message);
 
     void onProtocolCreated( ProtocolModel protocolModel);
+
+    void onProtocolDeleted();
 }

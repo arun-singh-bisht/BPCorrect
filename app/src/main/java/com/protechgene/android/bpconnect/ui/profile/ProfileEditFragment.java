@@ -320,6 +320,7 @@ public class ProfileEditFragment extends BaseFragment implements ProfileEditFrag
         Log.d("sohit", "update: "+photo_url);
         try{
             ProfileDetailModel profileDetailModel = new ProfileDetailModel();
+            profileDetailModel.setEmailId(edit_email.getText().toString().trim());
             profileDetailModel.setFirstname(edit_first_name.getText().toString().trim());
             profileDetailModel.setLastname(edit_last_name.getText().toString().trim());
             profileDetailModel.setGender(edit_gender.getText().toString().trim());

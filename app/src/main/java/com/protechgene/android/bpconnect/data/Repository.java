@@ -432,6 +432,12 @@ public class Repository implements ApiInterface,
     }
 
     @Override
+    public Observable<ProfileResponse> deleteProtocol(String access_token, String protocol_id) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.deleteProtocol(access_token,protocol_id);
+        return responseObservable;
+    }
+
+    @Override
     public Observable<GetProtocolResponse> getProtocolDetail(String access_token, String userId) {
         Observable<GetProtocolResponse> responseObservable = mApiInterface.getProtocolDetail(access_token, userId);
         return responseObservable;
@@ -469,8 +475,8 @@ public class Repository implements ApiInterface,
 
 
     @Override
-    public Observable<ProfileResponse> updateProfile(String access_token, String userId, String firstname, String lastname, String gender, String dob, String mobile1, String address1, String weight, String height, String photo_url, String state, String city, String zipcode) {
-        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId, firstname, lastname, gender, dob, mobile1, address1, weight, height, photo_url, state, city, zipcode);
+    public Observable<ProfileResponse> updateProfile(String access_token, String userId,String email, String firstname, String lastname, String gender, String dob, String mobile1, String address1, String weight, String height, String photo_url, String state, String city, String zipcode) {
+        Observable<ProfileResponse> responseObservable = mApiInterface.updateProfile(access_token, userId,email, firstname, lastname, gender, dob, mobile1, address1, weight, height, photo_url, state, city, zipcode);
         return responseObservable;
     }
 
